@@ -1,0 +1,91 @@
+hello = Bonjour
+
+helloWorld.0  = __________________________________________________________________
+helloWorld.1  =|  __    __        _                                 _____        |
+helloWorld.2  =| / / /\\ \\ \\  ___ | |  ___   ___   _ __ ___    ___  /__   \\  ___  |
+helloWorld.3  =| \\ \\/  \\/ / / _ \\| | / __| / _ \\ | '_ ` _ \\  / _ \\   / /\\/ / _ \\ |
+helloWorld.4  =|  \\  /\\  / |  __/| || (__ | (_) || | | | | ||  __/  / /   | (_) ||
+helloWorld.5  =|   \\/  \\/   \\___||_| \\___| \\___/ |_| |_| |_| \\___|  \\/     \\___/ |
+helloWorld.6  =|                                                                 |
+helloWorld.7  =|                      _                        _             _   |
+helloWorld.8  =|   /\\/\\    __ _  ___ | |_   ___  _ __   /\\/\\  (_) _ __    __| |  |
+helloWorld.9  =|  /    \\  / _` |/ __|| __| / _ \\| '__| /    \\ | || '_ \\  / _` |  |
+helloWorld.10 =| / /\\/\\ \\| (_| |\\__ \\| |_ |  __/| |   / /\\/\\ \\| || | | || (_| |  |
+helloWorld.11 =| \\/    \\/ \\__,_||___/ \\__| \\___||_|   \\/    \\/|_||_| |_| \\__,_|  |
+helloWorld.12 =|_________________________________________________________________|
+
+
+menu.Title = Menu
+menu.Options.0.key = game
+menu.Options.0.desc = Nouveau jeu
+menu.Options.1.key = rules
+menu.Options.1.desc = Règles
+menu.Options.2.key = scores
+menu.Options.2.desc = Scores
+menu.Options.3.key = credits
+menu.Options.3.desc = Crédits
+menu.Options.4.key = exit
+menu.Options.4.desc = Quitter
+
+setPlayerName = Entrez votre nom :
+getScores = Votre score est de : 
+victory = Victoires
+defeat = Defaites
+
+
+
+selectGameMode.Title = Selectionnez le mode de jeu
+selectGameMode.Options.0.key = challenger
+selectGameMode.Options.0.desc = Mode challenger où vous devez trouver la combinaison secrète de l'ordinateur
+selectGameMode.Options.1.key = defender
+selectGameMode.Options.1.desc = Mode défenseur où c'est à l'ordinateur de trouver votre combinaison secrète
+selectGameMode.Options.2.key = dual
+selectGameMode.Options.2.desc = Mode duel où l'ordinateur et vous jouez tour à tour, le premier à trouver la combinaison secrète de l'autre a gagné
+selectGameMode.Options.3.key = return
+selectGameMode.Options.3.desc = Retour
+
+
+
+gameMode.challenger : MODE CHALLENGER - Trouvez la combinaison !
+gameMode.defender : MODE DEFENSEUR - L'ordinateur cherche la combinaison
+gameMode.dual : MODE DUAL - Chacun cherche la combinaison de l'autre à tour de rôle
+
+rules.0 = Trouvez la combinaison des {{config.combinationLenght}} chiffres entre {{config.combinationNumbersMin}} et {{config.combinationNumbersMax}} . 
+rules.1 = \= signifie que c'est le bon chiffre
+rules.2 = - signifie que c'est moins
+rules.3 = et +, que c'est plus ...
+rules.4 = Lorsque vous saisissez une réponse, séparez les caractères par des espaces.
+rules.5 = Par exemple : 1 2 3 4
+rules.6 = 
+rules.7 = Attention, vous avez droit à {{config.gameTurns}} essais.
+
+pressEnterToContinue = Appuyez sur [Entrer] pour continuer ...
+select = Selectionnez une valeur :
+yesno = [O]ui/[N]on
+
+
+
+input.player = Veuillez saisir votre proposition :
+input.computer = Veuillez saisir votre réponse :
+
+input.error = La saisie n'est pas correcte. Veillez rentrer une chaine valide, avec des espaces entre chaque caractère.
+
+challenger.win = Bravo, vous avez gagné ... pour le moment
+challenger.lost = He oui, j'ai été le plus fort.
+challenger.restart = Voulez-vous recommencer une partie en mode Challenger ?
+
+defender.win = J'ai gagné. Le silicone bat le neurone !
+defender.lost = Bravo, l'humain bat encore la machine ... pour le moment
+defender.restart = Voulez-vous recommencer une partie en mode Defenseur?
+
+dual.computer.win = J'ai gagné. Le silicone bat le neurone !
+dual.player.win = Bravo, vous avez gagné ... pour le moment
+
+dual.computer.lost = Mince, je n'ai pas trouvé !
+dual.player.lost = Vous n'avez pas réussi à trouver mon code ! 
+dual.restart = Aller, nouvelle manche et on échange les places ! Ca vous va ?
+
+nbrPart = Manche 
+nbrTurn = Tour 
+
+notUnderstand = Je n'ai pas compris.
