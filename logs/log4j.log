@@ -1,0 +1,6 @@
+19-01-2018 23:33:23 INFO  Config:66 - Loading config file : resources/config.properties
+19-01-2018 23:33:23 INFO  Config:46 - Debug mode : true
+19-01-2018 23:33:23 INFO  Config:61 - Loading language file : resources/language/fr-FR.lang
+19-01-2018 23:33:23 INFO  View:24 - View mode : console
+19-01-2018 23:33:58 INFO  ConsoleMenu:43 - Game mode : challenger
+19-01-2018 23:33:58 DEBUG DebugMode:49 - hiddenCombination : [1, 9, 3, 2, 9]
