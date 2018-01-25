@@ -2,13 +2,15 @@ package  org.mastermind.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import org.mastermind.core.Core;
 import org.mastermind.model.Model;
-import org.mastermind.model.scores.Score;
+import org.mastermind.observer.Observer;
 
-
+/**
+ * Class Controller
+ * @author frank
+ *
+ */
 public class Controller {
 
 	/** Instance du model */
@@ -32,7 +34,7 @@ public class Controller {
 	 * Initialisation d'une nouvelle partie
 	 */
 	public void newGame() {
-		this.model.newGame();
+		this.model.startGame();
 	}
 
 	/**
@@ -56,23 +58,24 @@ public class Controller {
 
 
 	/**
-	 * Traite et met en forme la saisie du joueur avant de l'envoyer au model
+	 * Traite et met en forme la saisie du joueur en mode console avant de l'envoyer au model
 	 * Renvoie true si la saisie est coherente avec le model attendu
 	 * @param i
 	 * 	Chaine de caractère
 	 * 	
 	 * @return
 	 */
-	public boolean setInput(String i) {
+	public boolean setInput(String phase, String i) {
 		List<Object> tempInput = new ArrayList<Object>();
+		//retrait des espace en debut et fin de chaine
 		i = i.trim();
+		
 		if( !i.equals("") ) {
 			for (String v : i.split(" ")) {
 				// Definit si v est un entier ou non et le rentre;
 				tempInput.add( ( isInteger(v) )?Integer.valueOf(v):v );
 			}
-			
-			return setInput(tempInput);
+			return setInput(phase, tempInput);
 		}else {
 			return false;
 		}
@@ -86,18 +89,18 @@ public class Controller {
 	 * 	
 	 * @return
 	 */
-	public boolean setInput(List<Object> input) {
+	public boolean setInput(String phase, List<Object> input) {
 		int acceptedChar = 0;
-		int combinationLenght = core.config.getInt("combinationLenght");
+		int combinationLenght = Core.config.getInt("combinationLenght");
 		
+		// verification si les caractères sont acceptés
 		for(Object o : input) {
 			if(this.model.acceptedChar(o))
 				acceptedChar++;
 		}
 		
-		
 		if(input.size() == combinationLenght && acceptedChar == combinationLenght ) {
-			this.model.Comparaison(input);
+			this.model.setInput(phase, input);
 			return true;
 		}else {
 			return false;
@@ -115,14 +118,7 @@ public class Controller {
 		//formatage en majuscule
 		p = p.trim().toUpperCase();
 		//passage au model
-		this.model.setPlayerName(p);
-		//appel de l'observer pour mettre à jour la vue
-		this.model.getScoresListObserver();
-		
-	}
-	
-	public void setPoints() {
-		this.model.setPoints();
+		this.model.setPlayerName(p);	
 	}
 	
 	/**
@@ -144,6 +140,17 @@ public class Controller {
 		  return isInteger;
 	}
 
-
+	/**
+	 * Reinitialisation du model pour un nouveau jeu
+	 */
+	public void resetModel() {
+		this.model.reset();
+	}
+	
+	
+	public void addObserver(Observer obs) {
+		this.model.addObserver(obs);
+	}
+	
 
 }

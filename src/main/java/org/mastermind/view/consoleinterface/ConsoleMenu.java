@@ -2,6 +2,7 @@ package  org.mastermind.view.consoleinterface;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import org.mastermind.core.Core;
@@ -15,20 +16,24 @@ public class ConsoleMenu {
 	private String title = "";
 	
 	/** Liste des propositions */
-	private String options;
+	private List<String[]> options;
 
 
 	/**
-	 * Constructeur.
+	 * Constructeur par defaut
 	 */
 	public ConsoleMenu() {
 
 	}
 
-	
-	public ConsoleMenu(String k) {
-		this.title = core.lang.get(k+ ".Title");
-		this.options = k+".Options";
+	/**
+	 * Constructeur avancé
+	 * @param k 
+	 * 		Clef des parametres de menu dans le fichier Lang
+	 */
+	public ConsoleMenu(String t, List<String[]> o) {
+		this.title = core.lang.get(t);
+		this.options = o;
 	}
 
 
@@ -48,7 +53,7 @@ public class ConsoleMenu {
 	 *
 	 * @param options the options
 	 */
-	public void setOptions(String o) {
+	public void setOptions(List<String[]> o) {
 		this.options = o;
 	}
 
@@ -57,7 +62,7 @@ public class ConsoleMenu {
 	 */
 	public void flush() {
 		this.title = "";
-		this.options = "";
+		this.options.clear();
 	}
 
 
@@ -68,14 +73,9 @@ public class ConsoleMenu {
 	 * @return the string
 	 */
 	public String showMenu() {
-
-		// Liste des clefs des propositions
-		List<String> optionReturn = new ArrayList<>();
-
-
 		int choice;
 		Scanner keyboard;
-
+	
 		// verrou tant que le choix ne correspond pas à une proposition valide
 		boolean lock = true;	
 
@@ -87,27 +87,19 @@ public class ConsoleMenu {
 				System.out.println();
 
 			}
-			int i = 0;
-			String entry = "";
-			String desc = "";
-			
-			
-			while( core.lang.keyExist(options + "." + i) ) {
-				entry = core.lang.get(options + "." + i + ".key", true);
-				desc = core.lang.get(options + "." + i + ".desc", true);
-				optionReturn.add(entry);
-				i++;				
-				System.out.println("  " + i + ".  " + desc);
-
+	
+			// Creation des options du menu
+			for (int i = 0; i < options.size(); i++) {
+				System.out.println((i+1) + ". " + options.get(i)[1]);
 			}
-			System.out.println();
-					
+			
+	
 			// Choix de la proposition
 			keyboard = new Scanner(System.in);
 			System.out.print(core.lang.get("select"));
 			choice = keyboard.nextInt();
 
-			if(choice > i || choice < 1) {
+			if(choice > options.size() || choice < 1) {
 				System.out.println("Je n'ai pas compris votre choix");
 			}else {
 				// Sortie de boucle si le choix existe
@@ -116,15 +108,20 @@ public class ConsoleMenu {
 
 		}while(lock);		
 		
+		String key = options.get(choice-1)[0];
+		
 		flush();
 		
-		// retour de la clef de proposition choisie
-		return optionReturn.get(choice-1);
+		return key; 
 
 
 	}
 
-
+	/**
+	 * Mise en forme et affichage d'un titre
+	 * @param t
+	 * 		Le titre
+	 */
 	public static void showTitle(String t) {
 		int lenght;
 		String separator = " ";
@@ -139,12 +136,22 @@ public class ConsoleMenu {
 
 	}
 	
-	
-    private static String repeat( String str, int i){
-        if(i>0)
-            return str + repeat(str, i-1);
-        else
-            return str ;
+	/**
+	 * Fonction de répétition d'un string
+	 *
+	 * @param str
+	 * 		la chaine de caractère à repeter
+	 * @param r
+	 * 		Le nombre de répétitions
+	 * @return
+	 * 		La chaine répétée r fois
+	 */
+    private static String repeat( String str, int r){
+    	String strReturn = "";
+    	for(int i = 0; i < r; i++ )
+    		strReturn += str;
+        
+    	return strReturn ;
        
     }
 

@@ -20,38 +20,55 @@ public class ScoreSerializer implements Serializable{
 	/** Instance du core */
 	protected Core core = Core.getInstance(this);
 
-	protected Map<String, int[]> scoresList = new HashMap<String, int[]>();
-	protected File scoreFile;
+	/** Tableau des scores sous la forme nomDuJoueur =>  {nbrPatiesGagnées ; nbrPatiesPerdues} */
+	protected Map<String, int[]> scoreList = new HashMap<String, int[]>();
+	
+	/** Fichier de score */
+	protected File scoreFile = new File(core.config.get("scoreFile"));
 
 
-
-	public ScoreSerializer(String sf){
-		this.scoreFile = new File(sf);
+	/**
+	 * Constructeur
+	 */
+	public ScoreSerializer(){
 		load();
 	}
 
-	public void load(){	
-		if(scoreFile.exists() && !scoreFile.isDirectory())
+	/**
+	 * Chargement du fichier de score
+	 */
+	public void load(){
+		
+		// si le fichier score existe
+		if(scoreFile.exists() && !scoreFile.isDirectory()) {
 			try {
-				scoreFile.createNewFile();
 				ObjectInputStream ois = new ObjectInputStream( new FileInputStream(this.scoreFile));
-				this.scoresList = (HashMap) ois.readObject();
+				this.scoreList = (HashMap) ois.readObject();
 				ois.close();
 			} catch (Exception e) {
 				this.core.error(e);
 			}
-		else {
-			save();
+		//Sinon, le creer
+		}else {
+			try {
+				scoreFile.createNewFile();
+				save();
+			} catch (IOException e) {
+				this.core.error(e);
+			}
+			
 		}
 
 	}	
 
+	/**
+	 * Sauvegarde du fichier score
+	 */
 	public void save(){
 		try {
-			ObjectOutputStream oos = new ObjectOutputStream( new BufferedOutputStream( new FileOutputStream(scoreFile)));
-			oos.writeObject(scoresList);
+			ObjectOutputStream oos = new ObjectOutputStream( new BufferedOutputStream( new FileOutputStream(this.scoreFile)));
+			oos.writeObject(this.scoreList);
 			oos.close();
-
 		} catch (Exception e) {
 			this.core.error(e);
 		}

@@ -10,6 +10,10 @@ public class App {
 
 	protected Core core = Core.getInstance(this);
 
+	/**
+	 * Main
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		// creation du model

@@ -12,7 +12,11 @@ public class DebugMode {
 
 	/** Instance du fichier de configuration */
 	private static Config config = Config.getInstance();
+	
+	/** mode Debug */
+	private static boolean debugMode = false;
 
+	/** Vrai si le logger utilise la console */
 	private static boolean consoleMode = false;
 
 	/**
@@ -20,22 +24,35 @@ public class DebugMode {
 	 */
 	private static void testConsole() {
 		//liste des Appenders
-		Enumeration e = logger.getRootLogger().getAllAppenders();
+		Enumeration e = Logger.getRootLogger().getAllAppenders();
 		boolean loggerConsole = false;
-		
+
+		//Revoir true si ConsoleAppender est utilisé
 		while(e.hasMoreElements()) {
 			if(e.nextElement().toString().contains("ConsoleAppender") )
 				loggerConsole = true;
 		}
 
-		if( (logger.getRootLogger().getLevel().toInt() > Level.DEBUG.toInt()) || loggerConsole == false)
+		// Si le niveau du logger est supérieur au mode DEBUG  ou que ConsoleAppender n'estpas utilisé
+		if( (Logger.getRootLogger().getLevel().toInt() > Level.DEBUG.toInt()) || loggerConsole == false)
 			consoleMode = false;
 		else
 			consoleMode = true;
 	}
 
-	
 
+	/**
+	 * Definit si le mode debug est actif.
+	 *
+	 * @param d
+	 * 		true pour activer le mode DEBUG
+	 */
+
+	public static void setDebugMode(boolean d) {
+		debugMode = d;
+	}
+	
+	
 	/**
 	 * Affichage des messages de debug
 	 * 
@@ -44,11 +61,12 @@ public class DebugMode {
 	 */
 	public static void print(String debugMsg) {
 		testConsole();
-		
-		if(config.DEBUG && consoleMode)
-			logger.debug(debugMsg);
-		else
-			System.out.println(debugMsg);
+		if(debugMode) {
+			if(consoleMode)
+				logger.debug(debugMsg);
+			else
+				System.out.println(debugMsg);
+		}
 	}
 
 	/**
@@ -59,7 +77,7 @@ public class DebugMode {
 	 */
 	public static void error(Throwable errorMsg) {
 		testConsole();
-		
+
 		if(consoleMode)
 			logger.fatal( "FATAL ERROR!", errorMsg );			
 		else

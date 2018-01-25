@@ -2,27 +2,28 @@ package  org.mastermind.view;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import javax.swing.JFrame;
 
 import org.mastermind.controller.Controller;
 import org.mastermind.core.Core;
+import org.mastermind.model.scores.Score;
 import org.mastermind.observer.Observer;
 
-public abstract class AbstractInterface implements Observer{ 
+public abstract class AbstractInterface extends JFrame implements Observer {
 
 
 	/** Instance du core */
 	protected Core core = Core.getInstance(this);
 
+	/** Instance des scores */
+	protected Score score = Score.getInstance();
 
+	/** Controlleur */
 	protected Controller controller;
 
 	/** Saisies de l'ordinateur*/
-	protected List<Object> output = new ArrayList<Object>();;
-
-	/** Conditions de victoire réunies */
-	protected boolean win;
+	protected Object output;
 
 	/** Mode de jeu */
 	protected String gameMode;
@@ -33,100 +34,114 @@ public abstract class AbstractInterface implements Observer{
 	/** Partie en cours */
 	protected int round = 1;	
 
-	/** Nombre de tours de jeu */
-	protected int gameTurns = core.config.getInt("gameTurns");
-
-	/** Nombre de paries de jeu */
-	protected int gameRounds = core.config.getInt("gameRounds");	
-
-	/** Premier joueur */ 
-	protected String firstPlayer;
-	
-	protected int[] playerScore;
-
-	protected String playerName;
+	/** Nom du Joueur */
+	protected String playerName = "";
 
 
-	protected Map<String, int[]> scoresList;
-	
-	
-
+	/**
+	 * Constructeur
+	 * @param c
+	 * 		Instance du controlleur
+	 */
 	public AbstractInterface(Controller c) {
 		controller = c;
-
+		// Initialisation de la vue
 		initView();
 
 	}
 
+	/**
+	 * Initialisation de la vue
+	 */
 	protected abstract void initView();
 
-	protected abstract void helloWorld();
-
+	/**
+	 * Demarrage de la vue
+	 */
 	protected void start() {
 		helloWorld();
 		initInterface();
-
 	}
 
+	/**
+	 * BootScreen
+	 */
+	protected abstract void helloWorld();
 
-
+	/**
+	 * Initialisation de l'interface
+	 */
 	protected abstract void initInterface();
 
-	protected void initGameLoop() {
+	/**
+	 * Initialisation du jeu avant démarrage
+	 */
+	protected void initGame() {
+		//Remise à 0 des paramettres du model
+		this.controller.resetModel();
+		turn = 1;
+		round = 1;
 
-		this.output.clear();
-		this.win = false;
-		this.turn = 1;
-		this.controller.newGame();
-
+		if(playerName.equals(""))
+			setPlayer();
+		// Définition du mode de jeu
+		if(playerName.length()>0) {
+			setGameMode();
+			if(controller.getGameMode() != null) {
+				// Nouveau jeu
+				newGame();
+				// Nouveau round
+				newRound();
+			}
+		}
 	}
 
-	protected abstract void setPlayer();
-	
+	/**
+	 * Definition du mode de jeu
+	 */
 	protected abstract void setGameMode();
 
-	protected void initGame() {
-		setGameMode();		
-		initGameLoop();
-		gameLoop();		
+	/**
+	 * Demarrage d'un nouveau jeu
+	 */
+	protected abstract void newGame();
+
+	/**
+	 * Demarrage d'un nouveau matche
+	 */
+	protected abstract void newRound();
+
+	/**
+	 * Definition du joueur
+	 */
+	protected abstract void setPlayer();
+
+	/**
+	 * Vue des regles
+	 */
+	protected abstract void rulesView();
+
+	/**
+	 * Vue des scores
+	 */
+	protected abstract void scoresView();
+
+	/**
+	 * Vue des credits
+	 */
+	protected abstract void aboutUsView();
+
+	protected List<String[]> menuList(String options){
+		List<String[]> menuList = new ArrayList<String[]>();
+
+
+		for(int i = 0;  core.lang.keyExist(options + "." + i); i++ ) {
+			String[] value = {"", ""};
+			value[0] = core.lang.get(options + "." + i + ".key", true);
+			value[1] = core.lang.get(options + "." + i + ".desc", true);
+			menuList.add(value);
+		}
+		return menuList;
 	}
 
-	protected abstract void gameLoop();
-
-	protected abstract void rules();
-
-	protected abstract void scores();
-
-	protected abstract void credits();
-
-
-	protected abstract void input();
-
-	protected abstract void output();
-
-
-	protected abstract void endGame();
-
-	public void playerInfo(String playerName, int[] scores) {
-		this.playerName = playerName;
-		this.playerScore = scores;
-
-		
-	}
-
-	public void update(List<Object> o, boolean w) {
-		this.output = o;
-		this.win = w;
-	}
-
-
-	public void showScoresList( Map<String, int[]> scoresList) {
-		this.scoresList = scoresList;
-	}
-	
-	
-	public void  firstPlayer(String player) {
-		this.firstPlayer = player;
-	}
-		
 }

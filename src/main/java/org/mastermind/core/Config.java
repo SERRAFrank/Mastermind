@@ -42,7 +42,7 @@ public class Config {
 			DEBUG = true;
 		else
 			DEBUG = false;
-
+		
 		logger.info("Debug mode : " + DEBUG );
 
 	}

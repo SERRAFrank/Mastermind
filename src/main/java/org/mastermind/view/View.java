@@ -15,11 +15,16 @@ public class View {
 	/** Instance du core */
 	protected Core core = Core.getInstance(this);
 
-	
+	/**
+	 * Constructeur
+	 * @param c
+	 * 		Instance du controlleur
+	 */
 	public View(Controller c) {
 		
 		this.controller = c;
 		String viewMode = core.config.get("view");
+		
 		//Initialisation du type de vue
 		core.logger.info("View mode : " + viewMode);
 		switch (viewMode) {
@@ -40,9 +45,18 @@ public class View {
 		
 	}
 
+	/**
+	 * Demarrage de la vue
+	 */
 	public void start() {
 		this.gameInterface.start();
 	}
+	
+	/**
+	 * Retourn l'instance de l'interface utilisée
+	 * @return
+	 * 		Instance de l'interface 
+	 */
 	
 	public AbstractInterface getObserver() {
 		return this.gameInterface;

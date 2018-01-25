@@ -21,16 +21,17 @@ public class Lang {
 	protected Config config = Config.getInstance();
 	
 	/** Le répertoire des langues */
-
-
 	private String defaultLanguage = config.get("defaultLanguage");
+	
+	/** Le fichier langue */
 	private String languageFile = config.get("languageDir") + "/" + defaultLanguage + ".lang" ;	
 	
 	
 	private Properties props = new Properties();
 
-
+	/** Liste des clefs du fichier Lang */
 	private Set<String> keysList;
+	
 	/** Instance unique non préinitialisée */
 	private static Lang INSTANCE = null;
 	
@@ -64,7 +65,7 @@ public class Lang {
 			// chargement du fichier
 			reader = new FileInputStream(this.languageFile);
 			
-			// prose en charge de l'accentuation
+			// prise en charge de l'accentuation
 			props.load(new InputStreamReader(reader, Charset.forName("UTF-8")));
 			
 			this.props.load(reader);
@@ -88,8 +89,6 @@ public class Lang {
 		
 	}
 	
-	//private Map<String, String> explodeProp(String)
-
 	/**
 	 * Retourne la langue.
 	 *
@@ -106,7 +105,7 @@ public class Lang {
 	 * @param key
 	 * 		La clef
 	 * @param returnNull
-	 * 		Retourne null si la clef n'existe pas, si il retourne la clef
+	 * 		Retourne null si la clef n'existe pas, sinon il retourne la clef
 	 * @return La valeur de la clef
 	 */
 	private String getProperty(String key, boolean returnNull) {
@@ -124,7 +123,10 @@ public class Lang {
 		String[] substring;
 		String replace;
 		
-
+		/**
+		 *  Remplacement des variables du fichier  par des variables lang ou config
+		 *  sous la forme {{lang.xxx}} 
+		 */
 		while(true) {
 			matcher = pattern.matcher(value);
 			if (matcher.find()) {
@@ -155,6 +157,9 @@ public class Lang {
 	 *
 	 * @param key
 	 * 		La clef recherchée
+	 * @param returnNull
+	 * 		Retourne null si la clef n'existe pas, sinon il retourne la clef
+	 * 
 	 * @return value
 	 * 		La valeur de la clef
 	 */
@@ -163,13 +168,49 @@ public class Lang {
 
 	}
 	
-	
+	/**
+	 * Retourne la valeur correspondant à une clef
+	 *
+	 * @param key
+	 * 		La clef recherchée
+	 * 
+	 * @return value
+	 * 		La valeur de la clef
+	 */ 	
 	public String get(String key) {
 		return getProperty(key, false);
 	}
 	
+
 	/**
-	 * Retourne toutes les clefs.
+	 * Retourne la valeur correspondant à une clef sous forme de Character
+	 *
+	 * @param key
+	 * 		La clef recherchée
+	 * 
+	 * @return value
+	 * 		La valeur de la clef
+	 */ 	
+	public char getChar(String key) {
+		return getProperty(key, false).charAt(0);
+	}
+	
+	/**
+	 * Retourne la valeur correspondant à une clef sous dorme de Integer
+	 *
+	 * @param key
+	 * 		La clef recherchée
+	 * 
+	 * @return value
+	 * 		La valeur de la clef
+	 */ 	
+	public int getInt(String key) {
+		return Integer.parseInt(getProperty(key, false));
+	}
+	
+	
+	/**
+	 * Retourne une liste de toutes les clefs.
 	 *
 	 * @return Set
 	 * 	Liste des clefs
@@ -186,7 +227,13 @@ public class Lang {
 		keysList = ( (Map) this.props).keySet();
 	}
 	
-	
+	/**
+	 * Verifie si une clef existe
+	 * @param k
+	 * 		La clef
+	 * @return
+	 * 		true si elle existe, sinon false
+	 */
 	public boolean keyExist(String k) {
 		boolean result = false;
 		for(String key : keysList) {
@@ -195,7 +242,9 @@ public class Lang {
 		}
 		return result;
 	}
-	
+
+
+
 	
 	
 }

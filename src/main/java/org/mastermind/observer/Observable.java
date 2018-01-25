@@ -1,5 +1,6 @@
 package  org.mastermind.observer;
 
+import java.util.List;
 import java.util.Map;
 
 import org.mastermind.model.Model;
@@ -8,9 +9,9 @@ import org.mastermind.model.scores.Score;
 public interface Observable {
 
 	public void addObserver(Observer obs);
-	public void notifyObserver();
-	public void getFirstPlayerObserver();	
-	public void getPlayerObserver();
-	public void getScoresListObserver();				
+	public void notifyInput(String s);
+	public void notifyOutput(String s, List<?> o);
+	public void notifyOutput(String s, String o);
+	public void notifyEndGame(String e, boolean w);
 	public void removeObserver();
 }

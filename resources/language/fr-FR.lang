@@ -1,3 +1,5 @@
+appTitle = Mastermind
+
 hello = Bonjour
 
 helloWorld.0  = __________________________________________________________________
@@ -15,17 +17,31 @@ helloWorld.11 =| \\/    \\/ \\__,_||___/ \\__| \\___||_|   \\/    \\/|_||_| |_| 
 helloWorld.12 =|_________________________________________________________________|
 
 
+helloWorld.img = 
+
 menu.Title = Menu
 menu.Options.0.key = game
-menu.Options.0.desc = Nouveau jeu
+menu.Options.0.desc = {{lang.newGameItem}}
 menu.Options.1.key = rules
-menu.Options.1.desc = Règles
+menu.Options.1.desc =  {{lang.rulesItem}}
 menu.Options.2.key = scores
-menu.Options.2.desc = Scores
-menu.Options.3.key = credits
-menu.Options.3.desc = Crédits
+menu.Options.2.desc =  {{lang.scoreItem}}
+menu.Options.3.key = aboutUs
+menu.Options.3.desc =  {{lang.aboutUsItem}}
 menu.Options.4.key = exit
-menu.Options.4.desc = Quitter
+menu.Options.4.desc =  {{lang.exitItem}}
+
+
+
+fileMenu = Fichier
+fileMenuMnemonic = f
+newGameItem = Nouveau jeu
+rulesItem = Règles
+scoreItem = Scores
+exitItem = Quitter
+aboutUsMenu = ?
+aboutUsMenuMnemonic = o
+aboutUsItem = A propos ...
 
 setPlayerName = Entrez votre nom :
 getScores = Votre score est de : 
@@ -41,8 +57,9 @@ selectGameMode.Options.1.key = defender
 selectGameMode.Options.1.desc = Mode défenseur où c'est à l'ordinateur de trouver votre combinaison secrète
 selectGameMode.Options.2.key = dual
 selectGameMode.Options.2.desc = Mode duel où l'ordinateur et vous jouez tour à tour, le premier à trouver la combinaison secrète de l'autre a gagné
-selectGameMode.Options.3.key = return
-selectGameMode.Options.3.desc = Retour
+
+return.key = return
+return.desc = Retour
 
 
 
@@ -65,27 +82,31 @@ yesno = [O]ui/[N]on
 
 
 
-input.player = Veuillez saisir votre proposition :
-input.computer = Veuillez saisir votre réponse :
+input.proposCombination = Veuillez saisir votre proposition
+input.setComparaison = Veuillez saisir votre réponse
+
+output.proposCombination = Voici la proposition
+output.setComparaison = Voici la réponse
+
 
 input.error = La saisie n'est pas correcte. Veillez rentrer une chaine valide, avec des espaces entre chaque caractère.
 
-challenger.win = Bravo, vous avez gagné ... pour le moment
-challenger.lost = He oui, j'ai été le plus fort.
-challenger.restart = Voulez-vous recommencer une partie en mode Challenger ?
 
-defender.win = J'ai gagné. Le silicone bat le neurone !
-defender.lost = Bravo, l'humain bat encore la machine ... pour le moment
-defender.restart = Voulez-vous recommencer une partie en mode Defenseur?
 
-dual.computer.win = J'ai gagné. Le silicone bat le neurone !
-dual.player.win = Bravo, vous avez gagné ... pour le moment
 
-dual.computer.lost = Mince, je n'ai pas trouvé !
-dual.player.lost = Vous n'avez pas réussi à trouver mon code ! 
-dual.restart = Aller, nouvelle manche et on échange les places ! Ca vous va ?
+AI.win = J'ai gagné. Le silicone bat le neurone !
+human.win = Bravo, l'humain bat encore la machine ... pour le moment
+AI.lost = Mince, je n'ai pas trouvé !
+human.lost = Vous n'avez pas réussi à trouver mon code ! 
 
-nbrPart = Manche 
+challenger.newRound = Voulez-vous recommencer une partie en mode Challenger ?
+defender.newRound = Voulez-vous recommencer une partie en mode Defenseur ?
+dual.newRound = Voulez-vous recommencer une partie en mode Duel ?
+
+dual.exaequo =  Aller, nouvelle manche et on échange les places ! Ca vous va ?
+
+
+nbrRound = Manche 
 nbrTurn = Tour 
 
 notUnderstand = Je n'ai pas compris.
