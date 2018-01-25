@@ -91,7 +91,6 @@ public class GamePanel extends AbstractPanel {
 
 
 				submitButton.addActionListener(new ActionListener(){
-					@Override
 					public void actionPerformed(ActionEvent event){
 						submit();
 					}
@@ -181,7 +180,7 @@ public class GamePanel extends AbstractPanel {
 	}
 
 	@Override
-	public void updateEndGame(String t, boolean w) {
+	public void updateEndGame(String t, boolean winner) {
 		submitButton.setEnabled(false);
 		
 		String str = Core.lang.get(t) + "\n";
@@ -199,7 +198,7 @@ public class GamePanel extends AbstractPanel {
 
 		str += "  " + win + " " +  Core.lang.get("victory") + " / " +  loose + " " + Core.lang.get("defeat") +  " ( " + p + "% )" + "\n\n";
 
-		if(w) {
+		if(winner) {
 			str += Core.lang.get(controller.getGameMode() + ".newRound") + "\n";
 		} else {
 			str += Core.lang.get(controller.getGameMode() + ".exaequo") + "\n";
