@@ -3,6 +3,7 @@
  */
 package org.mastermind.model.player;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -37,8 +38,6 @@ public abstract class  AbstractPlayer {
 	/** Définit si le joueur peut mettre en pause le jeu pour des inputs */
 	protected boolean pauseToInput = false;
 	
-
-	
 	/** Longueur de la combinaison */
 	protected int combinationLenght = core.config.getInt("combinationLenght");
 	
@@ -46,15 +45,37 @@ public abstract class  AbstractPlayer {
 	protected String combinationType = core.config.get("combinationType");
 	
 	/** List des couleurs utilisables (combinaison de type couleur/ */
-	protected List<String> combinationColors = new ArrayList<String>(Arrays.asList(core.config.get("combinationColors").split(",")));
+	protected List<Color> combinationPossibleColors = new ArrayList<Color>();
 	
 
 	/** Min et max pour les combinaisons de type chiffre */
 	protected int combinationMin = (combinationType.equals("numbers")) ? core.config.getInt("combinationNumbersMin") : 0 ;
 	protected int combinationMax = (combinationType.equals("numbers")) ? core.config.getInt("combinationNumbersMax") : core.config.get("combinationColors").split(",").length ;
-	
 
-	
+	public AbstractPlayer() {
+		for(String c : core.config.get("combinationColors").split(",")) {
+			switch(c) {
+			case "white":
+				combinationPossibleColors.add(Color.white);
+				break;
+			case "black":
+				combinationPossibleColors.add(Color.black);
+				break;
+			case "blue":
+				combinationPossibleColors.add(Color.blue);
+				break;
+			case "red":
+				combinationPossibleColors.add(Color.red);
+				break;
+			case "yellow":
+				combinationPossibleColors.add(Color.yellow);
+				break;
+			case "green":
+				combinationPossibleColors.add(Color.green);
+				break;				
+			}
+		}
+	}
 	
 	/**
 	 * Generation de la clef secrete

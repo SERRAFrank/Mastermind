@@ -220,7 +220,7 @@ public class GraphicInterface extends AbstractInterface {
 	@Override
 	protected void aboutUsView() {
 		this.container.removeAll();
-		this.container.add(new RulesPanel(size).getPanel(), BorderLayout.CENTER);
+		this.container.add(new AboutUsPanel(size).getPanel(), BorderLayout.CENTER);
 		this.container.validate();
 	}
 
