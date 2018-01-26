@@ -63,7 +63,9 @@ public class GraphicInterface extends AbstractInterface {
 
 	}
 
-
+	/**
+	 * Menu principal
+	 */
 	private void initMenu() {
 		this.menuBar = new JMenuBar();
 

@@ -40,43 +40,12 @@ public abstract class  AbstractPlayer {
 	
 	/** Longueur de la combinaison */
 	protected int combinationLenght = core.config.getInt("combinationLenght");
-	
-	/** Type de combinaison */
-	protected String combinationType = core.config.get("combinationType");
-	
-	/** List des couleurs utilisables (combinaison de type couleur/ */
-	protected List<Color> combinationPossibleColors = new ArrayList<Color>();
-	
 
 	/** Min et max pour les combinaisons de type chiffre */
-	protected int combinationMin = (combinationType.equals("numbers")) ? core.config.getInt("combinationNumbersMin") : 0 ;
-	protected int combinationMax = (combinationType.equals("numbers")) ? core.config.getInt("combinationNumbersMax") : core.config.get("combinationColors").split(",").length ;
+	protected int combinationMin = core.config.getInt("combinationNumbersMin");
+	protected int combinationMax = core.config.getInt("combinationNumbersMax");
 
-	public AbstractPlayer() {
-		for(String c : core.config.get("combinationColors").split(",")) {
-			switch(c) {
-			case "white":
-				combinationPossibleColors.add(Color.white);
-				break;
-			case "black":
-				combinationPossibleColors.add(Color.black);
-				break;
-			case "blue":
-				combinationPossibleColors.add(Color.blue);
-				break;
-			case "red":
-				combinationPossibleColors.add(Color.red);
-				break;
-			case "yellow":
-				combinationPossibleColors.add(Color.yellow);
-				break;
-			case "green":
-				combinationPossibleColors.add(Color.green);
-				break;				
-			}
-		}
-	}
-	
+
 	/**
 	 * Generation de la clef secrete
 	 */

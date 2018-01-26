@@ -140,6 +140,36 @@ public class Config {
 		return value;
 
 	}
+	
+	/**
+	 * Retourne la valeur correspondant à une clef sous forme d'Integer
+	 *
+	 * @param key
+	 * 		La clef recherchée
+	 * @return value
+	 * 		La valeur de la clef
+	 */
+	public int getInt(String string) {
+		return Integer.parseInt(get(string));
+	}
+
+	
+	/**
+	 * Indique si la clef existe.
+	 *
+	 * @param key
+	 * 		La clef a tester
+	 * @return 
+	 * 		true si vrai
+	 */
+	public boolean exist(String key) {
+		if( this.props.getProperty(key) == null)
+			return false;
+		else
+			return true;
+	}
+
+	
 
 	/**
 	 * Définit la valeur d'une clef
@@ -163,11 +193,6 @@ public class Config {
 	public Set<Object> getAllKeys(){
 		Set<Object> keysList = this.props.keySet();
 		return keysList;
-	}
-
-
-	public int getInt(String string) {
-		return Integer.parseInt(get(string));
 	}
 
 

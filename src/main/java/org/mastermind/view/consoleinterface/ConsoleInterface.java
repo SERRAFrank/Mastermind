@@ -12,9 +12,6 @@ import org.mastermind.view.AbstractInterface;
 
 public class ConsoleInterface extends AbstractInterface{
 
-	/** Instance du core */
-	protected Core core = Core.getInstance(this);
-
 	/** Lecture des inputes */
 	protected Scanner scanner = new Scanner(System.in);
 
@@ -83,7 +80,7 @@ public class ConsoleInterface extends AbstractInterface{
 		List<String[]> o = menuList("selectGameMode.Options");
 		String[] returnOption = {core.lang.get("return.key"),core.lang.get("return.desc")  };
 		o.add(returnOption);
-		
+
 		ConsoleMenu gameModeMode = new ConsoleMenu(t, o);
 		gameMode = gameModeMode.showMenu();
 		if(gameMode.equals("return"))
@@ -92,7 +89,7 @@ public class ConsoleInterface extends AbstractInterface{
 			controller.setGameMode(gameMode);
 
 	}
-	
+
 	/**
 	 * Demarrage d'un nouveau jeu
 	 */
@@ -109,18 +106,20 @@ public class ConsoleInterface extends AbstractInterface{
 		System.out.println();
 		System.out.println(">  ROUND " + round + "  <") ;
 		System.out.println();
-		
+
 		round++;	
 		this.controller.newGame();
 	}
 
-
+	/**
+	 * Menu principal
+	 */
 	protected void principalMenu() {	
 		String t = core.lang.get("menu.Title");
 		List<String[]> o = menuList("menu.Options");
-	
+
 		ConsoleMenu menu = new ConsoleMenu(t, o);
-		
+
 		String choice = menu.showMenu();
 
 		clearScreen();
@@ -269,24 +268,24 @@ public class ConsoleInterface extends AbstractInterface{
 		}catch(Exception e) {
 		}
 	}
-	
-	
+
+
 	/** Pattern Observer */
-		
-		/**
-		 * Gestion des sorties
-		 * @param s 
-		 * @param o
-		 * 		Message à afficher
-		 */	
+
+	/**
+	 * Gestion des sorties
+	 * @param s 
+	 * @param o
+	 * 		Message à afficher
+	 */	
 	public void updateOutput(String s, List<?> o) {
 		for(Object str : o)
 			System.out.print(str + " ");
 
 		System.out.print(System.getProperty("line.separator"));
 	}
-	
-	
+
+
 	/**
 	 * Gestion des sorties
 	 * @param o
@@ -311,8 +310,8 @@ public class ConsoleInterface extends AbstractInterface{
 			msg = core.lang.get("input.setComparaison");
 			break;
 		}
-		
-		
+
+
 		String str = "";
 		boolean r = false;
 		System.out.println(msg);
@@ -325,7 +324,7 @@ public class ConsoleInterface extends AbstractInterface{
 			}
 		}
 	}
-	
+
 	/**
 	 * Fin de jeu
 	 * @param t
@@ -333,7 +332,7 @@ public class ConsoleInterface extends AbstractInterface{
 	 * @param w
 	 * 		Presence d'un gagnant
 	 */
-	
+
 	public void updateEndGame(String t, boolean w) {	
 		System.out.println(Core.lang.get(t));
 		System.out.println(Core.lang.get("getScores"));
@@ -344,9 +343,9 @@ public class ConsoleInterface extends AbstractInterface{
 		} else {
 			newRoundQuestion(Core.lang.get(gameMode + ".exaequo"));
 		}
-		
+
 	}
-	
-	
+
+
 
 }

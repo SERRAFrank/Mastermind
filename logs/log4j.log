@@ -1,4 +1,4 @@
-26-01-2018 16:37:13 INFO  Config:66 - Loading config file : resources/config.properties
-26-01-2018 16:37:13 INFO  Config:46 - Debug mode : true
-26-01-2018 16:37:13 INFO  Config:62 - Loading language file : resources/language/fr-FR.lang
-26-01-2018 16:37:13 INFO  View:29 - View mode : graphic
+26-01-2018 18:49:22 INFO  Config:66 - Loading config file : resources/config.properties
+26-01-2018 18:49:22 INFO  Config:46 - Debug mode : true
+26-01-2018 18:49:22 INFO  Config:62 - Loading language file : resources/language/fr-FR.lang
+26-01-2018 18:49:22 INFO  View:29 - View mode : console

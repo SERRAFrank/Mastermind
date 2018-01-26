@@ -6,9 +6,9 @@ import org.mastermind.model.Model;
 import org.mastermind.view.View;
 
 public class App {
-	
 
-	protected Core core = Core.getInstance(this);
+
+	protected static Core core = Core.getInstance("App");
 
 	/**
 	 * Main
@@ -16,12 +16,21 @@ public class App {
 	 */
 	public static void main(String[] args) {
 
+		for(String argument : args) {
+			if(argument.contains(".")) {
+				String key = argument.split("\\.")[0];
+				String value = argument.split("\\.")[1];
+				if(core.config.exist(key))
+					core.config.set(key, value);
+			}
+		}		
+
 		// creation du model
 		Model model = new Model(); 
 
 		// creation du controller
 		Controller controller = new Controller(model);
-		
+
 		//creation de la vue
 		View view = new View (controller);
 
@@ -29,7 +38,7 @@ public class App {
 
 		view.start();
 
-}
+	}
 
 
 }

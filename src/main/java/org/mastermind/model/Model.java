@@ -2,6 +2,7 @@ package  org.mastermind.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.mastermind.core.Core;
 import org.mastermind.model.player.AIPlayer;
@@ -21,7 +22,7 @@ public class Model implements Observable {
 	protected Core core = Core.getInstance(this);
 
 	/** List pour le pattern Observer */
-	private ArrayList<Observer> listObserver = new ArrayList<Observer>();
+	private List<Observer> listObserver = new CopyOnWriteArrayList <Observer>();
 
 	/** création de 2 joueurs */
 	private AbstractPlayer player1;
