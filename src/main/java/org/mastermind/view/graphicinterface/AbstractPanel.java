@@ -38,7 +38,6 @@ public abstract class AbstractPanel  implements Observer{
 		
 		this.content = new JPanel();
 		this.content.setBackground(Color.white);
-
 	}
 
 	public JPanel getPanel(){

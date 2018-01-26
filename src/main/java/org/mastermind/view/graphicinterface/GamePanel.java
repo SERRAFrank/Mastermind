@@ -126,6 +126,7 @@ public class GamePanel extends AbstractPanel {
 	private JTextField fieldMaker() {
 		JTextField field = new JTextField();
 		field.setHorizontalAlignment(SwingConstants.CENTER);
+		field.setFont(comics30);
 		field.setPreferredSize(new Dimension(50, 50));
 		return field;
 	}
