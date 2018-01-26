@@ -70,8 +70,6 @@ public class Model implements Observable {
 		this.currentRound = 1;
 		this.hiddenTo = null;
 		this.input = null;
-
-		
 	}
 
 	/**
@@ -210,6 +208,8 @@ public class Model implements Observable {
 	private void endGame() {
 		//Incremente le nombre de tours si la manche arrive à sa fin
 		this.currentTurn++;
+		
+		boolean forceReset = false;
 
 		// identifiant du gagnant
 		String winnerID = null;
@@ -218,6 +218,7 @@ public class Model implements Observable {
 		boolean win = true;
 		player2.comparToProposCombination();
 
+		
 		// Si le joueur 2 a résolu la clef
 		if( this.player2.solvedCombination()){
 			//Fin de jeu
@@ -229,9 +230,10 @@ public class Model implements Observable {
 
 			winnerID = this.player2.getID() + ".win";
 
+			forceReset = true;
+
 		// si le nombre de tours max est atteint
 		}else if(this.currentTurn > maxTurn) {	
-			
 			//Fin de jeu
 			this.endGame = true;
 
@@ -240,8 +242,6 @@ public class Model implements Observable {
 				
 				winnerID = this.player1.getID() + ".lost";	
 				win = false;
-				// reset forcé
-				reset();
 				
 			}else {
 				// Joueur 1 gagne
@@ -249,18 +249,23 @@ public class Model implements Observable {
 				// Joueur 2 perd
 				this.player2.win(false);
 				winnerID = this.player1.getID() + ".win";
+				forceReset = true;
 
 				
 			}
 		} 
 
-		if(endGame)
+		if(endGame) {
 			//Notifie à la vue lesparamettres de fin de partie
 			notifyEndGame(winnerID, win);
-		else
+			
+			// reset forcé
+			if(forceReset)
+				reset();
+		}else {
 			//Nouveau tour
 			gameLoop();
-		
+		}
 	}
 
 
@@ -309,7 +314,8 @@ public class Model implements Observable {
 
 	/** Implementation du pattern observer */
 	public void addObserver(Observer obs) {
-		this.listObserver.add(obs);
+		if(!listObserver.contains(obs))
+			this.listObserver.add(obs);
 	}
 
 
@@ -338,7 +344,6 @@ public class Model implements Observable {
 	public void notifyEndGame(String e, boolean w) {
 		for(Observer obs : listObserver)
 			obs.updateEndGame(e, w);
-
 	}
 
 

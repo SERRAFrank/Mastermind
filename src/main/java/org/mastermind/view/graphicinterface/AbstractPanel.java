@@ -32,12 +32,12 @@ public abstract class AbstractPanel  implements Observer{
 
 		this.dimension = dim;
 		this.panel = new JPanel();	
-		//this.panel.setPreferredSize(this.dimension);
+		this.panel.setSize (this.dimension);
 		this.panel.setBackground(Color.white);
 		this.panel.setLayout(new BorderLayout());
-
+		
 		this.content = new JPanel();
-		this.content.setBackground(Color.white);	
+		this.content.setBackground(Color.white);
 
 	}
 

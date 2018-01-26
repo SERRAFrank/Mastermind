@@ -88,14 +88,20 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 		if(playerName.length()>0) {
 			setGameMode();
 			if(controller.getGameMode() != null) {
-				// Nouveau jeu
-				newGame();
-				// Nouveau round
-				newRound();
+				startNewGame();
 			}
 		}
 	}
-
+	
+	/**
+	 * Demarrage d'une nouvelle partie
+	 */
+	protected void startNewGame() {
+		// Nouveau jeu
+		newGame();
+		// Nouveau round
+		newRound();
+	}
 	/**
 	 * Definition du mode de jeu
 	 */

@@ -16,10 +16,9 @@ public class HelloWorldPanel extends AbstractPanel{
 	}
 
 	public void initPanel(){
-		setTitle(core.lang.get("hello"));
+		ImageIcon imgFile = new ImageIcon(core.config.get("imgDir") + "/hello.jpg");
 
-
-		this.content.add(new JLabel(new ImageIcon(core.lang.get("helloWorld.img"))), BorderLayout.CENTER);
+		this.content.add(new JLabel(imgFile), BorderLayout.CENTER);
 		
 		this.panel.add(content, BorderLayout.CENTER);
 

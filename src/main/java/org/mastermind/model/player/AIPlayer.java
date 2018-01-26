@@ -14,7 +14,7 @@ public class AIPlayer extends AbstractPlayer {
 	public AIPlayer() {
 		// Identifiant
 		ID = "AI";
-		
+
 		// Definition des bornes
 		for(int i = this.combinationMin; i <= this.combinationMax; i++ ) {
 			this.acceptedInputChar.add(i);
@@ -83,24 +83,35 @@ public class AIPlayer extends AbstractPlayer {
 		for(int i = 0 ; i < this.combinationLenght ; i++) {
 			int props = this.proposCombination.get(i);			
 			String reponse = this.comparCombination.get(i);
-			String iMin = i + ".min";
-			String iMax = i + ".max";
-			if ( this.bornCombination.get( iMin ) != this.bornCombination.get( iMax )) {
-				switch(reponse) {
-				case "=" :
-					this.bornCombination.put( iMin , props );
-					this.bornCombination.put( iMax , props);
-					break;
-				case "-":
-					this.bornCombination.put( i + ".max", props-1);
-					break;
-				case "+":
-					this.bornCombination.put( i + ".min", props+1 );
-					break;
-				}		
+
+			if( core.config.get("combinationType").equals("numbers") ) {
+
+				String iMin = i + ".min";
+				String iMax = i + ".max";
+				if ( this.bornCombination.get( iMin ) != this.bornCombination.get( iMax )) {
+					switch(reponse) {
+					case "=" :
+						this.bornCombination.put( iMin , props );
+						this.bornCombination.put( iMax , props);
+						break;
+					case "-":
+						this.bornCombination.put( i + ".max", (props - 1 >= this.combinationMin)? props - 1 : this.combinationMin );
+						break;
+					case "+":
+						this.bornCombination.put( i + ".min", (props + 1 <= this.combinationMax)? props + 1 : this.combinationMax );
+						break;
+					}		
+				}
 			}
 		}
 	}
+
+
+	public void comparToProposCombinationColors() {
+
+	}
+
+
 
 	/**
 	 * Definit si le joueur est victorieux ou non, et ajouter les points en fonction

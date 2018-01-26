@@ -15,6 +15,7 @@ public class ConsoleInterface extends AbstractInterface{
 	/** Instance du core */
 	protected Core core = Core.getInstance(this);
 
+	/** Lecture des inputes */
 	protected Scanner scanner = new Scanner(System.in);
 
 	/** Constructeur */
@@ -23,13 +24,15 @@ public class ConsoleInterface extends AbstractInterface{
 	}
 
 
-
+	/**
+	 * Initialisation de la vue
+	 */
 	@Override
 	protected void initView() {
 
 	}
 
-	/* 
+	/**
 	 * Affiche le message d'accueil au lancement de l'application
 	 */
 	@Override
@@ -42,12 +45,13 @@ public class ConsoleInterface extends AbstractInterface{
 	}
 
 
-
+	/**
+	 * Definition du nom du joueur
+	 */
 	@Override
 	protected void setPlayer() {
 		System.out.println(Core.lang.get("setPlayerName"));
 
-		//scanner.nextLine();	
 		String p = scanner.nextLine();
 
 		controller.setPlayerName(p);
@@ -58,16 +62,20 @@ public class ConsoleInterface extends AbstractInterface{
 	}
 
 
-
+	/**
+	 * Initialisation de l'interface
+	 */
 	@Override
 	protected void initInterface() {
-
+		// nettoyage de la console
 		clearScreen();
+		// affichage du menu principal
 		principalMenu();
 	}
 
-
-
+	/**
+	 * Definition du mode de jeu
+	 */
 	@Override
 	protected void setGameMode() {
 
@@ -84,11 +92,18 @@ public class ConsoleInterface extends AbstractInterface{
 			controller.setGameMode(gameMode);
 
 	}
+	
+	/**
+	 * Demarrage d'un nouveau jeu
+	 */
 	@Override
 	protected void newGame() {
 		ConsoleMenu.showTitle(core.lang.get("gameMode." + controller.getGameMode()));
 	}
 
+	/**
+	 * Demarrage d'un nouveau matche
+	 */
 	@Override
 	protected void newRound() {
 		System.out.println();
@@ -153,7 +168,9 @@ public class ConsoleInterface extends AbstractInterface{
 		return "  " + w + " " +  Core.lang.get("victory") + " / " +  l + " " + Core.lang.get("defeat") +  " ( " + p + "% )";
 	}
 
-
+	/**
+	 * Vue des scores
+	 */
 	@Override
 	protected void scoresView() {
 
@@ -166,7 +183,9 @@ public class ConsoleInterface extends AbstractInterface{
 		principalMenu();
 	}
 
-
+	/**
+	 * Vue des credits
+	 */
 	@Override
 	protected void aboutUsView() {
 		printMultiline("credits");
@@ -175,7 +194,9 @@ public class ConsoleInterface extends AbstractInterface{
 
 	}
 
-
+	/**
+	 * Vue des regles
+	 */
 	@Override
 	protected void rulesView() {
 		printMultiline("rules");

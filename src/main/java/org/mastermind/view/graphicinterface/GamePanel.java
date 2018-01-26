@@ -24,15 +24,15 @@ import org.mastermind.model.scores.Score;
 public class GamePanel extends AbstractPanel {
 
 	/** tour en cours */
-	private int currentTurn;
+	protected int currentTurn;
 
-	private int maxTurn;
+	protected int maxTurn;
 
 
 	/** Instance des scores */
 	protected Score score = Score.getInstance();
 
-	private Controller controller; 
+	protected Controller controller; 
 
 	protected int combinationLenght = core.config.getInt("combinationLenght");
 
@@ -42,16 +42,16 @@ public class GamePanel extends AbstractPanel {
 	/** Reponse de la comparaison de la proposition de chaine et  de la cachée */
 	protected JTextField[]  comparJTextField = new JTextField[combinationLenght];
 
-	private String phase;
+	protected String phase;
 
-	private JPanel propPanel = new JPanel();
-	private JPanel reponsePanel = new JPanel();
+	protected JPanel propPanel = new JPanel();
+	protected JPanel reponsePanel = new JPanel();
 
-	private JLabel roundLabel = new JLabel();
+	protected JLabel roundLabel = new JLabel();
 
-	private JOptionPane popup = new JOptionPane();
+	protected JOptionPane popup = new JOptionPane();
 
-	private JButton submitButton = new JButton("Submit");
+	protected JButton submitButton = new JButton("Submit");
 
 	protected String proposText;
 	protected String reponseText;
@@ -59,7 +59,17 @@ public class GamePanel extends AbstractPanel {
 	public GamePanel(Dimension dim, Controller ctrl){
 		super(dim);		
 		this.controller = ctrl;
+		
+		for(int i = 0 ; i < ( combinationLenght ); i++) {
+			proposJTextField[i] = fieldMaker();
+			comparJTextField[i] = fieldMaker();
+
+			propPanel.add( proposJTextField[i]);
+			reponsePanel.add( comparJTextField[i]);
+		}
+		
 		initPanel();
+		
 	}
 
 	@Override
@@ -69,26 +79,17 @@ public class GamePanel extends AbstractPanel {
 		GridLayout gl = new GridLayout(3,1 );
 		content.setLayout(gl);	
 
-		for(int i = 0 ; i < ( combinationLenght ); i++) {
-			proposJTextField[i] = fieldMaker();
-			comparJTextField[i] = fieldMaker();
-
-			propPanel.add( proposJTextField[i]);
-			reponsePanel.add( comparJTextField[i]);
-		}
-
+		propPanel.setBorder(BorderFactory.createTitledBorder(""));	
+		reponsePanel.setBorder(BorderFactory.createTitledBorder(""));
 
 		Thread t = new Thread() {
 			@Override
 			public void run() {
 				content.removeAll();
-				propPanel.setBorder(BorderFactory.createTitledBorder(proposText));	
-				reponsePanel.setBorder(BorderFactory.createTitledBorder(reponseText));
 
 				content.add(roundLabel);
 				content.add(propPanel);
 				content.add(reponsePanel);
-
 
 				submitButton.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent event){
@@ -104,7 +105,6 @@ public class GamePanel extends AbstractPanel {
 		t.start();
 
 	}
-
 
 	protected void submit() {
 		JTextField[] input;
@@ -147,11 +147,13 @@ public class GamePanel extends AbstractPanel {
 			proposIsEnable = false;
 		}
 
+		propPanel.setBorder(BorderFactory.createTitledBorder(proposText));	
+		reponsePanel.setBorder(BorderFactory.createTitledBorder(reponseText));
+
 		for(int i = 0 ; i < ( combinationLenght ); i++) {
 			proposJTextField[i].setEnabled(proposIsEnable);
 			comparJTextField[i].setEnabled(!proposIsEnable);
 		}
-
 	}
 
 	@Override
@@ -181,40 +183,6 @@ public class GamePanel extends AbstractPanel {
 
 	@Override
 	public void updateEndGame(String t, boolean winner) {
-		submitButton.setEnabled(false);
-		
-		String str = Core.lang.get(t) + "\n";
-		str += Core.lang.get("getScores") + "\n";
-
-		int win = score.getScores()[0];
-		int loose = score.getScores()[1];
-		
-		double p = 0.;
-		try{
-			p =   (win / ((double)win + (double)loose)) * 100;
-		}catch(Exception e) {}
-
-		p = Math.round(p * Math.pow(10,2)) / Math.pow(10,2);
-
-		str += "  " + win + " " +  Core.lang.get("victory") + " / " +  loose + " " + Core.lang.get("defeat") +  " ( " + p + "% )" + "\n\n";
-
-		if(winner) {
-			str += Core.lang.get(controller.getGameMode() + ".newRound") + "\n";
-		} else {
-			str += Core.lang.get(controller.getGameMode() + ".exaequo") + "\n";
-		}
-
-		int option = JOptionPane.showConfirmDialog(null, 
-				str,
-				"", 
-				JOptionPane.YES_NO_OPTION, 
-				JOptionPane.QUESTION_MESSAGE);
-
-
-		if(option == JOptionPane.OK_OPTION){
-			controller.newGame(); 
-		}
-
 
 
 	}

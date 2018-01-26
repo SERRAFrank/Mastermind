@@ -1,7 +1,13 @@
-25-01-2018 22:17:32 INFO  Config:66 - Loading config file : resources/config.properties
-25-01-2018 22:17:32 INFO  Config:46 - Debug mode : true
-25-01-2018 22:17:32 INFO  Config:62 - Loading language file : resources/language/fr-FR.lang
-25-01-2018 22:17:32 INFO  View:29 - View mode : graphic
-25-01-2018 22:17:40 INFO  HelloWorldPanel:88 - Game mode : challenger
-25-01-2018 22:17:40 INFO  GamePanel:88 - Game mode : challenger
-25-01-2018 22:17:40 DEBUG DebugMode:66 - hiddenCombination : [7, 3, 8, 7, 9]
+26-01-2018 13:37:35 INFO  Config:66 - Loading config file : resources/config.properties
+26-01-2018 13:37:35 INFO  Config:46 - Debug mode : true
+26-01-2018 13:37:35 INFO  Config:62 - Loading language file : resources/language/fr-FR.lang
+26-01-2018 13:37:35 INFO  View:29 - View mode : graphic
+26-01-2018 13:37:40 INFO  HelloWorldPanel:86 - Game mode : challenger
+26-01-2018 13:37:40 INFO  GamePanel:86 - Game mode : challenger
+26-01-2018 13:37:40 DEBUG DebugMode:66 - hiddenCombination : [7, 4, 1, 0, 0]
+26-01-2018 13:37:54 INFO  GamePanel:86 - Game mode : challenger
+26-01-2018 13:37:54 DEBUG DebugMode:66 - hiddenCombination : [0, 5, 2, 3, 1]
+26-01-2018 13:38:02 INFO  HumanPlayer:86 - Game mode : dual
+26-01-2018 13:38:02 INFO  GamePanel:86 - Game mode : dual
+26-01-2018 13:38:08 INFO  GamePanel:86 - Game mode : dual
+26-01-2018 13:38:08 DEBUG DebugMode:66 - hiddenCombination : [7, 1, 6, 2, 5]

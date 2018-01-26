@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import org.mastermind.controller.Controller;
+import org.mastermind.core.Core;
 import org.mastermind.view.AbstractInterface;
 
 public class GraphicInterface extends AbstractInterface {
@@ -128,8 +129,9 @@ public class GraphicInterface extends AbstractInterface {
 
 	@Override
 	protected void helloWorld() {
+		this.container.removeAll();
 		this.container.add(new HelloWorldPanel(this.size).getPanel());
-
+		this.container.validate();
 	}
 
 	@Override
@@ -177,17 +179,17 @@ public class GraphicInterface extends AbstractInterface {
 
 		AbstractPanel gameViewPanel = new GamePanel(size, controller);
 		controller.addObserver(gameViewPanel);
+		
 		this.container.removeAll();
 		this.container.add(gameViewPanel.getPanel(), BorderLayout.CENTER);
-		this.container.revalidate();
-		controller.newGame();
-		controller.resetModel();
+		this.container.validate();
+
+ 
 	}
 
 	@Override
 	protected void newRound() {
-		// TODO Auto-generated method stub
-
+		controller.newGame();
 	}
 
 	@Override
@@ -205,21 +207,21 @@ public class GraphicInterface extends AbstractInterface {
 	protected void rulesView() {
 		this.container.removeAll();
 		this.container.add(new RulesPanel(size).getPanel(), BorderLayout.CENTER);
-		this.container.revalidate();
+		this.container.validate();
 	}
 
 	@Override
 	protected void scoresView() {
 		this.container.removeAll();
 		this.container.add(new ScoresPanel(size, score.getScoresList()).getPanel(), BorderLayout.CENTER);
-		this.container.revalidate();
+		this.container.validate();
 	}
 
 	@Override
 	protected void aboutUsView() {
 		this.container.removeAll();
 		this.container.add(new RulesPanel(size).getPanel(), BorderLayout.CENTER);
-		this.container.revalidate();
+		this.container.validate();
 	}
 
 
@@ -269,8 +271,41 @@ public class GraphicInterface extends AbstractInterface {
 	}
 
 	@Override
-	public void updateEndGame(String e, boolean w) {
-		// TODO Auto-generated method stub
+	public void updateEndGame(String t, boolean winner) {
+		String str = Core.lang.get(t) + "\n";
+		str += Core.lang.get("getScores") + "\n";
+
+		int win = score.getScores()[0];
+		int loose = score.getScores()[1];
+
+		double p = 0.;
+		try{
+			p =   (win / ((double)win + (double)loose)) * 100;
+		}catch(Exception e) {}
+
+		p = Math.round(p * Math.pow(10,2)) / Math.pow(10,2);
+
+		str += "  " + win + " " +  Core.lang.get("victory") + " / " +  loose + " " + Core.lang.get("defeat") +  " ( " + p + "% )" + "\n\n";
+
+		if(winner) {
+			str += Core.lang.get(controller.getGameMode() + ".newRound") + "\n";
+		} else {
+			str += Core.lang.get(controller.getGameMode() + ".exaequo") + "\n";
+		}
+
+		int option = JOptionPane.showConfirmDialog(null, 
+				str,
+				"", 
+				JOptionPane.YES_NO_OPTION, 
+				JOptionPane.QUESTION_MESSAGE);
+
+
+		
+		if(option == JOptionPane.OK_OPTION){
+			startNewGame();
+		}else {
+			helloWorld();
+		}
 
 	}
 
