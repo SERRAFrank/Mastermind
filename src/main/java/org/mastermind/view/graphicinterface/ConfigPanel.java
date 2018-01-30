@@ -46,7 +46,6 @@ public class ConfigPanel extends AbstractPanel {
 	}
 
 
-
 	protected void initPanel() {
 
 		// onglet interface
@@ -114,7 +113,7 @@ public class ConfigPanel extends AbstractPanel {
 		panDebug.setBackground(Color.white);
 		panDebug.setPreferredSize(new Dimension(350, 80));
 		panDebug.setLayout(new BoxLayout(panDebug, BoxLayout.Y_AXIS));
-		panDebug.setBorder(BorderFactory.createTitledBorder(core.lang.get("setViewMode")));
+		panDebug.setBorder(BorderFactory.createTitledBorder(core.lang.get("debugMode")));
 
 		//CheckBox
 		JCheckBox debugModeBox = new JCheckBox(core.lang.get("setDebugMode"));
