@@ -32,13 +32,13 @@ public abstract class AbstractPanel  implements Observer{
 
 		this.dimension = dim;
 		this.panel = new JPanel();	
-		this.panel.setSize (this.dimension);
+		this.panel.setSize(this.dimension);
 		this.panel.setBackground(Color.white);
 		this.panel.setLayout(new BorderLayout());
 		
 		this.content = new JPanel();
 		this.content.setBackground(Color.white);
-	}
+	} 
 
 	public JPanel getPanel(){
 		return this.panel;
@@ -60,11 +60,7 @@ public abstract class AbstractPanel  implements Observer{
 	public void updateInput(String s) {}
 
 	@Override
-	public void updateOutput(String s, List<?> o){}
-
-
-	@Override
-	public void updateOutput(String s, String o){}
+	public void updateOutput(String s, Object o){}
 
 
 	@Override

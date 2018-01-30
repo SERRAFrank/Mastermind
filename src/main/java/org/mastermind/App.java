@@ -16,7 +16,11 @@ public class App {
 	 */
 	public static void main(String[] args) {
 
+		
+		// mise a jour de la configuration en fonction des arguments passés
+		// ne modifie pas le fichier de config
 		for(String argument : args) {
+			//les arguments doivent etre sous la forme clef.valeur
 			if(argument.contains(".")) {
 				String key = argument.split("\\.")[0];
 				String value = argument.split("\\.")[1];

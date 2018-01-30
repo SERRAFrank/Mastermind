@@ -278,22 +278,20 @@ public class ConsoleInterface extends AbstractInterface{
 	 * @param o
 	 * 		Message à afficher
 	 */	
-	public void updateOutput(String s, List<?> o) {
-		for(Object str : o)
-			System.out.print(str + " ");
-
+	public void updateOutput(String s, Object o) {
+		if(o instanceof List ) {
+			for(Object str : (List<?>)o)
+				System.out.print(str + " ");
+		}else {
+			if(s.equals("round"))
+				System.out.println(core.lang.get("nbrRound") + " " + o + " / " + this.maxTurn);
+			else 
+				System.out.println(o);
+		}
 		System.out.print(System.getProperty("line.separator"));
 	}
 
 
-	/**
-	 * Gestion des sorties
-	 * @param o
-	 * 		Message à afficher
-	 */	
-	public void updateOutput(String s, String o) {
-		System.out.println(o);
-	}
 
 	/**
 	 * Gestion des inputs

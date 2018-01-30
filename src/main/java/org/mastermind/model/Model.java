@@ -143,7 +143,7 @@ public class Model implements Observable {
 	private void gameLoop() {
 		
 		// Notification du round en cours
-		notifyOutput("round", core.lang.get("nbrRound") + " " + this.currentTurn + "/" + this.maxTurn);
+		notifyOutput("round", this.currentTurn);
 		
 		// initialisation des joueurs avec les parametres de nouveau tour
 		this.player1.newRound();
@@ -331,14 +331,10 @@ public class Model implements Observable {
 
 	}
 
-	public void notifyOutput(String s, List<?> o) {
+	public void notifyOutput(String s, Object o) {
 		for(Observer obs : listObserver)
 			obs.updateOutput(s, o);
 
-	}
-	public void notifyOutput(String s, String o) {
-		for(Observer obs : listObserver)
-			obs.updateOutput(s, o);
 	}
 
 	

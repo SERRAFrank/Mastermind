@@ -9,7 +9,9 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -29,6 +31,7 @@ public class GraphicInterface extends AbstractInterface {
 	private JMenuItem newGameItem = null;
 	private JMenuItem scoreItem = null;
 	private JMenuItem rulesItem = null;	
+	private JMenuItem configItem = null;	
 	private JMenuItem exitItem = null;
 
 	private JMenu aboutUsMenu = null;
@@ -96,6 +99,14 @@ public class GraphicInterface extends AbstractInterface {
 				rulesView();
 			}	    	
 		});
+		
+		this.configItem = new JMenuItem(core.lang.get("configItem"));
+		this.configItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK));
+		this.configItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0){
+				configView();
+			} 	
+		});
 
 		this.exitItem = new JMenuItem(core.lang.get("exitItem"));
 		this.exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_MASK));
@@ -117,6 +128,8 @@ public class GraphicInterface extends AbstractInterface {
 		this.fileMenu.add(this.newGameItem);
 		this.fileMenu.add(this.scoreItem);
 		this.fileMenu.add(this.rulesItem);
+		this.fileMenu.addSeparator();
+		this.fileMenu.add(this.configItem);
 		this.fileMenu.addSeparator();
 		this.fileMenu.add(this.exitItem);   
 		this.aboutUsMenu.add(this.aboutUsItem);
@@ -218,12 +231,27 @@ public class GraphicInterface extends AbstractInterface {
 		this.container.add(new ScoresPanel(size, score.getScoresList()).getPanel(), BorderLayout.CENTER);
 		this.container.validate();
 	}
+	
+	private void configView() {
+		this.container.removeAll();
+		this.container.add(new ConfigPanel(size).getPanel(), BorderLayout.CENTER);
+		this.container.validate();
+		
+	}	   
 
 	@Override
 	protected void aboutUsView() {
-		this.container.removeAll();
-		this.container.add(new AboutUsPanel(size).getPanel(), BorderLayout.CENTER);
-		this.container.validate();
+		JOptionPane aboutUsPopUp = new JOptionPane();
+	    ImageIcon logo = new ImageIcon( core.config.get("imgDir") + "/logo.png");
+	    
+		String aboutUsText = "";
+		for(int i = 0;  core.lang.keyExist("aboutUs" + "." + i); i++ ) {
+			aboutUsText += core.lang.get("aboutUs" + "." + i, true) + "\n";
+		}
+		
+		
+		aboutUsPopUp.showMessageDialog(null, aboutUsText, core.lang.get("aboutUsItem"), JOptionPane.INFORMATION_MESSAGE, logo);  
+		
 	}
 
 
@@ -261,13 +289,7 @@ public class GraphicInterface extends AbstractInterface {
 	}
 
 	@Override
-	public void updateOutput(String s, List<?> o) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void updateOutput(String s, String o) {
+	public void updateOutput(String s, Object o) {
 		// TODO Auto-generated method stub
 
 	}

@@ -1,17 +1,18 @@
 package org.mastermind.view.graphicinterface;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -26,8 +27,6 @@ public class GamePanel extends AbstractPanel {
 	/** tour en cours */
 	protected int currentTurn;
 
-	protected int maxTurn;
-
 
 	/** Instance des scores */
 	protected Score score = Score.getInstance();
@@ -35,6 +34,9 @@ public class GamePanel extends AbstractPanel {
 	protected Controller controller; 
 
 	protected int combinationLenght = core.config.getInt("combinationLenght");
+
+
+	protected int maxTurn = core.config.getInt("gameTurns");
 
 	/** Combinaison proposée à comparer */
 	protected JTextField[] proposJTextField = new JTextField[combinationLenght];
@@ -46,12 +48,13 @@ public class GamePanel extends AbstractPanel {
 
 	protected JPanel propPanel = new JPanel();
 	protected JPanel reponsePanel = new JPanel();
+	protected JPanel roundBarPanel = new JPanel();
 
-	protected JLabel roundLabel = new JLabel();
+	protected JProgressBar roundBar = new JProgressBar();
 
 	protected JOptionPane popup = new JOptionPane();
 
-	protected JButton submitButton = new JButton("Submit");
+	protected JButton submitButton = new JButton(core.lang.get("submit"));
 
 	protected String proposText;
 	protected String reponseText;
@@ -59,7 +62,7 @@ public class GamePanel extends AbstractPanel {
 	public GamePanel(Dimension dim, Controller ctrl){
 		super(dim);		
 		this.controller = ctrl;
-		
+
 		for(int i = 0 ; i < ( combinationLenght ); i++) {
 			proposJTextField[i] = fieldMaker();
 			comparJTextField[i] = fieldMaker();
@@ -68,26 +71,34 @@ public class GamePanel extends AbstractPanel {
 			reponsePanel.add( comparJTextField[i]);
 		}
 		
-		initPanel();
+		roundBar.setMinimum(0);
+		roundBar.setMaximum(maxTurn);
+		roundBar.setValue(1);
+		roundBar.setStringPainted(true);
+		roundBar.setString(core.lang.get("nbrRound") + " 1 / " + this.maxTurn);
 		
+		initPanel();
+
 	}
 
 	@Override
 	public void initPanel(){
-		setTitle(Core.lang.get("rulesItem"));
-
-		GridLayout gl = new GridLayout(3,1 );
-		content.setLayout(gl);	
+	
+		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
 
 		propPanel.setBorder(BorderFactory.createTitledBorder(""));	
 		reponsePanel.setBorder(BorderFactory.createTitledBorder(""));
+		
+
 
 		Thread t = new Thread() {
 			@Override
 			public void run() {
+				
+				
 				content.removeAll();
 
-				content.add(roundLabel);
+				content.add(roundBar);
 				content.add(propPanel);
 				content.add(reponsePanel);
 
@@ -158,29 +169,33 @@ public class GamePanel extends AbstractPanel {
 	}
 
 	@Override
-	public void updateOutput(String phase, List<?> o) {
-		JTextField[] output;
+	public void updateOutput(String phase, Object o) {
+		switch(phase) {
+		case "compar":
+			for(int i = 0; i < combinationLenght; i++) {
+				Color color = Color.RED;
+				String value = ((List) o).get(i).toString();
+				
+				if(value.equals("="))
+					color = Color.BLUE;
+				
+				comparJTextField[i].setDisabledTextColor(color);
+				comparJTextField[i].setText(value);
+			}
+			break;
+		case "propos":
+			for(int i = 0; i < combinationLenght; i++)
+				proposJTextField[i].setText(((List) o).get(i).toString());
+			break;
 
-		if(phase.equals("compar"))
-			output = comparJTextField;
-		else
-			output = proposJTextField;
-
-		for(int i = 0; i < combinationLenght; i++) {
-			output[i].setText(o.get(i).toString());
-		}
-
-	}
-
-	@Override
-	public void updateOutput(String s, String o) {
-		switch(s) {
 		case "round":
-			roundLabel.setText(o);
+			roundBar.setString(core.lang.get("nbrRound") + " " + o + " / " + this.maxTurn);
+			roundBar.setValue((int) o);
 			break;
 		}
 
 	}
+
 
 	@Override
 	public void updateEndGame(String t, boolean winner) {

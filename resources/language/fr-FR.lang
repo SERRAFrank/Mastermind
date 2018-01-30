@@ -38,6 +38,7 @@ fileMenuMnemonic = f
 newGameItem = Nouveau jeu
 rulesItem = Règles
 scoreItem = Scores
+configItem = Configurer 
 exitItem = Quitter
 aboutUsMenu = ?
 aboutUsMenuMnemonic = o
@@ -80,6 +81,7 @@ pressEnterToContinue = Appuyez sur [Entrer] pour continuer ...
 select = Selectionnez une valeur :
 yesno = [O]ui/[N]on
 
+submit = Soumettre
 
 
 input.proposCombination = Veuillez saisir votre proposition
@@ -90,8 +92,6 @@ output.setComparaison = Voici la réponse
 
 
 input.error = La saisie n'est pas correcte. Veillez rentrer une chaine valide, avec des espaces entre chaque caractère.
-
-
 
 
 AI.win = J'ai gagné. Le silicone bat le neurone !
@@ -115,3 +115,27 @@ notUnderstand = Je n'ai pas compris.
 aboutUs.0 = MasterMind
 aboutUs.1 = Par SERRA Frank
 aboutUs.2 = Pour OpenClassRooms
+
+
+interfacePan = Interface
+gamePan = Jeu
+langPan = Langue
+
+
+setViewMode = Mode de vue
+setNightMode = Mode nuit
+
+
+setNbrRound = Nombre maximum de tours par manches
+
+setLang = Langue par defaut
+setCombinationRange = Bornes des combinaisons
+setCombinationLenght = Longueur de la combinaison
+
+setCombMin = Minimum : 
+setCombMax = Maximum : 
+
+setLenght = Longueur : 
+
+debugMode = Debug Mode
+setDebugMode = Activer le mode DEBUG
