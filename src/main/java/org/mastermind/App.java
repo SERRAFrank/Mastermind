@@ -20,8 +20,17 @@ public class App {
 	 * Main
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 
+
+		// Options
+		final Options firstOptions = configFirstParameters();
+		final Options options = configParameters(firstOptions);
+
+		// On parse l'aide
+		final CommandLineParser parser = new DefaultParser();
+		final CommandLine firstLine = parser.parse(firstOptions, args, true);
+		
 		/** Instanciation du Core pour le logger */
 		Core.getInstance("App");
 
@@ -32,9 +41,7 @@ public class App {
 		boolean debugOption = (Core.config.get("DEBUG").equals("true") ) ? true : false ;
 		boolean saveOption = false;
 
-		final Options options = configParameters();
-
-		final CommandLineParser parser = new DefaultParser();
+		
 		CommandLine line = null;
 		try {
 			line = parser.parse(options, args);
@@ -49,7 +56,7 @@ public class App {
 				}
 			}
 
-
+			// Borne min de la combinaison
 			minOption = line.getOptionValue("min", Core.config.get("combinationNumbersMin")).charAt(0) ;
 			if (!Character.isDigit(minOption)){
 				try {
@@ -59,6 +66,7 @@ public class App {
 				}
 			}
 
+			// Borne max de la combinaison
 			maxOption = line.getOptionValue("max", Core.config.get("combinationNumbersMax")).charAt(0);
 			if (!Character.isDigit(maxOption)){
 				try {
@@ -69,6 +77,7 @@ public class App {
 				}
 			}
 
+			// Longueur de la combinaison
 			char lenghtChar = line.getOptionValue("lenght", Core.config.get("combinationLenght")).charAt(0);
 			if (!Character.isDigit(maxOption)){
 				try {
@@ -79,46 +88,62 @@ public class App {
 				}
 			}
 			
-			
+			// debug mode
 			debugOption = line.hasOption("debug");
 
+			//Sauvegarde des arguments
 			saveOption = line.hasOption("save");
+			
+			// Si mode aide
+			boolean helpMode = firstLine.hasOption("help");
+			if (helpMode) {
+			    final HelpFormatter formatter = new HelpFormatter();
+			    formatter.printHelp("MasterMaind", options, true);
+			    System.exit(0);
+			}
 
 
 		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-
+		// écrasement des données pas des arguments
 		Core.config.set("view", viewOption);
 		Core.config.set("combinationNumbersMin", String.valueOf(minOption) );
 		Core.config.set("combinationNumbersMax", String.valueOf(maxOption))	;
 		Core.config.set("combinationLenght", String.valueOf(lenghtOption))	;
 		Core.config.set("DEBUG", (debugOption)? "true" : "false") ;		
 
+		// Sauvegarde des données
 		if(saveOption)
 			Core.config.updateConfigFile();
 
 
-		// creation du model
+		// Creation du model
 		Model model = new Model(); 
 
-		// creation du controller
+		// Creation du controller
 		Controller controller = new Controller(model);
 
-		//creation de la vue
+		//Creation de la vue
 		View view = new View (controller);
 
+		//Ajout des observers
 		model.addObserver(view.getObserver());
 
+		//Demarrage de la vue
 		view.start();
 
 	}
 
 
-	private static Options configParameters() {
-
+	/**
+	 * Options CLI
+	 * @param firstOptions
+	 * @return
+	 */
+	private static Options configParameters(final Options firstOptions) {
+		
 		final Option viewOption = Option.builder("v") 
 				.longOpt("view") //
 				.desc("View mode : graphic or console") 
@@ -153,8 +178,34 @@ public class App {
 				.longOpt("save") 
 				.desc("Save arguments") 
 				.hasArg(false) 
+				.argName("save")
 				.required(false) 
 				.build();
+
+
+
+		final Options options = new Options();
+		
+	    // First Options
+	    for (final Option fo : firstOptions.getOptions()) {
+	        options.addOption(fo);
+	    }
+	    
+
+		options.addOption(viewOption);
+		options.addOption(minOption);
+		options.addOption(maxOption);
+		options.addOption(lenghtOption);
+		options.addOption(saveOption);
+
+		return options;
+	}
+	
+	/**
+	 * Premier parametre d'Aide
+	 * @return
+	 */
+	private static Options configFirstParameters() {
 
 		final Option helpOption = Option.builder("h") 
 				.longOpt("help") 
@@ -162,16 +213,12 @@ public class App {
 				.build();
 
 
-		final Options options = new Options();
+	    final Options firstOptions = new Options();
 
-		options.addOption(viewOption);
-		options.addOption(minOption);
-		options.addOption(maxOption);
-		options.addOption(lenghtOption);
-		options.addOption(saveOption);
-		options.addOption(helpOption);
+	    firstOptions.addOption(helpOption);
 
-
-		return options;
+	    return firstOptions;
 	}
+	
+	
 }
