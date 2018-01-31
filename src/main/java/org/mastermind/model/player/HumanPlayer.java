@@ -2,6 +2,7 @@ package org.mastermind.model.player;
 
 import java.util.List;
 
+import org.mastermind.core.Core;
 import org.mastermind.observer.Observable;
 import org.mastermind.observer.Observer;
 
@@ -9,6 +10,9 @@ public class HumanPlayer extends AbstractPlayer {
 
 
 	public HumanPlayer() {
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
+		
 		// Identifiant
 		ID = "human";
 
@@ -58,7 +62,7 @@ public class HumanPlayer extends AbstractPlayer {
 	 */
 
 	public void win(boolean w) {
-		scores.addPoints(w);
+		Core.score.addPoints(w);
 	}
 
 }

@@ -1,6 +1,7 @@
 package  org.mastermind.core;
 
 import org.apache.log4j.Logger;
+import org.mastermind.model.scores.Score;
 
 public class Core {
 	/** Instance du logger */
@@ -11,6 +12,9 @@ public class Core {
 	
 	/** Instance du systeme de langue */
 	public static Lang lang = Lang.getInstance();
+	
+	/** Instance du systeme de langue */
+	public static Score score = Score.getInstance();
 	
 	/** Instance unique non préinitialisée */
 	private static Core INSTANCE = null;
@@ -29,8 +33,6 @@ public class Core {
 		}
 		return INSTANCE;
 	}
-	private static boolean consoleMode = false;
-
 
 	/**
 	 * Affichage des messages de debug

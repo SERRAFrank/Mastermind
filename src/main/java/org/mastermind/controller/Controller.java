@@ -18,16 +18,15 @@ public class Controller {
 
 	/** Mode de jeu */
 	private String gameMode;
-
-	/** Instance du core */
-	protected Core core = Core.getInstance(this);
-	
 	/**
 	 * Controlleur
 	 * @param m
 	 * 		Model
 	 */
 	public Controller(Model m) {
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
+		
 		this.model = m;
 	}
 	/**

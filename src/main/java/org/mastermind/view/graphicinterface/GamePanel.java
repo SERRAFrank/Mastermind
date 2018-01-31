@@ -5,13 +5,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,64 +21,66 @@ import javax.swing.text.MaskFormatter;
 
 import org.mastermind.controller.Controller;
 import org.mastermind.core.Core;
-import org.mastermind.model.scores.Score;
 
 
 
 public class GamePanel extends AbstractPanel {
 
-	/** tour en cours */
-	protected int currentTurn;
-
-
-	/** Instance des scores */
-	protected Score score = Score.getInstance();
-
+	/** Instance du Controller */
 	protected Controller controller; 
 
-	protected int combinationLenght = core.config.getInt("combinationLenght");
+	/** Longueur de la combinaison */
+	protected int combinationLenght = Core.config.getInt("combinationLenght");
 
 
-	protected int maxTurn = core.config.getInt("gameTurns");
+	/** Tour en cours */
+	protected int currentTurn;
+	
+	/** Nompbre de tours maximum */
+	protected int maxTurn = Core.config.getInt("gameTurns");
 
 	/** Combinaison proposée à comparer */
-	protected JTextField[] proposJTextField = new JTextField[combinationLenght];
+	protected JTextField[] proposJTextField = new JTextField[combinationLenght]; 
 
 	/** Reponse de la comparaison de la proposition de chaine et  de la cachée */
-	protected JComboBox[]  comparJComboBox = new JComboBox[combinationLenght];
+	protected JTextField[]  comparJComboBox = new JTextField[combinationLenght]; 
 
+	/** Phase de jeu */
 	protected String phase;
 
 	protected JPanel propPanel = new JPanel();
-	protected JPanel reponsePanel = new JPanel();
+	protected JPanel comparPanel = new JPanel();
 	protected JPanel roundBarPanel = new JPanel();
 
 	protected JProgressBar roundBar = new JProgressBar();
 
-	protected JOptionPane popup = new JOptionPane();
-
-	protected JButton submitButton = new JButton(core.lang.get("submit"));
+	protected JButton submitButton = new JButton(Core.lang.get("submit"));
 
 	protected String proposText;
-	protected String reponseText;
+	protected String comparText;
 
 	public GamePanel(Dimension dim, Controller ctrl){
-		super(dim);		
+		super(dim);
+
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
+
+
 		this.controller = ctrl;
 
 		for(int i = 0 ; i < ( combinationLenght ); i++) {
-			proposJTextField[i] = fieldMaker();
-			comparJComboBox[i] = boxMaker();
+			proposJTextField[i] = fieldMaker("0123456789");
+			comparJComboBox[i] = fieldMaker("+-=");
 
 			propPanel.add( proposJTextField[i]);
-			reponsePanel.add( comparJComboBox[i]);
+			comparPanel.add( comparJComboBox[i]);
 		}
 
 		roundBar.setMinimum(0);
 		roundBar.setMaximum(maxTurn);
 		roundBar.setValue(1);
 		roundBar.setStringPainted(true);
-		roundBar.setString(core.lang.get("nbrRound") + " 1 / " + this.maxTurn);
+		roundBar.setString(Core.lang.get("nbrRound") + " 1 / " + this.maxTurn);
 
 		initPanel();
 
@@ -92,7 +92,7 @@ public class GamePanel extends AbstractPanel {
 		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
 
 		propPanel.setBorder(BorderFactory.createTitledBorder(""));	
-		reponsePanel.setBorder(BorderFactory.createTitledBorder(""));
+		comparPanel.setBorder(BorderFactory.createTitledBorder(""));
 
 
 
@@ -105,7 +105,7 @@ public class GamePanel extends AbstractPanel {
 
 				content.add(roundBar);
 				content.add(propPanel);
-				content.add(reponsePanel);
+				content.add(comparPanel);
 
 				submitButton.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent event){
@@ -124,33 +124,31 @@ public class GamePanel extends AbstractPanel {
 
 	protected void submit() {
 		String value = "";
+		JTextField[] returnedField;
 
-		if(phase.equals("propos")) {
-			for(JTextField v : proposJTextField)
-				value += v.getText().trim() + " ";
-		}else {
-			for(JComboBox v : comparJComboBox)
-				value += v.getSelectedItem() + " ";
-		}
+		if(phase.equals("propos"))
+			returnedField = proposJTextField;
+		else
+			returnedField = comparJComboBox;
 
+		for(JTextField v : returnedField)
+			value += v.getText().trim() + " ";
 
 		if(!controller.setInput(phase, value)  ) {
 			JOptionPane.showMessageDialog(null, Core.lang.get("input.error"), "Erreur", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
-	private JTextField fieldMaker() {
-		MaskFormatter nbr = null;
+	private JTextField fieldMaker(String f) {
+		MaskFormatter format = null;
 		try {
-			nbr = new MaskFormatter("#");
+			format = new MaskFormatter("*");
+			format.setValidCharacters(f);
 		} catch (Exception e) {
-			core.error(e);
+			Core.error(e);
 		}
 
-
-
-
-		final JTextField field = new JFormattedTextField (nbr);
+		final JTextField field = new JFormattedTextField (format);
 		field.setHorizontalAlignment(SwingConstants.CENTER);
 		field.setFont(comics30);
 		field.setPreferredSize(new Dimension(50, 50));
@@ -168,65 +166,57 @@ public class GamePanel extends AbstractPanel {
 		return field;
 	}
 
-	private JComboBox boxMaker() {
-		//ComboBox
-		JComboBox comboBox = new JComboBox();
-		comboBox.addItem("+");
-		comboBox.addItem("=");
-		comboBox.addItem("-");
-		comboBox.setFont(comics30);
-		return comboBox;
-	}
-	
-	
 	@Override
 	public void updateInput(String p) {
 		boolean proposIsEnable = true;
 
-		phase = p; 
+		this.phase = p; 
 		if (phase.equals("propos")) {
 			proposText = Core.lang.get("input.proposCombination");
-			reponseText = Core.lang.get("output.setComparaison");
+			comparText = Core.lang.get("output.setComparaison");
 			proposIsEnable = true;
 
 		}else {
 			proposText = Core.lang.get("output.proposCombination");
-			reponseText = Core.lang.get("input.setComparaison ");
+			comparText = Core.lang.get("input.setComparaison ");
 			proposIsEnable = false;
 		}
 
 		propPanel.setBorder(BorderFactory.createTitledBorder(proposText));	
-		reponsePanel.setBorder(BorderFactory.createTitledBorder(reponseText));
+		comparPanel.setBorder(BorderFactory.createTitledBorder(comparText));
 
 		for(int i = 0 ; i < ( combinationLenght ); i++) {
 			proposJTextField[i].setEnabled(proposIsEnable);
+			proposJTextField[i].setToolTipText(Core.lang.get("toolTipText" + this.phase));
+			
 			comparJComboBox[i].setEnabled(!proposIsEnable);
 		}
 	}
 
 	@Override
 	public void updateOutput(String phase, Object o) {
-
 		switch(phase) {
 		case "compar":
 			for(int i = 0; i < combinationLenght; i++) {
+				JTextField box = comparJComboBox[i];
+
 				Color color = Color.RED;
-				String value = ((List) o).get(i).toString();
+				String value = ((List<?>) o).get(i).toString();
 				if(value.equals("="))
 					color = Color.BLUE;
-
-				comparJComboBox[i].setSelectedItem(value);
-			//	comparJComboBox[i].setBackground(color);
+				box.setBackground(color);
+				box.setText(((List<?>) o).get(i).toString());
+				
 			}
 			break;
 		case "propos":
 			for(int i = 0; i < combinationLenght; i++)
-				proposJTextField[i].setText(((List) o).get(i).toString());
+				proposJTextField[i].setText(((List<?>) o).get(i).toString());
 
 			break;
 
 		case "round":
-			roundBar.setString(core.lang.get("nbrRound") + " " + o + " / " + this.maxTurn);
+			roundBar.setString(Core.lang.get("nbrRound") + " " + o + " / " + this.maxTurn);
 			roundBar.setValue((int) o);
 			break;
 		}

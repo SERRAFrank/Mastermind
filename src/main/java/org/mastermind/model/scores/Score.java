@@ -2,6 +2,8 @@ package org.mastermind.model.scores;
 
 import java.util.Map;
 
+import org.mastermind.core.Core;
+
 public class Score extends ScoreSerializer{
 
 
@@ -14,6 +16,9 @@ public class Score extends ScoreSerializer{
 
 	private Score(){
 		super();
+		
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
 	}
 
 

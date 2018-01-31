@@ -1,17 +1,11 @@
 package  org.mastermind.view.consoleinterface;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.mastermind.core.Core;
 
 public class ConsoleMenu {
-
-	/** Instance du core */
-	protected Core core = Core.getInstance(this);
-
 	/** Titre du menu */
 	private String title = "";
 	
@@ -23,7 +17,8 @@ public class ConsoleMenu {
 	 * Constructeur par defaut
 	 */
 	public ConsoleMenu() {
-
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
 	}
 
 	/**
@@ -32,7 +27,7 @@ public class ConsoleMenu {
 	 * 		Clef des parametres de menu dans le fichier Lang
 	 */
 	public ConsoleMenu(String t, List<String[]> o) {
-		this.title = core.lang.get(t);
+		this.title = Core.lang.get(t);
 		this.options = o;
 	}
 
@@ -93,10 +88,9 @@ public class ConsoleMenu {
 				System.out.println((i+1) + ". " + options.get(i)[1]);
 			}
 			
-	
 			// Choix de la proposition
 			keyboard = new Scanner(System.in);
-			System.out.print(core.lang.get("select"));
+			System.out.print(Core.lang.get("select"));
 			choice = keyboard.nextInt();
 
 			if(choice > options.size() || choice < 1) {

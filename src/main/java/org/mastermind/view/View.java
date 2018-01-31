@@ -11,10 +11,6 @@ public class View {
 	
 	Controller controller;
 	
-
-	/** Instance du core */
-	protected Core core = Core.getInstance(this);
-
 	/**
 	 * Constructeur
 	 * @param c
@@ -22,11 +18,14 @@ public class View {
 	 */
 	public View(Controller c) {
 		
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
+				
 		this.controller = c;
-		String viewMode = core.config.get("view");
+		String viewMode = Core.config.get("view");
 		
 		//Initialisation du type de vue
-		core.logger.info("View mode : " + viewMode);
+		Core.logger.info("View mode : " + viewMode);
 		switch (viewMode) {
 			case "console" :
 				this.gameInterface = new ConsoleInterface(controller);
@@ -39,7 +38,7 @@ public class View {
 			try {
 				throw new Exception("View not found. Supported modes are console & graphic");
 			}catch(Exception e) {
-				core.error(e); 
+				Core.error(e); 
 			}
 		}
 		

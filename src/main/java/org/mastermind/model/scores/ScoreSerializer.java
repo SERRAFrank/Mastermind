@@ -9,28 +9,25 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.mastermind.core.Core;
 
 public class ScoreSerializer implements Serializable{
-
-
-	/** Instance du core */
-	protected Core core = Core.getInstance(this);
-
 	/** Tableau des scores sous la forme nomDuJoueur =>  {nbrPatiesGagnées ; nbrPatiesPerdues} */
 	protected Map<String, int[]> scoreList = new HashMap<String, int[]>();
 	
 	/** Fichier de score */
-	protected File scoreFile = new File(core.config.get("scoreFile"));
+	protected File scoreFile = new File(Core.config.get("scoreFile"));
 
 
 	/**
 	 * Constructeur
 	 */
 	public ScoreSerializer(){
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
+		
 		load();
 	}
 
@@ -46,7 +43,7 @@ public class ScoreSerializer implements Serializable{
 				this.scoreList = (HashMap) ois.readObject();
 				ois.close();
 			} catch (Exception e) {
-				this.core.error(e);
+				Core.error(e);
 			}
 		//Sinon, le creer
 		}else {
@@ -54,7 +51,7 @@ public class ScoreSerializer implements Serializable{
 				scoreFile.createNewFile();
 				save();
 			} catch (IOException e) {
-				this.core.error(e);
+				Core.error(e);
 			}
 			
 		}
@@ -70,7 +67,7 @@ public class ScoreSerializer implements Serializable{
 			oos.writeObject(this.scoreList);
 			oos.close();
 		} catch (Exception e) {
-			this.core.error(e);
+			Core.error(e);
 		}
 
 	}

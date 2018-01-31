@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -44,13 +43,17 @@ public class GraphicInterface extends AbstractInterface {
 
 	public GraphicInterface(Controller c) {
 		super(c);
+		
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
+		
 	}
 
 	@Override
 	protected void initView() {
 		this.size = new Dimension(600, 400);
 
-		this.setTitle(core.lang.get("appTitle"));
+		this.setTitle(Core.lang.get("appTitle"));
 		this.setSize(this.size);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
@@ -72,11 +75,11 @@ public class GraphicInterface extends AbstractInterface {
 	private void initMenu() {
 		this.menuBar = new JMenuBar();
 
-		this.fileMenu = new JMenu(core.lang.get("fileMenu"));
-		this.fileMenu.setMnemonic(core.lang.getChar("fileMenuMnemonic"));
+		this.fileMenu = new JMenu(Core.lang.get("fileMenu"));
+		this.fileMenu.setMnemonic(Core.lang.getChar("fileMenuMnemonic"));
 
 
-		this.newGameItem = new JMenuItem(core.lang.get("newGameItem"));
+		this.newGameItem = new JMenuItem(Core.lang.get("newGameItem"));
 		this.newGameItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		this.newGameItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0){
@@ -84,7 +87,7 @@ public class GraphicInterface extends AbstractInterface {
 			}	    	
 		});
 
-		this.scoreItem = new JMenuItem(core.lang.get("scoreItem"));
+		this.scoreItem = new JMenuItem(Core.lang.get("scoreItem"));
 		this.scoreItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK));
 		this.scoreItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0){
@@ -92,7 +95,7 @@ public class GraphicInterface extends AbstractInterface {
 			}	    	
 		});
 
-		this.rulesItem = new JMenuItem(core.lang.get("rulesItem"));
+		this.rulesItem = new JMenuItem(Core.lang.get("rulesItem"));
 		this.rulesItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_MASK));
 		this.rulesItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0){
@@ -100,7 +103,7 @@ public class GraphicInterface extends AbstractInterface {
 			}	    	
 		});
 		
-		this.configItem = new JMenuItem(core.lang.get("configItem"));
+		this.configItem = new JMenuItem(Core.lang.get("configItem"));
 		this.configItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK));
 		this.configItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0){
@@ -108,7 +111,7 @@ public class GraphicInterface extends AbstractInterface {
 			} 	
 		});
 
-		this.exitItem = new JMenuItem(core.lang.get("exitItem"));
+		this.exitItem = new JMenuItem(Core.lang.get("exitItem"));
 		this.exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_MASK));
 		this.exitItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -116,9 +119,9 @@ public class GraphicInterface extends AbstractInterface {
 			}
 		});
 
-		this.aboutUsMenu = new JMenu(core.lang.get("aboutUsMenu"));
-		this.aboutUsMenu.setMnemonic(core.lang.getChar("aboutUsMenuMnemonic"));
-		this.aboutUsItem = new JMenuItem(core.lang.get("aboutUsItem"));
+		this.aboutUsMenu = new JMenu(Core.lang.get("aboutUsMenu"));
+		this.aboutUsMenu.setMnemonic(Core.lang.getChar("aboutUsMenuMnemonic"));
+		this.aboutUsItem = new JMenuItem(Core.lang.get("aboutUsItem"));
 		this.aboutUsItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0){
 				aboutUsView();
@@ -163,17 +166,14 @@ public class GraphicInterface extends AbstractInterface {
 
 		String[] options = new String[optionsList.size()];
 		String[] keys = new String[optionsList.size()];
-		String gmKey;
-
 		for(int i = 0; i <  optionsList.size(); i++ ) {
 			keys[i] = optionsList.get(i)[0];
 			options[i] = optionsList.get(i)[1];
 		}
 
-		JOptionPane jop = new JOptionPane(), jop2 = new JOptionPane();
-		String gm = (String)jop.showInputDialog(null, 
-				core.lang.get(menu + ".Title"),
-				core.lang.get(menu + ".Title"),
+		String gm = (String)JOptionPane.showInputDialog(null, 
+				Core.lang.get(menu + ".Title"),
+				Core.lang.get(menu + ".Title"),
 				JOptionPane.QUESTION_MESSAGE,
 				null,
 				options,
@@ -209,12 +209,11 @@ public class GraphicInterface extends AbstractInterface {
 
 	@Override
 	protected void setPlayer() {
-		JOptionPane jop = new JOptionPane(), jop2 = new JOptionPane();
-		String nom = jop.showInputDialog(null, core.lang.get("setPlayerName"), "", JOptionPane.QUESTION_MESSAGE);
+		String nom = JOptionPane.showInputDialog(null, Core.lang.get("setPlayerName"), "", JOptionPane.QUESTION_MESSAGE);
 		if(nom != null) {
 			this.controller.setPlayerName(nom);
-			this.playerName = score.getPlayerName();
-			jop.showMessageDialog(null, core.lang.get("hello") + " " +this.playerName, core.lang.get("hello"), JOptionPane.INFORMATION_MESSAGE);
+			this.playerName = Core.score.getPlayerName();
+			JOptionPane.showMessageDialog(null, Core.lang.get("hello") + " " +this.playerName, Core.lang.get("hello"), JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -228,7 +227,7 @@ public class GraphicInterface extends AbstractInterface {
 	@Override
 	protected void scoresView() {
 		this.container.removeAll();
-		this.container.add(new ScoresPanel(size, score.getScoresList()).getPanel(), BorderLayout.CENTER);
+		this.container.add(new ScoresPanel(size, Core.score.getScoresList()).getPanel(), BorderLayout.CENTER);
 		this.container.validate();
 	}
 	
@@ -241,57 +240,25 @@ public class GraphicInterface extends AbstractInterface {
 
 	@Override
 	protected void aboutUsView() {
-		JOptionPane aboutUsPopUp = new JOptionPane();
-	    ImageIcon logo = new ImageIcon( core.config.get("imgDir") + "/logo.png");
+	    ImageIcon logo = new ImageIcon( Core.config.get("imgDir") + "/logo.png");
 	    
 		String aboutUsText = "";
-		for(int i = 0;  core.lang.keyExist("aboutUs" + "." + i); i++ ) {
-			aboutUsText += core.lang.get("aboutUs" + "." + i, true) + "\n";
+		for(int i = 0;  Core.lang.keyExist("aboutUs" + "." + i); i++ ) {
+			aboutUsText += Core.lang.get("aboutUs" + "." + i, true) + "\n";
 		}
 		
 		
-		aboutUsPopUp.showMessageDialog(null, aboutUsText, core.lang.get("aboutUsItem"), JOptionPane.INFORMATION_MESSAGE, logo);  
+		JOptionPane.showMessageDialog(null, aboutUsText, Core.lang.get("aboutUsItem"), JOptionPane.INFORMATION_MESSAGE, logo);  
 		
 	}
 
-
-	private String[] genOptionsList(String options) {
-		String[] optionsList = {};
-		int i = 0;
-
-		while( core.lang.keyExist(options + "." + i) ) {
-			optionsList[i] = core.lang.get(options + "." + i + ".desc", true);
-			i++;				
-		}
-		return optionsList;
-
-	}
-
-	private String optionToKey(String options, String value) {
-
-		String key = "";
-		int i = 0;
-
-		while( core.lang.keyExist(options + "." + i) ) {
-			if(core.lang.get(options + "." + i + ".desc", true).equals(value))
-				key = core.lang.get(options + "." + i + ".key", true);
-
-		}
-
-
-		return key;		
-	}
 
 	@Override
 	public void updateInput(String s) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void updateOutput(String s, Object o) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -299,8 +266,8 @@ public class GraphicInterface extends AbstractInterface {
 		String str = Core.lang.get(t) + "\n";
 		str += Core.lang.get("getScores") + "\n";
 
-		int win = score.getScores()[0];
-		int loose = score.getScores()[1];
+		int win = Core.score.getScores()[0];
+		int loose = Core.score.getScores()[1];
 
 		double p = 0.;
 		try{

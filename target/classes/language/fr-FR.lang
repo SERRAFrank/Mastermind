@@ -139,3 +139,7 @@ setLenght = Longueur :
 
 debugMode = Debug Mode
 setDebugMode = Activer le mode DEBUG
+
+toolTipTextpropos = Entre {{config.combinationNumbersMin}} et  {{config.combinationNumbersMax}}
+toolTipTextcompar = +, - ou =
+

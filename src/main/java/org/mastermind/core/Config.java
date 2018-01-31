@@ -26,7 +26,6 @@ public class Config {
 
 	private Properties props = new Properties();
 
-
 	/** Instance unique non préinitialisée */
 	private static Config INSTANCE = null;
 
@@ -42,9 +41,8 @@ public class Config {
 			DEBUG = true;
 		else
 			DEBUG = false;
-		
-		logger.info("Debug mode : " + DEBUG );
 
+		logger.info("Debug mode : " + DEBUG );
 	}
 
 
@@ -140,7 +138,7 @@ public class Config {
 		return value;
 
 	}
-	
+
 	/**
 	 * Retourne la valeur correspondant à une clef sous forme d'Integer
 	 *
@@ -153,7 +151,7 @@ public class Config {
 		return Integer.parseInt(get(string));
 	}
 
-	
+
 	/**
 	 * Indique si la clef existe.
 	 *
@@ -169,7 +167,7 @@ public class Config {
 			return true;
 	}
 
-	
+
 
 	/**
 	 * Définit la valeur d'une clef

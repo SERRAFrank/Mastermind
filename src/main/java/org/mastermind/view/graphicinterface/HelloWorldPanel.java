@@ -2,21 +2,26 @@ package org.mastermind.view.graphicinterface;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+
+import org.mastermind.core.Core;
 
 public class HelloWorldPanel extends AbstractPanel{
 
 	public HelloWorldPanel(Dimension dim){
 		super(dim);
+		
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
+		
 		initPanel();
 		
 	}
 
 	public void initPanel(){
-		ImageIcon imgFile = new ImageIcon(core.config.get("imgDir") + "/hello.jpg");
+		ImageIcon imgFile = new ImageIcon(Core.config.get("imgDir") + "/hello.jpg");
 
 		this.content.add(new JLabel(imgFile), BorderLayout.CENTER);
 		

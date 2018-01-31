@@ -3,23 +3,14 @@
  */
 package org.mastermind.model.player;
 
-import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.mastermind.core.Core;
-import org.mastermind.model.scores.Score;
 
 public abstract class  AbstractPlayer {
-	/** Instance du core */
-	protected Core core = Core.getInstance(this);
-	
-	/** Instance de score */
-	protected Score scores = Score.getInstance();
-
 	/** Combinaison à trouver */
 	protected List<Integer> hiddenCombination =  new ArrayList<Integer>();
 
@@ -39,11 +30,11 @@ public abstract class  AbstractPlayer {
 	protected boolean pauseToInput = false;
 	
 	/** Longueur de la combinaison */
-	protected int combinationLenght = core.config.getInt("combinationLenght");
+	protected int combinationLenght = Core.config.getInt("combinationLenght");
 
 	/** Min et max pour les combinaisons de type chiffre */
-	protected int combinationMin = core.config.getInt("combinationNumbersMin");
-	protected int combinationMax = core.config.getInt("combinationNumbersMax");
+	protected int combinationMin = Core.config.getInt("combinationNumbersMin");
+	protected int combinationMax = Core.config.getInt("combinationNumbersMax");
 
 
 	/**
@@ -68,6 +59,12 @@ public abstract class  AbstractPlayer {
 	public abstract void comparToProposCombination();
 	
 
+	public AbstractPlayer() {
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
+	}
+	
+	
 	/**
 	 * Reinitialisation pour une nouvelle manche
 	 */

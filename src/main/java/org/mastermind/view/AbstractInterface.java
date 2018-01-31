@@ -7,18 +7,9 @@ import javax.swing.JFrame;
 
 import org.mastermind.controller.Controller;
 import org.mastermind.core.Core;
-import org.mastermind.model.scores.Score;
 import org.mastermind.observer.Observer;
 
 public abstract class AbstractInterface extends JFrame implements Observer {
-
-
-	/** Instance du core */
-	protected Core core = Core.getInstance(this);
-
-	/** Instance des scores */
-	protected Score score = Score.getInstance();
-
 	/** Controlleur */
 	protected Controller controller;
 
@@ -32,7 +23,7 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 	protected int turn = 1;
 	
 	/** Nombre de tours max */
-	protected int maxTurn = core.config.getInt("gameTurns");
+	protected int maxTurn = Core.config.getInt("gameTurns");
 
 	/** Partie en cours */
 	protected int round = 1;	
@@ -47,6 +38,10 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 	 * 		Instance du controlleur
 	 */
 	public AbstractInterface(Controller c) {
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
+		
+		
 		controller = c;
 		// Initialisation de la vue
 		initView();
@@ -144,10 +139,10 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 		List<String[]> menuList = new ArrayList<String[]>();
 
 
-		for(int i = 0;  core.lang.keyExist(options + "." + i); i++ ) {
+		for(int i = 0;  Core.lang.keyExist(options + "." + i); i++ ) {
 			String[] value = {"", ""};
-			value[0] = core.lang.get(options + "." + i + ".key", true);
-			value[1] = core.lang.get(options + "." + i + ".desc", true);
+			value[0] = Core.lang.get(options + "." + i + ".key", true);
+			value[1] = Core.lang.get(options + "." + i + ".desc", true);
 			menuList.add(value);
 		}
 		return menuList;

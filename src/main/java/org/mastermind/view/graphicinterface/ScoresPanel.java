@@ -3,14 +3,12 @@ package org.mastermind.view.graphicinterface;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import org.mastermind.core.Core;
 
@@ -20,6 +18,10 @@ public class ScoresPanel extends AbstractPanel{
 	
 	public ScoresPanel(Dimension dim, Map<String, int[]> list){
 		super(dim);
+		
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
+		
 		this.scoresList = list;
 		
 		initPanel();
@@ -30,26 +32,33 @@ public class ScoresPanel extends AbstractPanel{
 	public void initPanel(){
 		
 		
-		setTitle(core.lang.get("scoreItem"));
+		setTitle(Core.lang.get("scoreItem"));
 
 	    content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-		int i = 0;
+	    
+	    
+		JTextArea scoreJTextArea = new JTextArea();
+		scoreJTextArea.setBackground(Color.white);
+		scoreJTextArea.setFont(arial);
+		
+		String scoreText = "";
 		
 		for(Entry<String, int[]> list : scoresList.entrySet()) {
-		
 			String playerName = list.getKey();
 			String value = printScores(list.getValue());
-			JLabel scoreLabel = new JLabel( playerName + " : " +  value );
-			scoreLabel.setFont(arial);
-			scoreLabel.setPreferredSize(new Dimension(440, 40));
-			content.add(scoreLabel);
-
-			i++;
-
+			scoreText += playerName + " : " +  value + "\n\n";
 		}
 		
+		scoreJTextArea.setText(scoreText);
+		scoreJTextArea.setEditable(false);
 		
+		JScrollPane scrollScore = new JScrollPane(scoreJTextArea);
+		scrollScore.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollScore.setBorder(null);
+		
+		
+		this.content.add(scrollScore);
 		this.panel.add(content, BorderLayout.CENTER);	
 	}
 	

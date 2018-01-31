@@ -10,9 +10,7 @@ public class DebugMode {
 	/** Instance du logger */
 	private static Logger logger = Logger.getLogger(DebugMode.class);
 
-	/** Instance du fichier de configuration */
-	private static Config config = Config.getInstance();
-	
+
 	/** mode Debug */
 	private static boolean debugMode = false;
 
@@ -24,7 +22,7 @@ public class DebugMode {
 	 */
 	private static void testConsole() {
 		//liste des Appenders
-		Enumeration e = Logger.getRootLogger().getAllAppenders();
+		Enumeration<?> e = Logger.getRootLogger().getAllAppenders();
 		boolean loggerConsole = false;
 
 		//Revoir true si ConsoleAppender est utilisé
@@ -83,6 +81,7 @@ public class DebugMode {
 		else
 			errorMsg.printStackTrace();
 
+		System.exit(3);
 	}
 
 }

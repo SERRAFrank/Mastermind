@@ -2,7 +2,6 @@ package  org.mastermind.view.consoleinterface;
 
 
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
@@ -18,6 +17,10 @@ public class ConsoleInterface extends AbstractInterface{
 	/** Constructeur */
 	public ConsoleInterface(Controller controller) {
 		super(controller);
+		
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
+		
 	}
 
 
@@ -52,7 +55,7 @@ public class ConsoleInterface extends AbstractInterface{
 		String p = scanner.nextLine();
 
 		controller.setPlayerName(p);
-		this.playerName = score.getPlayerName();
+		this.playerName = Core.score.getPlayerName();
 
 		System.out.println(Core.lang.get("hello") + " " + this.playerName );
 		getScores();		
@@ -76,9 +79,9 @@ public class ConsoleInterface extends AbstractInterface{
 	@Override
 	protected void setGameMode() {
 
-		String t = core.lang.get("selectGameMode.Title");
+		String t = Core.lang.get("selectGameMode.Title");
 		List<String[]> o = menuList("selectGameMode.Options");
-		String[] returnOption = {core.lang.get("return.key"),core.lang.get("return.desc")  };
+		String[] returnOption = {Core.lang.get("return.key"), Core.lang.get("return.desc")  };
 		o.add(returnOption);
 
 		ConsoleMenu gameModeMode = new ConsoleMenu(t, o);
@@ -95,7 +98,7 @@ public class ConsoleInterface extends AbstractInterface{
 	 */
 	@Override
 	protected void newGame() {
-		ConsoleMenu.showTitle(core.lang.get("gameMode." + controller.getGameMode()));
+		ConsoleMenu.showTitle(Core.lang.get("gameMode." + controller.getGameMode()));
 	}
 
 	/**
@@ -115,7 +118,7 @@ public class ConsoleInterface extends AbstractInterface{
 	 * Menu principal
 	 */
 	protected void principalMenu() {	
-		String t = core.lang.get("menu.Title");
+		String t = Core.lang.get("menu.Title");
 		List<String[]> o = menuList("menu.Options");
 
 		ConsoleMenu menu = new ConsoleMenu(t, o);
@@ -149,7 +152,7 @@ public class ConsoleInterface extends AbstractInterface{
 	protected void getScores() {
 		System.out.println(Core.lang.get("getScores"));
 
-		System.out.println( printScores( score.getScores() ) );
+		System.out.println( printScores( Core.score.getScores() ) );
 
 		pressEnterToContinue();
 	}
@@ -173,7 +176,7 @@ public class ConsoleInterface extends AbstractInterface{
 	@Override
 	protected void scoresView() {
 
-		for(Entry<String, int[]> list : score.getScoresList().entrySet()) {
+		for(Entry<String, int[]> list : Core.score.getScoresList().entrySet()) {
 			String playerName = list.getKey();
 			int[] value = list.getValue();
 			System.out.println( playerName + " : " +  printScores(value) );
@@ -284,7 +287,7 @@ public class ConsoleInterface extends AbstractInterface{
 				System.out.print(str + " ");
 		}else {
 			if(s.equals("round"))
-				System.out.println(core.lang.get("nbrRound") + " " + o + " / " + this.maxTurn);
+				System.out.println(Core.lang.get("nbrRound") + " " + o + " / " + this.maxTurn);
 			else 
 				System.out.println(o);
 		}
@@ -302,10 +305,10 @@ public class ConsoleInterface extends AbstractInterface{
 		String msg = "";
 		switch(phase) {
 		case "propos" :
-			msg = core.lang.get("input.proposCombination");
+			msg = Core.lang.get("input.proposCombination");
 			break;
 		case "compar":
-			msg = core.lang.get("input.setComparaison");
+			msg = Core.lang.get("input.setComparaison");
 			break;
 		}
 
@@ -334,7 +337,7 @@ public class ConsoleInterface extends AbstractInterface{
 	public void updateEndGame(String t, boolean w) {	
 		System.out.println(Core.lang.get(t));
 		System.out.println(Core.lang.get("getScores"));
-		System.out.println( printScores( score.getScores() ) );
+		System.out.println( printScores( Core.score.getScores() ) );
 
 		if(w) {
 			newRoundQuestion(Core.lang.get(gameMode + ".newRound"));

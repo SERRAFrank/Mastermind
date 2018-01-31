@@ -8,7 +8,6 @@ import org.mastermind.core.Core;
 import org.mastermind.model.player.AIPlayer;
 import org.mastermind.model.player.AbstractPlayer;
 import org.mastermind.model.player.HumanPlayer;
-import org.mastermind.model.scores.Score;
 import org.mastermind.observer.Observable;
 import org.mastermind.observer.Observer;
 
@@ -17,10 +16,6 @@ import org.mastermind.observer.Observer;
  * 
  */
 public class Model implements Observable {
-
-	/** Instance du core */
-	protected Core core = Core.getInstance(this);
-
 	/** List pour le pattern Observer */
 	private List<Observer> listObserver = new CopyOnWriteArrayList <Observer>();
 
@@ -31,33 +26,27 @@ public class Model implements Observable {
 	/** Boolean définissant la fin du jeu */
 	private boolean endGame = false;
 	
-	/** Boolean définissant que des paramettres de victoires ont été remplis */
-	private boolean winConditions = false;
-
 	/** Tour de jeu en cours*/
 	private int currentTurn = 1;
 	
 	/** Nombre maximal de touts de jeu */
-	private int maxTurn = core.config.getInt("gameTurns");
+	private int maxTurn = Core.config.getInt("gameTurns");
 
 	/** Manche en cours */
 	private int currentRound = 1;
 
-	/** Parametre en cas de pause pour input */
-	private String hiddenTo = null;
-	
 	/** Mode de jeu en cours */
 	private String gameMode = null;
 
 	/** Input passé au Model */
 	private Object input = null;
 
-	private Score score = Score.getInstance();
-
 	/**
 	 * Constructeur
 	 */
 	public Model() {
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
 
 	}
 
@@ -66,10 +55,8 @@ public class Model implements Observable {
 	 */
 	public void reset() {
 		this.endGame = false;
-		this.winConditions = false;
 		this.currentTurn = 1;
 		this.currentRound = 1;
-		this.hiddenTo = null;
 		this.input = null;
 	}
 
@@ -84,7 +71,7 @@ public class Model implements Observable {
 		this.currentTurn = 1;
 		this.gameMode = gm;
 
-		core.logger.info("Game mode : " + gm);
+		Core.logger.info("Game mode : " + gm);
 		
 		//Choix du mode de jeu et initialisation des joueurs
 		switch (gm) {
@@ -110,7 +97,7 @@ public class Model implements Observable {
 				try {
 					throw new Exception("GameMode not found. Supported modes are Defender , Challenger & Dual");
 				}catch(Exception e) {
-					core.error(e); 
+					Core.error(e); 
 				}
 		}
 	}
@@ -309,7 +296,7 @@ public class Model implements Observable {
 	 * 		Nom du joueur
 	 */
 	public void setPlayerName(String p) {
-		score.setPlayerName(p);
+		Core.score.setPlayerName(p);
 	}	
 
 

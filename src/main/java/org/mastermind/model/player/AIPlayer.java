@@ -1,10 +1,9 @@
 package org.mastermind.model.player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
+
+import org.mastermind.core.Core;
 
 public class AIPlayer extends AbstractPlayer {
 
@@ -13,6 +12,10 @@ public class AIPlayer extends AbstractPlayer {
 
 
 	public AIPlayer() {
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
+		
+		
 		// Identifiant
 		ID = "AI";
 
@@ -37,7 +40,7 @@ public class AIPlayer extends AbstractPlayer {
 			this.hiddenCombination.add(randomNbr );
 		}
 		//Affiche la combinaison. Uniquement si le mose DEBUG est actif
-		core.debug("hiddenCombination : " + this.hiddenCombination);
+		Core.debug("hiddenCombination : " + this.hiddenCombination);
 	}
 
 	/**
