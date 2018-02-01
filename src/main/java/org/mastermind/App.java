@@ -15,6 +15,9 @@ import org.mastermind.view.View;
 
 
 public class App {
+	static Model model;
+	static Controller controller;
+	static View view;
 
 	/**
 	 * Main
@@ -78,10 +81,9 @@ public class App {
 			}
 
 			// Longueur de la combinaison
-			char lenghtChar = line.getOptionValue("lenght", Core.config.get("combinationLenght")).charAt(0);
-			if (!Character.isDigit(maxOption)){
+			lenghtOption = line.getOptionValue("lenght", Core.config.get("combinationLenght")).charAt(0);
+			if (!Character.isDigit(lenghtOption)){
 				try {
-
 					throw new Exception("Lenght is a digit between 0 and 9");
 				} catch (Exception e) {
 					Core.error(e); 
@@ -120,7 +122,7 @@ public class App {
 
 
 		// Creation du model
-		Model model = new Model(); 
+		model = new Model(); 
 
 		// Creation du controller
 		Controller controller = new Controller(model);

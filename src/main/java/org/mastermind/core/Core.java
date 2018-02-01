@@ -1,5 +1,6 @@
 package  org.mastermind.core;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.mastermind.model.scores.Score;
 
@@ -26,7 +27,7 @@ public class Core {
 	
 	/** Point d'accès pour l'instance unique du singleton */
 	public static synchronized Core getInstance(Object ob)
-	{           
+	{	
 		logger = Logger.getLogger(ob.getClass());
 		if (INSTANCE == null){
 			INSTANCE = new Core(); 

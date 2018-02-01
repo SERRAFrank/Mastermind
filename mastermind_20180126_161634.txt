@@ -1,6 +1,0 @@
-WARNING - 16:16:34: Creating types 
-WARNING - 16:16:34: Initializing types
-WARNING - 16:16:36: Generic post-process : Creating usages and associations
-WARNING - 16:16:36: Generic post-process : Creating activities
-WARNING - 16:16:36: Saving uml file /resource/mastermind/mastermind.uml
-WARNING - 16:16:36: Uml file /resource/mastermind/mastermind.uml saved

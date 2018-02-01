@@ -2,6 +2,7 @@ package  org.mastermind.view.graphicinterface;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,6 +40,8 @@ public class GraphicInterface extends AbstractInterface {
 	private JPanel container ;
 
 	private Dimension size;
+
+	private AbstractPanel currentView;
 
 
 	public GraphicInterface(Controller c) {
@@ -192,14 +195,10 @@ public class GraphicInterface extends AbstractInterface {
 	@Override
 	protected void newGame() {
 
-		AbstractPanel gameViewPanel = new GamePanel(size, controller);
-		controller.addObserver(gameViewPanel);
+		currentView = new GamePanel(size, controller);
+		controller.addObserver(currentView);
 		
-		this.container.removeAll();
-		this.container.add(gameViewPanel.getPanel(), BorderLayout.CENTER);
-		this.container.validate();
-
- 
+		updateView(); 
 	}
 
 	@Override
@@ -219,25 +218,31 @@ public class GraphicInterface extends AbstractInterface {
 
 	@Override
 	protected void rulesView() {
-		this.container.removeAll();
-		this.container.add(new RulesPanel(size).getPanel(), BorderLayout.CENTER);
-		this.container.validate();
+		currentView = new RulesPanel(size);
+		updateView(); 
 	}
 
 	@Override
 	protected void scoresView() {
-		this.container.removeAll();
-		this.container.add(new ScoresPanel(size, Core.score.getScoresList()).getPanel(), BorderLayout.CENTER);
-		this.container.validate();
+		currentView = new ScoresPanel(size);
+		updateView(); 
+		
 	}
 	
 	private void configView() {
-		this.container.removeAll();
-		this.container.add(new ConfigPanel(size).getPanel(), BorderLayout.CENTER);
-		this.container.validate();
+		currentView = new ConfigPanel(size);
+		updateView(); 
 		
 	}	   
 
+	private void updateView() {
+		this.container.removeAll();
+		this.container.add(this.currentView.getPanel());
+		this.container.validate();		
+		
+	}
+	
+	
 	@Override
 	protected void aboutUsView() {
 	    ImageIcon logo = new ImageIcon( Core.config.get("imgDir") + "/logo.png");

@@ -16,13 +16,13 @@ public class ScoresPanel extends AbstractPanel{
 
 	private Map<String, int[]> scoresList;
 	
-	public ScoresPanel(Dimension dim, Map<String, int[]> list){
+	public ScoresPanel(Dimension dim){
 		super(dim);
 		
 		/** Instanciation du Core pour le logger */
 		Core.getInstance(this);
 		
-		this.scoresList = list;
+		this.scoresList = Core.score.getScoresList();
 		
 		initPanel();
 		
