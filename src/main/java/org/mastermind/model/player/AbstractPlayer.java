@@ -3,68 +3,82 @@
  */
 package org.mastermind.model.player;
 
+import java.awt.Color;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.mastermind.core.Core;
 
 public abstract class  AbstractPlayer {
 	/** Combinaison à trouver */
-	protected List<Integer> hiddenCombination =  new ArrayList<Integer>();
+	protected List<Object> hiddenCombination =  new ArrayList<Object>();
 
 	/** Combinaison proposée à comparer */
-	protected List<Integer> proposCombination =  new ArrayList<Integer>();
-	
+	protected List<Object> proposCombination =  new ArrayList<Object>();
+
 	/** Reponse de la comparaison de la proposition de chaine et  de la cachée */
-	protected List<String> comparCombination =  new ArrayList<String>();
+	protected List<Object> comparCombination =  new ArrayList<Object>();
+
+	/** Liste des symboles acceptés */
+	protected List<Object> acceptedInputList = new ArrayList<Object>();
 
 	/** Liste des caracteres acceptés */
-	protected Set<Object> acceptedInputChar = new HashSet<Object>();
-	
+	protected List<Object> acceptedComparChars  = new ArrayList<Object>();
+
 	/** Identifiant du joueur */
 	protected String ID;
-	
+
 	/** Définit si le joueur peut mettre en pause le jeu pour des inputs */
 	protected boolean pauseToInput = false;
-	
+
 	/** Longueur de la combinaison */
 	protected int combinationLenght = Core.config.getInt("combinationLenght");
-
-	/** Min et max pour les combinaisons de type chiffre */
-	protected int combinationMin = Core.config.getInt("combinationNumbersMin");
-	protected int combinationMax = Core.config.getInt("combinationNumbersMax");
+	
+	protected int wInt = 0;
 
 
+	protected boolean uniqueValue;
+
+	protected boolean moreLess = false;
 	/**
 	 * Generation de la clef secrete
 	 */
 	public abstract void genCombination();
-	
+
 	/**
 	 * Proposition d'une clef
 	 */
 	public abstract void proposCombination();
-	
+
 	/**
 	 * Comparaison de la proposition et de la clef secrete 
 	 */
 	public abstract void comparToHiddenCombination();
 
-	
+
 	/**
 	 * Comparaison de la reponse joueur et de la proposition de clef
 	 */
 	public abstract void comparToProposCombination();
-	
 
-	public AbstractPlayer() {
+
+	public AbstractPlayer(List<Object> acceptedInputList, List<Object> acceptedComparChars, boolean moreLess, boolean uniqueValue)  {
 		/** Instanciation du Core pour le logger */
 		Core.getInstance(this);
+
+		this.acceptedInputList = acceptedInputList;
+		this.acceptedComparChars = acceptedComparChars;
+		this.uniqueValue = uniqueValue;
+		this.moreLess = moreLess;
+		
 	}
-	
-	
+
 	/**
 	 * Reinitialisation pour une nouvelle manche
 	 */
@@ -72,20 +86,15 @@ public abstract class  AbstractPlayer {
 		proposCombination.clear();
 		comparCombination.clear();
 	}
-	
+
 	/**
 	 * Teste si la combinaison est résolue
 	 * @return boolean
 	 */
 	public boolean solvedCombination() {
-		Set<String> tempSet = new HashSet<String>(comparCombination);
-		
-		if(tempSet.size() == 1 && tempSet.contains("=")) {
-			return true;
-		}else {
-			return false;
-		}
-
+		boolean solved = (wInt == combinationLenght);
+		wInt = 0;
+		return solved;
 	}
 
 	/**
@@ -95,9 +104,12 @@ public abstract class  AbstractPlayer {
 	 * @return
 	 * 		true si utilisable, sinon false
 	 */
-	
+
 	public boolean acceptedInputChar(Object o) {
-		return acceptedInputChar.contains(o);
+		if(acceptedInputList.contains(o) || acceptedComparChars.contains(o))
+			return true;
+		else
+			return false;
 	}
 
 	/**
@@ -108,7 +120,7 @@ public abstract class  AbstractPlayer {
 	public boolean pauseToInput() {
 		return pauseToInput;
 	}
-	
+
 
 
 	/**
@@ -117,7 +129,7 @@ public abstract class  AbstractPlayer {
 	 * @param p 
 	 * 		Nouvelle proposition
 	 */
-	public void setProposition(List<Integer> p) {
+	public void setProposition(List<Object> p) {
 		this.proposCombination = p;
 	}
 
@@ -127,7 +139,7 @@ public abstract class  AbstractPlayer {
 	 * @return 
 	 * 		La proposition
 	 */
-	public List<Integer> getProposition(){
+	public List<Object> getProposition(){
 		return this.proposCombination;
 	}
 
@@ -137,7 +149,7 @@ public abstract class  AbstractPlayer {
 	 * @param c 
 	 * 		La nouvelle comparaison
 	 */
-	public void setComparaison(List<String> c) {
+	public void setComparaison(List<Object> c) {
 		this.comparCombination = c;
 	}
 
@@ -147,10 +159,10 @@ public abstract class  AbstractPlayer {
 	 * @return
 	 * 		La comparaison
 	 */
-	public List<String> getComparaison(){
+	public List<Object> getComparaison(){
 		return this.comparCombination;
 	}
-	
+
 	/**
 	 * Retourn l'ID du joueur
 	 *

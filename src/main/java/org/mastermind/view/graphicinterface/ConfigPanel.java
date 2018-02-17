@@ -143,9 +143,6 @@ public class ConfigPanel extends AbstractPanel {
 		gamePan.setBackground(Color.white);
 		gamePan.setPreferredSize(new Dimension(400, 300));
 
-		//Longueur de la combinaison
-		final JLabel nbrTurnValue = new JLabel(Core.lang.get("nbrTurn") + Core.config.get("gameTurns"));
-
 		JPanel panNbrTurns = new JPanel();
 		panNbrTurns.setBackground(Color.white);
 		panNbrTurns.setPreferredSize(new Dimension(350, 80));
@@ -153,9 +150,12 @@ public class ConfigPanel extends AbstractPanel {
 		panNbrTurns.setBorder(BorderFactory.createTitledBorder(Core.lang.get("setNbrTurns")));		
 
 		//Slider
-		JSlider sliderNbrTurns = new JSlider(1, 15);
+		JSlider sliderNbrTurns = new JSlider(1, 10);
 		sliderNbrTurns.setValue(Core.config.getInt("combinationLenght"));
-		sliderNbrTurns.setMaximumSize(new Dimension(200,30));
+		sliderNbrTurns.setMajorTickSpacing(1);
+		//sliderCombinationLenght.setMinorTickSpacing(1);
+		sliderNbrTurns.setPaintTicks(true);
+		sliderNbrTurns.setPaintLabels(true);
 
 		//Ajout du listener
 		sliderNbrTurns.addChangeListener(new ChangeListener() {
@@ -165,13 +165,12 @@ public class ConfigPanel extends AbstractPanel {
 				Core.config.updateConfigFile();            	
 
 				String value = Core.lang.get("nbrTurn") + nbrTurns;
-				nbrTurnValue.setText(value);
 			}
 		});
 
-
+		panNbrTurns.add(sliderNbrTurns);
+		
 		//Longueur de la combinaison
-		final JLabel combinationLenghtValue = new JLabel(Core.lang.get("setLenght") + Core.config.get("combinationLenght"));
 
 		JPanel panCombinationLenght = new JPanel();
 		panCombinationLenght.setBackground(Color.white);
@@ -180,9 +179,12 @@ public class ConfigPanel extends AbstractPanel {
 		panCombinationLenght.setBorder(BorderFactory.createTitledBorder(Core.lang.get("setCombinationLenght")));
 		
 		//Slider
-		JSlider sliderCombinationLenght = new JSlider(1, 9);
+		final JSlider sliderCombinationLenght = new JSlider(1, Core.config.getArray("nbr.acceptedInputValues").length);
 		sliderCombinationLenght.setValue(Core.config.getInt("combinationLenght"));
-
+		sliderCombinationLenght.setMajorTickSpacing(1);
+		//sliderCombinationLenght.setMinorTickSpacing(1);
+		sliderCombinationLenght.setPaintTicks(true);
+		sliderCombinationLenght.setPaintLabels(true);
 		//Ajout du listener
 		sliderCombinationLenght.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -191,18 +193,16 @@ public class ConfigPanel extends AbstractPanel {
 				Core.config.set("combinationLenght", lenght);
 				Core.config.updateConfigFile();            	
 
-				combinationLenghtValue.setText(Core.lang.get("setLenght") + lenght);
-
 			}
 		});
 
 
-		panCombinationLenght.add(combinationLenghtValue);
 		panCombinationLenght.add(sliderCombinationLenght);
 
 		// bornes de la combinaison
-		final JLabel rangeSliderValueMin = new JLabel(Core.lang.get("setCombMin") + Core.config.get("combinationNumbersMin"));
-		final JLabel rangeSliderValueMax = new JLabel(Core.lang.get("setCombMax") + Core.config.get("combinationNumbersMax"));
+		String[] rangeSliderValue = Core.config.getArray("nbr.acceptedInputValues");
+		int rangeSliderMin = Integer.parseInt(rangeSliderValue[0]);
+		int rangeSliderMax = Integer.parseInt(rangeSliderValue[rangeSliderValue.length-1]);
 
 
 		JPanel panCombinationRange = new JPanel();
@@ -212,31 +212,40 @@ public class ConfigPanel extends AbstractPanel {
 		panCombinationRange.setBorder(BorderFactory.createTitledBorder(Core.lang.get("setCombinationRange")));
 
 		//Range
-		RangeSlider slider =  new RangeSlider();
-		slider.setMinimum(0);
-		slider.setMaximum(9);
+		RangeSlider sliderRange =  new RangeSlider();
+		sliderRange.setMajorTickSpacing(1);
+		//sliderCombinationLenght.setMinorTickSpacing(1);
+		sliderRange.setPaintTicks(true);
+		sliderRange.setPaintLabels(true);
+		
+		sliderRange.setMinimum(0);
+		sliderRange.setMaximum(9);
 
-		slider.setValue(Core.config.getInt("combinationNumbersMin"));
-		slider.setUpperValue(Core.config.getInt("combinationNumbersMax"));
+		sliderRange.setValue(rangeSliderMin);
+		sliderRange.setUpperValue(rangeSliderMax);
 
 		//Ajout du listener
-		slider.addChangeListener(new ChangeListener() {
+		sliderRange.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				RangeSlider slider = (RangeSlider) e.getSource();
-				Core.config.set("combinationNumbersMin", String.valueOf(slider.getValue()));
-				Core.config.set("combinationNumbersMax", String.valueOf(slider.getUpperValue()));
-
+				
+				String inputValues = "";
+				
+				for ( int i = slider.getValue(); i <= slider.getUpperValue(); i++)
+					inputValues += String.valueOf(i) + ((i< slider.getUpperValue())?",":"");
+				
+				Core.config.set("nbr.acceptedInputValues", inputValues);
+				sliderCombinationLenght.setMaximum(Core.config.getArray("nbr.acceptedInputValues").length);
 				Core.config.updateConfigFile();                
 
-				rangeSliderValueMin.setText(Core.lang.get("setCombMin") + String.valueOf(slider.getValue()));
-				rangeSliderValueMax.setText(Core.lang.get("setCombMax") + String.valueOf(slider.getUpperValue()));
 			}
 		});
 
-		panCombinationRange.add(rangeSliderValueMin);
-		panCombinationRange.add(rangeSliderValueMax);
-		panCombinationRange.add(slider);
+		panCombinationRange.add(sliderRange);
+		
+		
 
+		gamePan.add(panNbrTurns);
 		gamePan.add(panCombinationLenght);		    
 		gamePan.add(panCombinationRange);		    
 

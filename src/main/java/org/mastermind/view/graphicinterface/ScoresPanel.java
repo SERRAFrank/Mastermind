@@ -40,7 +40,7 @@ public class ScoresPanel extends AbstractPanel{
 	    
 		JTextArea scoreJTextArea = new JTextArea();
 		scoreJTextArea.setBackground(Color.white);
-		scoreJTextArea.setFont(arial);
+		scoreJTextArea.setFont(GameFont.ARIAL.getFont());
 		
 		String scoreText = "";
 		

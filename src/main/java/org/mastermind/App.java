@@ -58,9 +58,9 @@ public class App {
 					Core.error(e); 
 				}
 			}
-
+/*
 			// Borne min de la combinaison
-			minOption = line.getOptionValue("min", Core.config.get("combinationNumbersMin")).charAt(0) ;
+			minOption = line.getOptionValue("min", Core.config.get("nbr.acceptedInputMin")).charAt(0) ;
 			if (!Character.isDigit(minOption)){
 				try {
 					throw new Exception("Min is a digit between 0 and 9");
@@ -70,7 +70,7 @@ public class App {
 			}
 
 			// Borne max de la combinaison
-			maxOption = line.getOptionValue("max", Core.config.get("combinationNumbersMax")).charAt(0);
+			maxOption = line.getOptionValue("max", Core.config.get("nbr.acceptedInputMax")).charAt(0);
 			if (!Character.isDigit(maxOption)){
 				try {
 
@@ -79,7 +79,7 @@ public class App {
 					Core.error(e); 
 				}
 			}
-
+*/
 			// Longueur de la combinaison
 			lenghtOption = line.getOptionValue("lenght", Core.config.get("combinationLenght")).charAt(0);
 			if (!Character.isDigit(lenghtOption)){
@@ -111,8 +111,8 @@ public class App {
 
 		// écrasement des données pas des arguments
 		Core.config.set("view", viewOption);
-		Core.config.set("combinationNumbersMin", String.valueOf(minOption) );
-		Core.config.set("combinationNumbersMax", String.valueOf(maxOption))	;
+		//Core.config.set("combinationNumbersMin", String.valueOf(minOption) );
+		//Core.config.set("combinationNumbersMax", String.valueOf(maxOption))	;
 		Core.config.set("combinationLenght", String.valueOf(lenghtOption))	;
 		Core.config.set("DEBUG", (debugOption)? "true" : "false") ;		
 
@@ -153,7 +153,7 @@ public class App {
 				.argName("view")
 				.required(false) 
 				.build();
-
+/*
 		final Option minOption = Option.builder("min") 
 				.desc("Minimal number") 
 				.hasArg(true) 
@@ -167,7 +167,7 @@ public class App {
 				.argName("max") 
 				.required(false) 
 				.build();
-
+*/
 		final Option lenghtOption = Option.builder("l") 
 				.longOpt("lenght") 
 				.desc("Combination lenght") 
@@ -195,8 +195,8 @@ public class App {
 	    
 
 		options.addOption(viewOption);
-		options.addOption(minOption);
-		options.addOption(maxOption);
+		//options.addOption(minOption);
+		//options.addOption(maxOption);
 		options.addOption(lenghtOption);
 		options.addOption(saveOption);
 

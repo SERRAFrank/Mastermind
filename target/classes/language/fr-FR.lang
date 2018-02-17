@@ -50,7 +50,10 @@ victory = Victoires
 defeat = Defaites
 
 
+gameType = Type de jeu
+gameMode = Mode de jeu
 
+selectGameType.Title = Selectionnez le type de jeu
 selectGameMode.Title = Selectionnez le mode de jeu
 selectGameMode.Options.0.key = challenger
 selectGameMode.Options.0.desc = Mode challenger où vous devez trouver la combinaison secrète de l'ordinateur
@@ -64,11 +67,15 @@ return.desc = Retour
 
 
 
+
 gameMode.challenger : MODE CHALLENGER - Trouvez la combinaison !
 gameMode.defender : MODE DEFENSEUR - L'ordinateur cherche la combinaison
 gameMode.dual : MODE DUAL - Chacun cherche la combinaison de l'autre à tour de rôle
 
-rules.0 = Trouvez la combinaison des {{config.combinationLenght}} chiffres entre {{config.combinationNumbersMin}} et {{config.combinationNumbersMax}} . 
+gameType.color = Couleur
+gameType.nbr = Nombres
+
+rules.0 = Trouvez la combinaison des {{config.combinationLenght}} chiffres ou couleurs . 
 rules.1 = \= signifie que c'est le bon chiffre
 rules.2 = - signifie que c'est moins
 rules.3 = et +, que c'est plus ...
@@ -96,6 +103,7 @@ input.error = La saisie n'est pas correcte. Veillez rentrer une chaine valide, a
 
 AI.win = J'ai gagné. Le silicone bat le neurone !
 human.win = Bravo, l'humain bat encore la machine ... pour le moment
+
 AI.lost = Mince, je n'ai pas trouvé !
 human.lost = Vous n'avez pas réussi à trouver mon code ! 
 
@@ -126,7 +134,7 @@ setViewMode = Mode de vue
 setNightMode = Mode nuit
 
 
-setNbrRound = Nombre maximum de tours par manches
+setNbrTurns = Nombre maximum de tours par manches
 
 setLang = Langue par defaut
 setCombinationRange = Bornes des combinaisons
@@ -140,6 +148,6 @@ setLenght = Longueur :
 debugMode = Debug Mode
 setDebugMode = Activer le mode DEBUG
 
-toolTipTextpropos = Entre {{config.combinationNumbersMin}} et  {{config.combinationNumbersMax}}
-toolTipTextcompar = +, - ou =
 
+
+uniqueValue = Les valeurs sont uniques

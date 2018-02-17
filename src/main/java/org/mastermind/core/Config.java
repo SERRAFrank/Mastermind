@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -138,6 +139,9 @@ public class Config {
 		return value;
 
 	}
+	
+	
+	
 
 	/**
 	 * Retourne la valeur correspondant à une clef sous forme d'Integer
@@ -150,6 +154,41 @@ public class Config {
 	public int getInt(String string) {
 		return Integer.parseInt(get(string));
 	}
+
+
+	/**
+	 * Retourne la valeur correspondant à une clef sous forme du Boolean
+	 *
+	 * @param key
+	 * 		La clef recherchée
+	 * @return value
+	 * 		La valeur de la clef
+	 */
+	public boolean getBoolean(String key) {
+		String value = get(key).toUpperCase();
+	
+		if(value.equals("TRUE"))
+			return true;
+		else
+			return false;
+	}
+
+	/**
+	 * Retourne la valeur correspondant à une clef sous forme d'un tableau
+	 *
+	 * @param key
+	 * 		La clef recherchée
+	 * @return value
+	 * 		La valeur de la clef
+	 * @throws Exception 
+	 * 		Exception si la clef n'existe pas
+	 */
+	public String[] getArray(String key) {
+		String[] value = get(key).split(",");
+		return value;
+
+	}
+	
 
 
 	/**
@@ -181,7 +220,24 @@ public class Config {
 		this.props.setProperty(key, value);
 	}
 
-
+	/**
+	 * Définit la valeur d'une clef
+	 *
+	 * @param key
+	 * 		Le nom de la clef
+	 * @param value
+	 * 		La valeur de la clef
+	 */
+	public void set(String key, boolean b) {
+		String value;
+		if(b)
+			value = "TRUE";
+		else
+			value = "FALSE";
+		
+		this.props.setProperty(key, value);
+	}
+	
 	/**
 	 * Retourne toutes les clefs.
 	 *
@@ -191,6 +247,12 @@ public class Config {
 	public Set<Object> getAllKeys(){
 		Set<Object> keysList = this.props.keySet();
 		return keysList;
+	}
+
+
+	public void remove(String string) {
+		this.props.remove(string);
+
 	}
 
 

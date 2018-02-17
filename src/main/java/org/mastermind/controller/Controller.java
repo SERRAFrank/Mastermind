@@ -1,6 +1,7 @@
 package  org.mastermind.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.mastermind.core.Core;
 import org.mastermind.model.Model;
@@ -18,6 +19,8 @@ public class Controller {
 
 	/** Mode de jeu */
 	private String gameMode;
+
+	private String gameType;
 	/**
 	 * Controlleur
 	 * @param m
@@ -52,9 +55,15 @@ public class Controller {
 	 */
 	public void setGameMode(String gm) {
 		this.gameMode = gm;
-		this.model.initGameMode(gameMode);
+		this.model.setGameMode(gameMode);
 	}
 
+	public void setGameType(String gt) {
+		this.gameType = gt;
+		this.model.setGameType(gameType);
+	}
+	
+	
 
 	/**
 	 * Traite et met en forme la saisie du joueur en mode console avant de l'envoyer au model
@@ -65,15 +74,12 @@ public class Controller {
 	 * @return
 	 */
 	public boolean setInput(String phase, String i) {
-		List<Object> tempInput = new ArrayList<Object>();
+		List<Object> tempInput;
 		//retrait des espace en debut et fin de chaine
 		i = i.trim();
-		
-		if( !i.equals("") ) {
-			for (String v : i.split(" ")) {
-				// Definit si v est un entier ou non et le rentre;
-				tempInput.add( ( isInteger(v) )?Integer.valueOf(v):v );
-			}
+				
+		if( i.length() > 0 ) {
+			tempInput = new ArrayList<Object>(Arrays.asList(i.split(" ")));
 			return setInput(phase, tempInput);
 		}else {
 			return false;
@@ -91,7 +97,6 @@ public class Controller {
 	public boolean setInput(String phase, List<Object> input) {
 		int acceptedChar = 0;
 		int combinationLenght = Core.config.getInt("combinationLenght");
-		
 		// verification si les caractères sont acceptés
 		for(Object o : input) {
 			if(this.model.acceptedChar(o))
@@ -150,6 +155,6 @@ public class Controller {
 	public void addObserver(Observer obs) {
 		this.model.addObserver(obs);
 	}
-	
+
 
 }

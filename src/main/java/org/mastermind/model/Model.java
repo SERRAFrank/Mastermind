@@ -1,8 +1,14 @@
 package  org.mastermind.model;
 
+import java.awt.Color;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.swing.ImageIcon;
 
 import org.mastermind.core.Core;
 import org.mastermind.model.player.AIPlayer;
@@ -25,21 +31,33 @@ public class Model implements Observable {
 
 	/** Boolean définissant la fin du jeu */
 	private boolean endGame = false;
-	
+
 	/** Tour de jeu en cours*/
 	private int currentTurn = 1;
-	
+
 	/** Nombre maximal de touts de jeu */
 	private int maxTurn = Core.config.getInt("gameTurns");
 
 	/** Manche en cours */
 	private int currentRound = 1;
 
+
 	/** Mode de jeu en cours */
 	private String gameMode = null;
+	private String gameType = null;
 
 	/** Input passé au Model */
 	private Object input = null;
+
+
+	private boolean uniqueValue;
+	private boolean moreLess;
+
+
+
+	private List<Object>  acceptedInputList = new ArrayList<Object>();
+	private List<Object> acceptedComparChars =  new ArrayList<Object>();
+
 
 	/**
 	 * Constructeur
@@ -47,7 +65,6 @@ public class Model implements Observable {
 	public Model() {
 		/** Instanciation du Core pour le logger */
 		Core.getInstance(this);
-
 	}
 
 	/**
@@ -56,9 +73,9 @@ public class Model implements Observable {
 	public void reset() {
 		this.endGame = false;
 		this.currentTurn = 1;
-		this.currentRound = 1;
 		this.input = null;
 	}
+
 
 	/**
 	 * Initialisation du mode de jeu
@@ -66,59 +83,121 @@ public class Model implements Observable {
 	 * @param gm
 	 * 		Le mode de jeu
 	 */
-	public void initGameMode(String gm) {
-
-		this.currentTurn = 1;
+	public void setGameMode(String gm) {
 		this.gameMode = gm;
-
-		Core.logger.info("Game mode : " + gm);
+		this.currentRound = 1;
+		Core.logger.info("Game mode : " + gameMode);
+	}
+	
+	public void setGameType(String gt) {
+		this.gameType = gt;
 		
-		//Choix du mode de jeu et initialisation des joueurs
-		switch (gm) {
-			case "challenger" :
-				this.player1 = new AIPlayer();
-				this.player2 = new HumanPlayer();
-				break;
-			case "defender" :
-				this.player1 = new HumanPlayer();
-				this.player2 = new AIPlayer();
-				break;
-			case "dual" : 
-				if(this.currentRound%2 == 1) {
-					this.player1 = new AIPlayer();
-					this.player2 = new HumanPlayer();			
-				}else {
-					this.player1 = new HumanPlayer();
-					this.player2 = new AIPlayer();		
-				}
-				break;
-			default: 
-				//Exception si le mode de jeu est inconnu
-				try {
-					throw new Exception("GameMode not found. Supported modes are Defender , Challenger & Dual");
-				}catch(Exception e) {
-					Core.error(e); 
-				}
-		}
+		Core.config.set("gameMode", gameMode);
+		
+	
 	}
 
-	
+
+	public void initGameMode() {
+		
+		uniqueValue = Core.config.getBoolean(gameType+".uniqueValue") ;
+		moreLess = Core.config.getBoolean(gameType+".moreLess") ;
+
+		acceptedInputList.clear();
+		acceptedComparChars.clear();
+		
+		String[] acceptedInput = Core.config.getArray(gameType+".acceptedInputValues");
+		for(String s :  acceptedInput ) {
+			if(Core.config.get(gameType+".acceptedInputType").equals("Color")) {
+				try {
+					Field field = Class.forName("java.awt.Color").getField(s);
+					Color color = (Color)field.get(null);	
+					if(!this.acceptedInputList.contains(color) && color != null )
+						this.acceptedInputList.add(color);
+					
+				} catch (Exception e) { }
+				
+			}else {
+				this.acceptedInputList.add(s.trim());
+			}
+		}
+		
+		
+
+		String[] acceptedChar = Core.config.getArray(gameType+".acceptedComparChars");
+
+		if(Core.config.get(gameType+".acceptedComparType").equals("Icon")) {
+			String imgDir = Core.config.get("imgDir") + "/";
+			ImageIcon icon = new ImageIcon(imgDir+acceptedChar[0]);
+
+			this.acceptedComparChars.add(new ImageIcon(imgDir+acceptedChar[0]));
+			this.acceptedComparChars.add(new ImageIcon(imgDir+acceptedChar[1]));
+			this.acceptedComparChars.add(new ImageIcon(imgDir+acceptedChar[2]));
+
+		}else {
+			this.acceptedComparChars = new ArrayList<Object>(Arrays.asList(acceptedChar));
+
+		}
+		
+
+		//Choix du mode de jeu et initialisation des joueurs
+		switch (gameMode) {
+		case "challenger" :
+			this.player1 = new AIPlayer(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
+			this.player2 = new HumanPlayer(acceptedInputList, acceptedComparChars, false, false);
+
+			break;
+		case "defender" :
+			this.player1 = new HumanPlayer(acceptedInputList, acceptedComparChars, false, false);
+			this.player2 = new AIPlayer(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
+
+			break;
+		case "dual" : 
+			if(this.currentRound%2 == 1) {
+				this.player1 = new AIPlayer(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
+				this.player2 = new HumanPlayer(acceptedInputList, acceptedComparChars, false, false);
+			}else {
+				this.player1 = new HumanPlayer(acceptedInputList, acceptedComparChars, false, false);
+				this.player2 = new AIPlayer(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);		
+			}
+			break;
+		default: 
+			//Exception si le mode de jeu est inconnu
+			try {
+				throw new Exception("GameMode not found. Supported modes are Defender , Challenger & Dual");
+			}catch(Exception e) {
+				Core.error(e); 
+			}
+		}
+
+
+		
+		
+		
+
+		if(this.player1.pauseToInput()) {
+			notifyInitGame("compar", acceptedComparChars , false);
+		}else if(this.player2.pauseToInput()) {
+			notifyInitGame("propos",  acceptedInputList , uniqueValue);
+		}
+
+	}
 	/**
 	 * Demarrage du jeu
 	 */
 	public void startGame() {
-		// nouveau round
-		this.currentRound++;
-		
 		// Initialisation du mode de jeu en fonction du précédant utilisé
-		initGameMode(this.gameMode);
-		
+		initGameMode();
+		this.currentTurn = 1;
+		this.currentRound++;
+
+
 		// Le joueur 1 definit sa combinaison secrete
 		this.player1.genCombination();
-		
+
 		// Pas de fin de jeu
 		this.endGame = false;
-		
+
 		gameLoop();
 
 	}
@@ -128,10 +207,10 @@ public class Model implements Observable {
 	 * Debut de la boucle de jeu
 	 */
 	private void gameLoop() {
-		
+
 		// Notification du round en cours
-		notifyOutput("round", this.currentTurn);
-		
+		notifyRound( this.currentTurn);
+
 		// initialisation des joueurs avec les parametres de nouveau tour
 		this.player1.newRound();
 		this.player2.newRound();
@@ -139,8 +218,6 @@ public class Model implements Observable {
 		setPropositionInput();
 
 	}
-
-
 
 
 	/**
@@ -157,13 +234,15 @@ public class Model implements Observable {
 	}
 
 	/**
-	* Definit la proposition de clef du joueur 2
-	*/
+	 * Definit la proposition de clef du joueur 2
+	 */
 	private void setProposition() {
 		this.player2.proposCombination();
 		this.player1.setProposition(this.player2.getProposition());
-		if(!this.player2.pauseToInput())
-			notifyOutput( "propos", this.player2.getProposition());
+
+		if(!this.player2.pauseToInput()) {
+			notifyOutputPropos( this.player2.getProposition());
+		}
 		setComparaisonInput();
 	}
 
@@ -180,13 +259,13 @@ public class Model implements Observable {
 	}
 
 	/**
-	* Analyse la comparaison de clef du joueur 1
-	*/
+	 * Analyse la comparaison de clef du joueur 1
+	 */
 	private void setComparaison() {
 		this.player1.comparToHiddenCombination();
 		this.player2.setComparaison(this.player1.getComparaison());
 		if(!this.player1.pauseToInput())
-			notifyOutput("compar", this.player1.getComparaison());
+			notifyOutputCompar(this.player1.getComparaison());
 		endGame();
 	}	
 
@@ -196,19 +275,17 @@ public class Model implements Observable {
 	private void endGame() {
 		//Incremente le nombre de tours si la manche arrive à sa fin
 		this.currentTurn++;
-		
-		boolean forceReset = false;
 
 		// identifiant du gagnant
 		String winnerID = null;
-		
+
 		// présence d'un gagnant
 		boolean win = true;
 		player2.comparToProposCombination();
 
-		
+
 		// Si le joueur 2 a résolu la clef
-		if( this.player2.solvedCombination()){
+		if( this.player1.solvedCombination() || this.player2.solvedCombination()){
 			//Fin de jeu
 			this.endGame = true;
 			// Joueur 1 perd
@@ -218,38 +295,30 @@ public class Model implements Observable {
 
 			winnerID = this.player2.getID() + ".win";
 
-			forceReset = true;
-
-		// si le nombre de tours max est atteint
+			// si le nombre de tours max est atteint
 		}else if(this.currentTurn > maxTurn) {	
 			//Fin de jeu
 			this.endGame = true;
 
 			// Si mode Duel
 			if(this.gameMode.equals("dual")) {
-				
-				winnerID = this.player1.getID() + ".lost";	
+
+				winnerID = this.player2.getID() + ".lost";	
 				win = false;
-				
+
 			}else {
 				// Joueur 1 gagne
 				this.player1.win(true);
 				// Joueur 2 perd
 				this.player2.win(false);
 				winnerID = this.player1.getID() + ".win";
-				forceReset = true;
-
-				
 			}
 		} 
 
 		if(endGame) {
 			//Notifie à la vue lesparamettres de fin de partie
 			notifyEndGame(winnerID, win);
-			
-			// reset forcé
-			if(forceReset)
-				reset();
+			reset();
 		}else {
 			//Nouveau tour
 			gameLoop();
@@ -265,17 +334,17 @@ public class Model implements Observable {
 	 */
 	public void setInput(String phase, Object i) {
 		this.input = i;
-		
+
 		//Selectionne l'action a réalisée en fonction du moment de pause
 		switch(phase) {
-			case "propos":
-				player2.setProposition((List<Integer>) this.input);
-				setProposition();
-				break;
-			case "compar":
-				player1.setComparaison((List<String>) input);
-				setComparaison();
-				break;
+		case "propos":
+			player2.setProposition((List<Object>) this.input);
+			setProposition();
+			break;
+		case "compar":
+			player1.setComparaison((List<Object>) input);
+			setComparaison();
+			break;
 		}
 	}
 
@@ -289,7 +358,7 @@ public class Model implements Observable {
 	public boolean acceptedChar(Object o) {
 		return this.player1.acceptedInputChar(o);
 	}
-	
+
 	/**
 	 * Definit le nom du joueur et le passe au score
 	 * @param p
@@ -301,6 +370,7 @@ public class Model implements Observable {
 
 
 	/** Implementation du pattern observer */
+
 	public void addObserver(Observer obs) {
 		if(!listObserver.contains(obs))
 			this.listObserver.add(obs);
@@ -318,17 +388,37 @@ public class Model implements Observable {
 
 	}
 
-	public void notifyOutput(String s, Object o) {
+
+
+	public void notifyInitGame(String s, List<Object> l, boolean u) {
+
 		for(Observer obs : listObserver)
-			obs.updateOutput(s, o);
+			obs.updateInitGame(s, l, u);
 
 	}
 
-	
+	public void notifyOutputCompar(List<Object> o) {
+		for(Observer obs : listObserver)
+			obs.updateOutputCompar(o);
+
+	}
+
+	public void notifyOutputPropos(List<Object> o) {
+		for(Observer obs : listObserver)
+			obs.updateOutputPropos( o);
+
+	}
+	public void notifyRound(int o) {
+		for(Observer obs : listObserver)
+			obs.updateRound(o);
+
+	}
+
 	public void notifyEndGame(String e, boolean w) {
 		for(Observer obs : listObserver)
 			obs.updateEndGame(e, w);
 	}
+
 
 
 }

@@ -54,7 +54,7 @@ public class GraphicInterface extends AbstractInterface {
 
 	@Override
 	protected void initView() {
-		this.size = new Dimension(600, 400);
+		this.size = new Dimension(600, 600);
 
 		this.setTitle(Core.lang.get("appTitle"));
 		this.setSize(this.size);
@@ -163,38 +163,13 @@ public class GraphicInterface extends AbstractInterface {
 
 	@Override
 	protected void setGameMode() {
-		String menu = "selectGameMode";
-
-		List<String[]> optionsList = menuList(menu + ".Options");
-
-		String[] options = new String[optionsList.size()];
-		String[] keys = new String[optionsList.size()];
-		for(int i = 0; i <  optionsList.size(); i++ ) {
-			keys[i] = optionsList.get(i)[0];
-			options[i] = optionsList.get(i)[1];
-		}
-
-		String gm = (String)JOptionPane.showInputDialog(null, 
-				Core.lang.get(menu + ".Title"),
-				Core.lang.get(menu + ".Title"),
-				JOptionPane.QUESTION_MESSAGE,
-				null,
-				options,
-				options[0]);
-
-		if(gm != null) {
-			for(int i = 0; i < options.length; i++) {
-				if(options[i].equals(gm))
-					controller.setGameMode( keys[i]);
-			}
-		}
+		GameModeDialog dial = new GameModeDialog(null, "Coucou les ZérOs", true, controller);
 	}
 
 
 
 	@Override
 	protected void newGame() {
-
 		currentView = new GamePanel(size, controller);
 		controller.addObserver(currentView);
 		
@@ -257,14 +232,21 @@ public class GraphicInterface extends AbstractInterface {
 		
 	}
 
-
+	@Override
+	public void updateInitGame(String s, List<Object> l, boolean u) {}
+	
 	@Override
 	public void updateInput(String s) {
 	}
 
 	@Override
-	public void updateOutput(String s, Object o) {
-	}
+	public void updateOutputPropos(List<Object> o) {}
+
+	@Override
+	public void updateOutputCompar(List<Object> o) {}
+	
+	@Override
+	public void updateRound(int o) {}
 
 	@Override
 	public void updateEndGame(String t, boolean winner) {

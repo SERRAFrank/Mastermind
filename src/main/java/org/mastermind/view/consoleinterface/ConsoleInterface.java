@@ -17,10 +17,10 @@ public class ConsoleInterface extends AbstractInterface{
 	/** Constructeur */
 	public ConsoleInterface(Controller controller) {
 		super(controller);
-		
+
 		/** Instanciation du Core pour le logger */
 		Core.getInstance(this);
-		
+
 	}
 
 
@@ -281,20 +281,27 @@ public class ConsoleInterface extends AbstractInterface{
 	 * @param o
 	 * 		Message à afficher
 	 */	
-	public void updateOutput(String s, Object o) {
-		if(o instanceof List ) {
-			for(Object str : (List<?>)o)
-				System.out.print(str + " ");
-		}else {
-			if(s.equals("round"))
-				System.out.println(Core.lang.get("nbrRound") + " " + o + " / " + this.maxTurn);
-			else 
-				System.out.println(o);
-		}
+	public void updateOutputCompar(List<Object> o) {
+		for(Object str : o)
+			System.out.print(str + " ");
+		System.out.print(System.getProperty("line.separator"));
+	}
+
+	public void updateOutputPropos(List<Object> o) {
+		for(Object str : o)
+			System.out.print(str + " ");
+		System.out.print(System.getProperty("line.separator"));
+	}
+
+	public void updateRound(int o) {
+		System.out.println(Core.lang.get("nbrRound") + " " + o + " / " + this.maxTurn);
 		System.out.print(System.getProperty("line.separator"));
 	}
 
 
+
+
+	public void updateInitGame(String s, List<Object> l, boolean u) {}
 
 	/**
 	 * Gestion des inputs

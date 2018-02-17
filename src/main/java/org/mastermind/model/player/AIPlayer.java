@@ -1,6 +1,10 @@
 package org.mastermind.model.player;
 
-import java.util.HashMap;
+import java.awt.Color;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.mastermind.core.Core;
@@ -8,36 +12,44 @@ import org.mastermind.core.Core;
 public class AIPlayer extends AbstractPlayer {
 
 	/** Liste des bornes min et max pour la génération des combinaisons numeriques */
-	private Map<String, Integer> bornCombination = new HashMap<String, Integer>();
+	private List<List<Object>> possibleCombination = new ArrayList<List<Object>>();
 
+	private List<Object> validateCombination = new ArrayList<Object>();
 
-	public AIPlayer() {
+	public AIPlayer(List<Object> acceptedInputList, List<Object> acceptedComparChars, boolean moreLess, boolean uniqueValue) {
+		super(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
+
 		/** Instanciation du Core pour le logger */
 		Core.getInstance(this);
-		
-		
+
 		// Identifiant
 		ID = "AI";
 
-		// Definition des bornes
-		for(int i = this.combinationMin; i <= this.combinationMax; i++ ) {
-			this.acceptedInputChar.add(i);
-			this.bornCombination.put( i + ".min", this.combinationMin);
-			this.bornCombination.put( i + ".max", this.combinationMax);
-		}
-	}
+		for(int i = 0; i < this.combinationLenght; i++ )
+			this.possibleCombination.add(new ArrayList<Object>(this.acceptedInputList));
 
+		for(int i = 0; i < this.combinationLenght; i++)
+			validateCombination.add(null);
+
+	}
 
 	/**
 	 * Génération d'une clef secrete
 	 */
 	public void genCombination() {
 		this.hiddenCombination.clear();
-		int randomNbr;
+		List<Object> temp = new ArrayList<Object>(this.acceptedInputList);
+		int randomIndex;
 		for(int i = 0; i < this.combinationLenght; i++) {
-			//Tire un nombre aléatoire entre combinationNumbersMin et combinationNumbersMax
-			randomNbr = this.combinationMin + (int)(Math.random() * ((this.combinationMax - this.combinationMin) + 1));
-			this.hiddenCombination.add(randomNbr );
+			//Tire un nombre aléatoire d'index
+			if(this.uniqueValue) {
+				randomIndex = (int)(Math.random() * temp.size());
+				this.hiddenCombination.add(temp.get(randomIndex) );
+				temp.remove(randomIndex);
+			}else {
+				randomIndex = (int)(Math.random() * temp.size());
+				this.hiddenCombination.add(temp.get(randomIndex) );
+			}
 		}
 		//Affiche la combinaison. Uniquement si le mose DEBUG est actif
 		Core.debug("hiddenCombination : " + this.hiddenCombination);
@@ -47,15 +59,41 @@ public class AIPlayer extends AbstractPlayer {
 	 * Création d'une proposition de clef en tirant un nombre aléatoire entre les bornes min et max
 	 */
 	public void proposCombination() {
-		int min;
-		int max;
-		int testNumber;
+		this.proposCombination.clear();
+
+		List<List<Object>> possibilities = new ArrayList<List<Object>>();
+
+		for(List<Object> p : possibleCombination) {
+			List<Object> t = new ArrayList<Object>(p);
+			possibilities.add(t);
+		}
+
+		int randomIndex;
 		for(int i = 0 ; i < this.combinationLenght ; i++) {
-			min = this.bornCombination.get( i + ".min");
-			max = this.bornCombination.get( i + ".max");
-			// Generation de la proposition de clef en tirant un nombre aléatoire entre les bornes
-			testNumber = min + (int)(Math.random() * ((max - min) + 1));
-			this.proposCombination.add(testNumber);
+
+			List<Object> temp = new ArrayList<Object>(possibilities.get(i));
+
+			if(validateCombination.get(i) == null) {
+
+				do {
+					randomIndex = (int)(Math.random() * temp.size());
+				}while((validateCombination.contains(temp.get(randomIndex)) || proposCombination.contains(temp.get(randomIndex))) && this.uniqueValue);
+
+				this.proposCombination.add(temp.get(randomIndex) );
+
+				if(this.uniqueValue) {
+					for(List<Object> p : possibilities) {
+						p.remove( temp.get(randomIndex) );
+					}
+				}
+			}else {
+				this.proposCombination.add(validateCombination.get(i));
+				if(this.uniqueValue) {
+					for(List<Object> t : possibilities)
+						t.remove(validateCombination.get(i));
+				}
+			}
+
 		}
 	}
 
@@ -63,47 +101,120 @@ public class AIPlayer extends AbstractPlayer {
 	 * Comparaison d'une proposition de clef avec la clef secrete
 	 */
 	public void comparToHiddenCombination() {
-		int wInt = 0;
-		for(int i = 0 ; i < combinationLenght; i++ ) {
-			int hiddenCombinationValue = this.hiddenCombination.get(i);
-			int propositionValue = this.proposCombination.get(i);
 
-			if ( hiddenCombinationValue == propositionValue ) {
-				this.comparCombination.add("=");
-				wInt++;
-			}else if ( hiddenCombinationValue > propositionValue ) {
-				this.comparCombination.add("+");
-			}else if ( hiddenCombinationValue < propositionValue ) {
-				this.comparCombination.add("-");
+		for(int i = 0 ; i < combinationLenght; i++ ) {
+			Object hiddenCombinationValue = (Object) this.hiddenCombination.get(i);
+			Object propositionValue = (Object) this.proposCombination.get(i);
+			if(this.moreLess) {
+				if ( acceptedInputList.indexOf(hiddenCombinationValue) >  acceptedInputList.indexOf(propositionValue) ) {
+					this.comparCombination.add(acceptedComparChars.get(2));
+				}else if ( acceptedInputList.indexOf(hiddenCombinationValue) <  acceptedInputList.indexOf(propositionValue) ) {
+					this.comparCombination.add(acceptedComparChars.get(0));
+				}else {
+					this.comparCombination.add(acceptedComparChars.get(1));
+					this.wInt++;
+				}
+			}else {
+				if ( hiddenCombinationValue == propositionValue ) {
+					this.comparCombination.add(acceptedComparChars.get(1));
+					this.wInt++;
+				}else if(this.hiddenCombination.contains(propositionValue)) {
+					this.comparCombination.add(acceptedComparChars.get(2));
+				}else {
+					this.comparCombination.add(acceptedComparChars.get(0));
+				}
+
 			}
-		}		
-	}
+		}
+	}		
 
 	/**
 	 * Analyse de la reponse de comparaison entre la proposition de clef
 	 */
 	public void comparToProposCombination() {
-		for(int i = 0 ; i < this.combinationLenght ; i++) {
-			int props = this.proposCombination.get(i);			
-			String reponse = this.comparCombination.get(i);
+		List<Object> excludePossibilities = new ArrayList<Object>();
 
-			String iMin = i + ".min";
-			String iMax = i + ".max";
-			if ( this.bornCombination.get( iMin ) != this.bornCombination.get( iMax )) {
-				switch(reponse) {
-				case "=" :
-					this.bornCombination.put( iMin , props );
-					this.bornCombination.put( iMax , props);
-					break;
-				case "-":
-					this.bornCombination.put( i + ".max", (props - 1 >= this.combinationMin)? props - 1 : this.combinationMin );
-					break;
-				case "+":
-					this.bornCombination.put( i + ".min", (props + 1 <= this.combinationMax)? props + 1 : this.combinationMax );
-					break;
-				}		
+		int min = 0;
+		int max = acceptedInputList.size()-1;
+
+		int combinationMin = 0;
+		int combinationMax = acceptedInputList.size()-1;
+
+		for(int i = 0 ; i < this.combinationLenght ; i++) {
+
+			Object props = this.proposCombination.get(i);
+			String reponse = this.comparCombination.get(i).toString();
+
+			List<Object> newPossibility = new ArrayList<Object>();
+			List<Object> possibilities = this.possibleCombination.get(i);
+
+			if(this.moreLess) {
+				min = acceptedInputList.indexOf(possibilities.get(0));
+				max = acceptedInputList.indexOf(possibilities.get(possibilities.size()-1));
 			}
+
+			if(reponse == acceptedComparChars.get(1) ) {
+
+				validateCombination.set(i, props);
+
+				if(uniqueValue) {
+					for(List<Object> p : possibleCombination)
+						p.remove(props);
+					excludePossibilities.add(props);
+				}
+
+				newPossibility.add(props);
+				this.wInt++;
+			}else {
+
+				if(reponse == acceptedComparChars.get(0) ){
+					if(this.moreLess)
+						max = (acceptedInputList.indexOf(props) > 0) ? acceptedInputList.indexOf(props)-1 : 0;
+
+						if(uniqueValue) {
+							for(List<Object> p : possibleCombination)
+								p.remove(props);
+							excludePossibilities.add(props);
+						}
+
+						for(int j = min ; j <= max; j++) {
+							Object f =  acceptedInputList.get(j);
+							if(!excludePossibilities.contains(f)) 
+								newPossibility.add(f);
+						}
+
+						if(newPossibility.size() == 1)
+							validateCombination.set(i, newPossibility.get(0));
+
+
+				}else if(reponse == acceptedComparChars.get(2) ){
+					if(this.moreLess)
+						min = (acceptedInputList.indexOf(props) < acceptedInputList.size()-1) ? acceptedInputList.indexOf(props) +1 :  acceptedInputList.size()-1;
+
+
+					for(int j = min ; j <= max; j++) {
+						Object f =  acceptedInputList.get(j);
+						if(!excludePossibilities.contains(f)) {
+							newPossibility.add(f);
+						}
+
+					}
+					
+					if(uniqueValue)
+						newPossibility.remove(props);
+
+					if(newPossibility.size() == 1)
+						validateCombination.set(i, newPossibility.get(0));
+
+				}
+			}
+
+			this.possibleCombination.set(i, (ArrayList<Object>) newPossibility);
+
 		}
+		for(List l : possibleCombination)
+			System.out.println(l);
+
 	}
 
 
@@ -117,7 +228,4 @@ public class AIPlayer extends AbstractPlayer {
 	public void win(boolean w) {
 		// L'IA ne gagne pas de points
 	}
-
-
-
 }

@@ -34,7 +34,7 @@ public class RulesPanel extends AbstractPanel{
 		}
 		
 		rules.setText(rulesText);
-		rules.setFont(arial);
+		rules.setFont(GameFont.ARIAL.getFont());
 		rules.setEditable(false);
 		
 		this.content.add(rules);

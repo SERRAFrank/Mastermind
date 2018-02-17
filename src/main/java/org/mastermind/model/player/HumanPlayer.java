@@ -1,6 +1,8 @@
 package org.mastermind.model.player;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.mastermind.core.Core;
 import org.mastermind.observer.Observable;
@@ -8,18 +10,14 @@ import org.mastermind.observer.Observer;
 
 public class HumanPlayer extends AbstractPlayer {
 
-
-	public HumanPlayer() {
+	public HumanPlayer(List<Object> acceptedInputList, List<Object> acceptedComparChars, boolean moreLess, boolean uniqueValue) {
+		super(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
 		/** Instanciation du Core pour le logger */
 		Core.getInstance(this);
-		
+
 		// Identifiant
 		ID = "human";
 
-		// Definition des bornes
-		acceptedInputChar.add("+");
-		acceptedInputChar.add("-");
-		acceptedInputChar.add("=");
 		this.pauseToInput = true;
 	}
 
@@ -29,6 +27,7 @@ public class HumanPlayer extends AbstractPlayer {
 	 */
 	public void genCombination() {		
 	}
+
 
 	/**
 	 * Création d'une proposition de clef
@@ -53,7 +52,7 @@ public class HumanPlayer extends AbstractPlayer {
 		// TODO Auto-generated method stub
 
 	}
- 
+
 	/**
 	 * Definit si le joueur est victorieux ou non, et ajouter les points en fonction
 	 *
