@@ -32,14 +32,14 @@ public class GamePanel extends AbstractPanel {
 	protected Controller controller; 
 
 	/** Longueur de la combinaison */
-	protected int combinationLenght = Core.config.getInt("combinationLenght");
+	protected int combinationLenght = Core.config.getInt("game.lenght");
 
 
 	/** Tour en cours */
 	protected int currentTurn;
 
 	/** Nompbre de tours maximum */
-	protected int maxTurn = Core.config.getInt("gameTurns");
+	protected int maxTurn = Core.config.getInt("game.turns");
 
 	protected Map<String, GameComponent> labelList = new HashMap<String, GameComponent>();
 

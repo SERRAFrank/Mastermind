@@ -20,9 +20,11 @@ public class Core {
 	/** Instance unique non préinitialisée */
 	private static Core INSTANCE = null;
 	
+	public static boolean DEBUG = config.getBoolean("DEBUG");
+	
 	/** Constructeur privé */
 	private Core(){
-		DebugMode.setDebugMode(Config.DEBUG);
+		DebugMode.setDebugMode(config.getBoolean("DEBUG"));
 	}
 	
 	/** Point d'accès pour l'instance unique du singleton */

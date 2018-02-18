@@ -21,10 +21,10 @@ public class Lang {
 	protected Config config = Config.getInstance();
 	
 	/** Le répertoire des langues */
-	private String defaultLanguage = config.get("defaultLanguage");
+	private String defaultLanguage = config.get("lang.default");
 	
 	/** Le fichier langue */
-	private String languageFile = config.get("languageDir") + "/" + defaultLanguage + ".lang" ;	
+	private String languageFile = config.get("dir.language") + "/" + defaultLanguage + ".lang" ;	
 	
 	
 	private Properties props = new Properties();

@@ -41,7 +41,7 @@ public class App {
 		char minOption = 0;
 		char maxOption = 0;
 		char lenghtOption = 0;
-		boolean debugOption = (Core.config.get("DEBUG").equals("true") ) ? true : false ;
+		boolean debugOption = Core.config.getBoolean("DEBUG");
 		boolean saveOption = false;
 
 		
@@ -81,7 +81,7 @@ public class App {
 			}
 */
 			// Longueur de la combinaison
-			lenghtOption = line.getOptionValue("lenght", Core.config.get("combinationLenght")).charAt(0);
+			lenghtOption = line.getOptionValue("lenght", Core.config.get("game.lenght")).charAt(0);
 			if (!Character.isDigit(lenghtOption)){
 				try {
 					throw new Exception("Lenght is a digit between 0 and 9");
@@ -100,7 +100,7 @@ public class App {
 			boolean helpMode = firstLine.hasOption("help");
 			if (helpMode) {
 			    final HelpFormatter formatter = new HelpFormatter();
-			    formatter.printHelp("MasterMaind", options, true);
+			    formatter.printHelp("MasterMind", options, true);
 			    System.exit(0);
 			}
 
@@ -113,8 +113,8 @@ public class App {
 		Core.config.set("view", viewOption);
 		//Core.config.set("combinationNumbersMin", String.valueOf(minOption) );
 		//Core.config.set("combinationNumbersMax", String.valueOf(maxOption))	;
-		Core.config.set("combinationLenght", String.valueOf(lenghtOption))	;
-		Core.config.set("DEBUG", (debugOption)? "true" : "false") ;		
+		Core.config.set("game.lenght", lenghtOption)	;
+		Core.config.set("DEBUG", debugOption) ;		
 
 		// Sauvegarde des données
 		if(saveOption)

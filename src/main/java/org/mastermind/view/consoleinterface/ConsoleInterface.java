@@ -96,7 +96,7 @@ public class ConsoleInterface extends AbstractInterface{
 	}
 
 	protected void setGameType() {
-		if(Core.config.exist(gameType+".moreLess") ) {
+		if(Core.config.containsKey(gameType+".moreLess") ) {
 			moreLess = Core.config.getBoolean(gameType+".moreLess") ;
 		}else {
 			String[][] o = { {"true", Core.lang.get("combType.moreLessTrue")  } ,
@@ -120,7 +120,7 @@ public class ConsoleInterface extends AbstractInterface{
 
 
 	protected void setUniqueValue() {
-		if(Core.config.exist(gameType+".uniqueValue")) {
+		if(Core.config.containsKey(gameType+".uniqueValue")) {
 			moreLess = Core.config.getBoolean(gameType+".uniqueValue") ;
 		}else if(!moreLess){
 			uniqueValue = true;

@@ -24,8 +24,8 @@ public class GameModeDialog extends JDialog {
 	private JLabel gameTypeLabel = new JLabel(Core.lang.get("setGameType"));
 	private JLabel gameModeLabel = new JLabel(Core.lang.get("selectGameMode.Title"));
 
-	private String[] gameTypeValue = Core.config.getArray("gameType");
-	private String[] gameModeValue = Core.config.getArray("gameMode");
+	private String[] gameTypeValue = Core.config.getArray("game.type");
+	private String[] gameModeValue = Core.config.getArray("game.mode");
 	private boolean sendData;
 	private JPanel content = new JPanel();
 

@@ -27,7 +27,7 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 	protected int turn = 1;
 	
 	/** Nombre de tours max */
-	protected int maxTurn = Core.config.getInt("gameTurns");
+	protected int maxTurn = Core.config.getInt("game.turns");
 
 	/** Partie en cours */
 	protected int currentRound = 1;	

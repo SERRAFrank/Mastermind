@@ -18,7 +18,7 @@ public class ScoreSerializer implements Serializable{
 	protected Map<String, int[]> scoreList = new HashMap<String, int[]>();
 	
 	/** Fichier de score */
-	protected File scoreFile = new File(Core.config.get("scoreFile"));
+	protected File scoreFile = new File(Core.config.get("file.score"));
 
 
 	/**

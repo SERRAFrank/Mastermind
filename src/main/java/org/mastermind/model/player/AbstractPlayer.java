@@ -38,7 +38,7 @@ public abstract class  AbstractPlayer {
 	protected boolean pauseToInput = false;
 
 	/** Longueur de la combinaison */
-	protected int combinationLenght = Core.config.getInt("combinationLenght");
+	protected int combinationLenght = Core.config.getInt("game.lenght");
 	
 	protected int wInt = 0;
 

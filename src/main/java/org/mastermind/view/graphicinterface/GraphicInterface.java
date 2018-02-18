@@ -220,7 +220,7 @@ public class GraphicInterface extends AbstractInterface {
 	
 	@Override
 	protected void aboutUsView() {
-	    ImageIcon logo = new ImageIcon( Core.config.get("imgDir") + "/logo.png");
+	    ImageIcon logo = new ImageIcon( Core.config.get("dir.img") + "logo.png");
 	    
 		String aboutUsText = "";
 		for(int i = 0;  Core.lang.keyExist("aboutUs" + "." + i); i++ ) {

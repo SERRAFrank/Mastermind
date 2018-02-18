@@ -35,7 +35,7 @@ public class Model implements Observable {
 	private int currentTurn = 1;
 
 	/** Nombre maximal de touts de jeu */
-	private int maxTurn = Core.config.getInt("gameTurns");
+	private int maxTurn = Core.config.getInt("game.turns");
 
 	/** Manche en cours */
 	private int currentRound = 1;
@@ -86,13 +86,13 @@ public class Model implements Observable {
 		this.gameMode = gm;
 		this.gameType = gt;
 		
-		if(Core.config.exist(gameType+".uniqueValue") ) {
+		if(Core.config.containsKey(gameType+".uniqueValue") ) {
 			uniqueValue = Core.config.getBoolean(gameType+".uniqueValue") ;
 		}else {
 			uniqueValue = b;
 		}
 		
-		if(Core.config.exist(gameType+".moreLess") ) {
+		if(Core.config.containsKey(gameType+".moreLess") ) {
 			moreLess = Core.config.getBoolean(gameType+".moreLess") ;
 		}else {
 			moreLess = ml;
@@ -110,18 +110,17 @@ public class Model implements Observable {
 		acceptedComparChars.clear();
 		
 		String[] acceptedInput = Core.config.getArray(gameType+".acceptedInputValues");
-		for(String s : acceptedInput ) {
+		for(String c : acceptedInput ) {
 			if(Core.config.get(gameType+".acceptedInputType").equals("Color")) {
 				try {
-					Field field = Class.forName("java.awt.Color").getField(s);
-					Color color = (Color)field.get(null);	
+					Color color =  Color.decode(c);	
 					if(!this.acceptedInputList.contains(color) && color != null )
 						this.acceptedInputList.add(color);
 					
 				} catch (Exception e) { }
 				
 			}else {
-				this.acceptedInputList.add(s.trim());
+				this.acceptedInputList.add(c.trim());
 			}
 		}
 		

@@ -9,6 +9,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -120,13 +121,13 @@ public class ConfigPanel extends AbstractPanel {
 
 		//CheckBox
 		JCheckBox debugModeBox = new JCheckBox(Core.lang.get("setDebugMode"));
-		debugModeBox.setSelected(Core.config.DEBUG);
+		debugModeBox.setSelected(Core.DEBUG);
 		panDebug.add(debugModeBox);
 
 		//Ajout du listener
 		debugModeBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent  e) {
-				Core.config.set("DEBUG", ((JCheckBox)e.getSource()).isSelected()?"true" : "false");
+				Core.config.set("DEBUG", ((AbstractButton) e.getSource()).isSelected());
 				Core.config.updateConfigFile();
 			}
 		});
@@ -289,7 +290,7 @@ public class ConfigPanel extends AbstractPanel {
 
 		langComboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent  e) {
-				Core.config.set("defaultLanguage", e.getItem().toString());
+				Core.config.set("lang.default", e.getItem().toString());
 				Core.config.updateConfigFile();
 			}
 		});

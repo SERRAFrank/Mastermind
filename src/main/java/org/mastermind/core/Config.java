@@ -1,17 +1,17 @@
 package  org.mastermind.core;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.File;
 import java.io.OutputStream;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.Iterator;
+import java.util.List;
 
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.FileBasedConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.log4j.Logger;
 
 
@@ -28,25 +28,16 @@ public class Config {
 	/** Le fichier de config */
 	private String configFile = "resources/config.properties";
 
-	private Properties props = new Properties();
+	Configuration config;
 
 	/** Instance unique non préinitialisée */
 	private static Config INSTANCE = null;
 
-	/** Instance unique indiquant le mode DEBUG */
-	public static boolean DEBUG;
+	FileBasedConfigurationBuilder<FileBasedConfiguration> builder;
 
 	/** Constructeur privé */
 	private Config(){
 		loadConfigFile();
-
-		// définit si le Debug Mode est activé
-		if (this.props.getProperty("DEBUG").equals("true") )
-			DEBUG = true;
-		else
-			DEBUG = false;
-
-		logger.info("Debug mode : " + DEBUG );
 	}
 
 
@@ -65,67 +56,46 @@ public class Config {
 	 */
 	private void loadConfigFile() {
 
-		logger.info("Loading config file : " + this.configFile );
-		FileInputStream reader = null;
-		try {
-			//chargement du fichier
-			reader = new FileInputStream(this.configFile);
-			this.props.load(reader);
-		} catch (FileNotFoundException e) {
-			//fichier inexistant
-			DebugMode.error(e); 
-		} catch (IOException e) {
-			// erreur de chargement
-			DebugMode.error(e); 
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (final IOException e) {
-					//erreur de fermeture
-					DebugMode.error(e); 
-				}
-			}
+		Parameters params = new Parameters();
+		// Read data from this file
+		File propertiesFile = new File(this.configFile);
+
+		builder =
+			    new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class)
+			    .configure(params.properties()
+			        .setFileName(this.configFile)
+			        .setListDelimiterHandler(new DefaultListDelimiterHandler(','))
+			        );
+		try
+		{
+			config = builder.getConfiguration();
+			logger.info("Loading config file : " + this.configFile );
 		}
+		catch(ConfigurationException e)
+		{
+			DebugMode.error(e); 
+		}
+
+
 	}
 
 
 	/**
 	 * Mise à jour du fichier de configuration
+	 * @throws ConfigurationException 
 	 */
+
 	public void updateConfigFile() {
 		OutputStream output = null;
 		logger.info("Saving config file : " + configFile );
 
 		try {
-			Properties ordoredProps = new Properties() {
-			    @Override
-			    public synchronized Enumeration<Object> keys() {
-			        return Collections.enumeration(new TreeSet<Object>(super.keySet()));
-			    }
-			};
-			ordoredProps.putAll(props);
-			
-			// ouverture du fichier de config
-			output = new FileOutputStream(configFile);
-			//réécriture avec les parametres en cours
-			ordoredProps.store(output, null);
-		} catch (final IOException e) {
+			builder.save();
+		} catch (final ConfigurationException e) {
 			//erreur à l'ouverture
 			DebugMode.error(e); 
-		} finally {
-			if (output != null) {
-				try {
-					//fermeture du fichier
-					output.close();
-				} catch (final IOException e) {
-					//erreur à la fermeture
-					DebugMode.error(e); 
-				}
-			}
 
 		}
-
 	}
 
 	/**
@@ -139,20 +109,12 @@ public class Config {
 	 * 		Exception si la clef n'existe pas
 	 */
 	public String get(String key) {
-		String value = this.props.getProperty(key);
-		try {
-			if (value == null)
-				throw new Exception("Config key '"+key+"' not found.");
-		}catch(Exception e){
-			DebugMode.error(e);			
-		}
-
-		return value;
+		return this.config.getString(key);
 
 	}
-	
-	
-	
+
+
+
 
 	/**
 	 * Retourne la valeur correspondant à une clef sous forme d'Integer
@@ -162,8 +124,8 @@ public class Config {
 	 * @return value
 	 * 		La valeur de la clef
 	 */
-	public int getInt(String string) {
-		return Integer.parseInt(get(string));
+	public int getInt(String key) {
+		return config.getInt(key);
 	}
 
 
@@ -176,12 +138,7 @@ public class Config {
 	 * 		La valeur de la clef
 	 */
 	public boolean getBoolean(String key) {
-		String value = get(key).toUpperCase();
-	
-		if(value.equals("TRUE"))
-			return true;
-		else
-			return false;
+		return  config.getBoolean(key);
 	}
 
 	/**
@@ -195,12 +152,24 @@ public class Config {
 	 * 		Exception si la clef n'existe pas
 	 */
 	public String[] getArray(String key) {
-		String[] value = get(key).split(",");
-		return value;
+		return config.getStringArray(key);
 
 	}
-	
 
+	/**
+	 * Retourne la valeur correspondant à une clef sous forme d'une list
+	 *
+	 * @param key
+	 * 		La clef recherchée
+	 * @return value
+	 * 		La valeur de la clef
+	 * @throws Exception 
+	 * 		Exception si la clef n'existe pas
+	 */
+	public List<Object> getList(String key) {
+		return config.getList(key);
+
+	}
 
 	/**
 	 * Indique si la clef existe.
@@ -210,11 +179,8 @@ public class Config {
 	 * @return 
 	 * 		true si vrai
 	 */
-	public boolean exist(String key) {
-		if( this.props.getProperty(key) == null)
-			return false;
-		else
-			return true;
+	public boolean containsKey(String key) {
+		return config.containsKey(key);
 	}
 
 
@@ -227,48 +193,29 @@ public class Config {
 	 * @param value
 	 * 		La valeur de la clef
 	 */
-	public void set(String key, String value) {
-		this.props.setProperty(key, value);
+	public void set(String key, Object value) {
+		this.config.setProperty(key, value);
 	}
 
-	/**
-	 * Définit la valeur d'une clef
-	 *
-	 * @param key
-	 * 		Le nom de la clef
-	 * @param value
-	 * 		La valeur de la clef
-	 */
-	public void set(String key, boolean b) {
-		String value;
-		if(b)
-			value = "TRUE";
-		else
-			value = "FALSE";
-		
-		this.props.setProperty(key, value);
-	}
-	
+
 	/**
 	 * Retourne toutes les clefs.
 	 *
 	 * @return Set
 	 * 	Liste des clefs
 	 */	
-	public Set<Object> getAllKeys(){
-		Set<Object> keysList = this.props.keySet();
-		return keysList;
+	public Iterator<String> getAllKeys(){
+		return this.config.getKeys();
 	}
 
-
-	public void remove(String string) {
-		this.props.remove(string);
-
+	/**
+	 * Supprime une clef et sa valeur
+	 * 
+	 * @param key
+	 * 		Le nom de la clef
+	 */	
+	public void remove(String key) {
+		this.config.clearProperty(key);
 	}
-
-
-
-
-
 }
 
