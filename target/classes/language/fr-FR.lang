@@ -125,7 +125,6 @@ aboutUs.1 = Par SERRA Frank
 aboutUs.2 = Pour OpenClassrooms
 
 
-interfacePan = Interface
 gamePan = Jeu
 langPan = Langue
 
@@ -148,6 +147,13 @@ setLenght = Longueur :
 debugMode = Debug Mode
 setDebugMode = Activer le mode DEBUG
 
+acceptedValues = Valeurs acceptées : 
+setUniqueValue = Voulez-vous interdire les doublons dans la combinaison ?
+uniqueValueYes = Les valeurs sont uniques
+uniqueValueNo = Les doublons sont autorisés
 
+selectCombType = Selectionnez votre type de jeu
+combType.moreLessTrue = Plus et moins
+combType.moreLessFalse = MasterMind
 
-uniqueValue = Les valeurs sont uniques
+combLenght = La chaine fait {{config.combinationLenght}} caractères

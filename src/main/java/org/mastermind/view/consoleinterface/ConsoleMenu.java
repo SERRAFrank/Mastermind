@@ -78,8 +78,8 @@ public class ConsoleMenu {
 
 			// Affichage d'un titre
 			if(!title.equals("")) {
-				showTitle(title);
 				System.out.println();
+				showTitle(title);
 
 			}
 	

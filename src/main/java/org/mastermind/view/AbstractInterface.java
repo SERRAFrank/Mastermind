@@ -18,7 +18,11 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 
 	/** Mode de jeu */
 	protected String gameMode;
-
+	protected String gameType;
+	protected boolean uniqueValue;
+	protected boolean moreLess;
+	
+	
 	/** Tour en cours */
 	protected int turn = 1;
 	
@@ -26,10 +30,13 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 	protected int maxTurn = Core.config.getInt("gameTurns");
 
 	/** Partie en cours */
-	protected int round = 1;	
+	protected int currentRound = 1;	
 
 	/** Nom du Joueur */
 	protected String playerName = "";
+
+	protected List<Object> acceptedValues;
+	protected List<Object> comparValues;
 
 
 	/**
@@ -78,7 +85,7 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 		//Remise à 0 des paramettres du model
 		this.controller.resetModel();
 		turn = 1;
-		round = 1;
+		currentRound = 1;
 
 		if(playerName.equals(""))
 			setPlayer();

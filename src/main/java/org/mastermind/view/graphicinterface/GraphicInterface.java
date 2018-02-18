@@ -233,7 +233,7 @@ public class GraphicInterface extends AbstractInterface {
 	}
 
 	@Override
-	public void updateInitGame(String s, List<Object> l, boolean u) {}
+	public void updateInitGame(String s, List<Object> l, List<Object> r,  boolean u, String gt) {}
 	
 	@Override
 	public void updateInput(String s) {

@@ -67,7 +67,7 @@ public abstract class AbstractPanel  implements Observer{
 	public void updateInput(String s) {}
 	
 	@Override
-	public void updateInitGame(String s, List<Object> l, boolean u) {}
+	public void updateInitGame(String s, List<Object> l, List<Object> r,  boolean u, String gt) {}
 
 	@Override
 	public void updateOutputPropos(List<Object> o) {}

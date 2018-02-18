@@ -89,14 +89,12 @@ public class GameModeDialog extends JDialog {
 						gm = gameMode;
 				}
 
-				controller.setGameMode(gm);
-
 				String gt = null;
 				for(String gameType : gameTypeValue ) {
 					if(Core.lang.get("gameType." + gameType ).equals(gameTypeCombo.getSelectedItem()))
 						gt = gameType;
 				}
-				controller.setGameType(gt);
+				controller.setGameMode(gm, gt, false, true);
 				
 				setVisible(false);
 

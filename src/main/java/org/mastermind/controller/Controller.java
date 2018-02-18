@@ -20,7 +20,6 @@ public class Controller {
 	/** Mode de jeu */
 	private String gameMode;
 
-	private String gameType;
 	/**
 	 * Controlleur
 	 * @param m
@@ -52,18 +51,15 @@ public class Controller {
 	 * Definit le mode de jeu
 	 * @param gm
 	 * 		Mode de jeu
+	 * @param combType 
+	 * @param gt 
+	 * @param b 
 	 */
-	public void setGameMode(String gm) {
+	public void setGameMode(String gm, String gt, boolean moreLess, boolean b) {
 		this.gameMode = gm;
-		this.model.setGameMode(gameMode);
+		this.model.setGameMode(gameMode, gt, moreLess, b);
 	}
 
-	public void setGameType(String gt) {
-		this.gameType = gt;
-		this.model.setGameType(gameType);
-	}
-	
-	
 
 	/**
 	 * Traite et met en forme la saisie du joueur en mode console avant de l'envoyer au model

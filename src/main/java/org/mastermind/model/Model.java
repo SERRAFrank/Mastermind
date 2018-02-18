@@ -1,10 +1,9 @@
-package  org.mastermind.model;
+package org.mastermind.model;
 
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -49,14 +48,11 @@ public class Model implements Observable {
 	/** Input passé au Model */
 	private Object input = null;
 
-
 	private boolean uniqueValue;
 	private boolean moreLess;
 
-
-
-	private List<Object>  acceptedInputList = new ArrayList<Object>();
-	private List<Object> acceptedComparChars =  new ArrayList<Object>();
+	private List<Object> acceptedInputList = new ArrayList<Object>();
+	private List<Object> acceptedComparChars = new ArrayList<Object>();
 
 
 	/**
@@ -82,32 +78,39 @@ public class Model implements Observable {
 	 *
 	 * @param gm
 	 * 		Le mode de jeu
+	 * @param ml 
+	 * @param gt 
+	 * @param b 
 	 */
-	public void setGameMode(String gm) {
+	public void setGameMode(String gm, String gt, boolean ml, boolean b) {
 		this.gameMode = gm;
+		this.gameType = gt;
+		
+		if(Core.config.exist(gameType+".uniqueValue") ) {
+			uniqueValue = Core.config.getBoolean(gameType+".uniqueValue") ;
+		}else {
+			uniqueValue = b;
+		}
+		
+		if(Core.config.exist(gameType+".moreLess") ) {
+			moreLess = Core.config.getBoolean(gameType+".moreLess") ;
+		}else {
+			moreLess = ml;
+		}
+		
+		
 		this.currentRound = 1;
 		Core.logger.info("Game mode : " + gameMode);
 	}
 	
-	public void setGameType(String gt) {
-		this.gameType = gt;
-		
-		Core.config.set("gameMode", gameMode);
-		
-	
-	}
-
-
 	public void initGameMode() {
-		
-		uniqueValue = Core.config.getBoolean(gameType+".uniqueValue") ;
-		moreLess = Core.config.getBoolean(gameType+".moreLess") ;
+
 
 		acceptedInputList.clear();
 		acceptedComparChars.clear();
 		
 		String[] acceptedInput = Core.config.getArray(gameType+".acceptedInputValues");
-		for(String s :  acceptedInput ) {
+		for(String s : acceptedInput ) {
 			if(Core.config.get(gameType+".acceptedInputType").equals("Color")) {
 				try {
 					Field field = Class.forName("java.awt.Color").getField(s);
@@ -171,14 +174,11 @@ public class Model implements Observable {
 		}
 
 
-		
-		
-		
 
 		if(this.player1.pauseToInput()) {
-			notifyInitGame("compar", acceptedComparChars , false);
+			notifyInitGame("compar", acceptedComparChars , acceptedComparChars, false, gameType);
 		}else if(this.player2.pauseToInput()) {
-			notifyInitGame("propos",  acceptedInputList , uniqueValue);
+			notifyInitGame("propos", acceptedInputList , acceptedComparChars, uniqueValue, gameType);
 		}
 
 	}
@@ -390,10 +390,10 @@ public class Model implements Observable {
 
 
 
-	public void notifyInitGame(String s, List<Object> l, boolean u) {
+	public void notifyInitGame(String s, List<Object> l, List<Object> r, boolean u, String gt) {
 
 		for(Observer obs : listObserver)
-			obs.updateInitGame(s, l, u);
+			obs.updateInitGame(s, l, r, u, gt);
 
 	}
 

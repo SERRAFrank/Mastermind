@@ -9,7 +9,7 @@ public interface Observable {
 	public void notifyOutputCompar( List<Object> o);
 	public void notifyOutputPropos(List<Object> o);
 	public void notifyRound(int o);
-	public void notifyInitGame(String s, List<Object> l, boolean u);
+	public void notifyInitGame(String s, List<Object> l, List<Object> r,  boolean u, String gt);
 	public void notifyEndGame(String e, boolean w);
 	public void removeObserver();
 }

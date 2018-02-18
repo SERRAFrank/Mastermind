@@ -45,7 +45,7 @@ public abstract class  AbstractPlayer {
 
 	protected boolean uniqueValue;
 
-	protected boolean moreLess = false;
+	protected boolean moreLess;
 	/**
 	 * Generation de la clef secrete
 	 */

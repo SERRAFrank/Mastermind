@@ -52,13 +52,17 @@ public class GamePanel extends AbstractPanel {
 
 	private int currentRound = 1;
 
-	private List<Object> selectable = new ArrayList<Object>();
+	private List<Object> acceptedValues = new ArrayList<Object>();
 
 	private List<Object> returnedField = new ArrayList<Object>();
 
 	private boolean uniqueValue;
+	
+	private String gameType;
 
 	private String returnText = "";
+
+	private List<Object> comparValues;
 
 	public GamePanel(Dimension dim, Controller ctrl){
 		super(dim);
@@ -138,7 +142,7 @@ public class GamePanel extends AbstractPanel {
 					compar.setBackground(Color.LIGHT_GRAY);
 				}
 
-				if(returnText.equals(""))
+				if(gameType.equals("hiddenComb"))
 					history.add(compar);
 				else
 					history.add(new JLabel(returnText));
@@ -187,10 +191,12 @@ public class GamePanel extends AbstractPanel {
 	}
 
 	@Override
-	public void updateInitGame(String s, List<Object> l, boolean u) {
+	public void updateInitGame(String s, List<Object> l, List<Object> r,  boolean u, String gt) {
 		this.editable = s;
-		this.selectable = l;
+		this.acceptedValues = l;
+		this.comparValues = r;
 		this.uniqueValue = u;
+		this.gameType = gt;
 		addLabelLine();
 
 
@@ -206,14 +212,14 @@ public class GamePanel extends AbstractPanel {
 		if (editable.equals("propos")) {
 			proposText = Core.lang.get("input.proposCombination");
 			comparText = Core.lang.get("output.setComparaison");
-			propPanel.setPossibleValue(selectable, uniqueValue);
+			propPanel.setPossibleValue(acceptedValues, uniqueValue);
 			propPanel.setEnabled(true);
 			comparPanel.setEnabled(false);
 
 		}else if (editable.equals("compar")) {
 			proposText = Core.lang.get("output.proposCombination");
 			comparText = Core.lang.get("input.setComparaison");
-			comparPanel.setPossibleValue(selectable, uniqueValue);
+			comparPanel.setPossibleValue(acceptedValues, uniqueValue);
 			comparPanel.setEnabled(true);
 			propPanel.setEnabled(false);
 		}

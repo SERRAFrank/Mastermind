@@ -3,11 +3,14 @@ package  org.mastermind.core;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
@@ -92,13 +95,21 @@ public class Config {
 	 */
 	public void updateConfigFile() {
 		OutputStream output = null;
-		logger.info("Loading config file : " + configFile );
+		logger.info("Saving config file : " + configFile );
 
 		try {
+			Properties ordoredProps = new Properties() {
+			    @Override
+			    public synchronized Enumeration<Object> keys() {
+			        return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+			    }
+			};
+			ordoredProps.putAll(props);
+			
 			// ouverture du fichier de config
 			output = new FileOutputStream(configFile);
 			//réécriture avec les parametres en cours
-			this.props.store(output, null);
+			ordoredProps.store(output, null);
 		} catch (final IOException e) {
 			//erreur à l'ouverture
 			DebugMode.error(e); 
