@@ -1,16 +1,12 @@
 package org.mastermind.model.player;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import org.mastermind.core.Core;
-import org.mastermind.observer.Observable;
-import org.mastermind.observer.Observer;
 
 public class HumanPlayer extends AbstractPlayer {
 
-	public HumanPlayer(List<Object> acceptedInputList, List<Object> acceptedComparChars, boolean moreLess, boolean uniqueValue) {
+	public HumanPlayer(List<Object> acceptedInputList, List<Object> acceptedComparChars, boolean moreLess,
+			boolean uniqueValue) {
 		super(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
 		/** Instanciation du Core pour le logger */
 		Core.getInstance(this);
@@ -21,17 +17,17 @@ public class HumanPlayer extends AbstractPlayer {
 		this.pauseToInput = true;
 	}
 
-
 	/**
 	 * Génération d'une clef secrete
 	 */
-	public void genCombination() {		
+	@Override
+	public void genCombination() {
 	}
-
 
 	/**
 	 * Création d'une proposition de clef
 	 */
+	@Override
 	public void proposCombination() {
 		// TODO Auto-generated method stub
 
@@ -40,6 +36,7 @@ public class HumanPlayer extends AbstractPlayer {
 	/**
 	 * Comparaison d'une proposition de clef avec la clef secrete
 	 */
+	@Override
 	public void comparToHiddenCombination() {
 		// TODO Auto-generated method stub
 
@@ -48,6 +45,7 @@ public class HumanPlayer extends AbstractPlayer {
 	/**
 	 * Analyse de la reponse de comparaison entre la proposition de clef
 	 */
+	@Override
 	public void comparToProposCombination() {
 		// TODO Auto-generated method stub
 
@@ -57,9 +55,10 @@ public class HumanPlayer extends AbstractPlayer {
 	 * Definit si le joueur est victorieux ou non, et ajouter les points en fonction
 	 *
 	 * @param w
-	 * 		true si le joueur est gagnant, sinon false
+	 *            true si le joueur est gagnant, sinon false
 	 */
 
+	@Override
 	public void win(boolean w) {
 		Core.score.addPoints(w);
 	}

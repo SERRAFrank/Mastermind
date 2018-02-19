@@ -1,5 +1,4 @@
-package  org.mastermind.view.consoleinterface;
-
+package org.mastermind.view.consoleinterface;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,11 +10,10 @@ import org.mastermind.controller.Controller;
 import org.mastermind.core.Core;
 import org.mastermind.view.AbstractInterface;
 
-public class ConsoleInterface extends AbstractInterface{
+public class ConsoleInterface extends AbstractInterface {
 
 	/** Lecture des inputes */
 	protected Scanner scanner = new Scanner(System.in);
-
 
 	/** Constructeur */
 	public ConsoleInterface(Controller controller) {
@@ -25,7 +23,6 @@ public class ConsoleInterface extends AbstractInterface{
 		Core.getInstance(this);
 
 	}
-
 
 	/**
 	 * Affiche le message d'accueil au lancement de l'application
@@ -39,7 +36,6 @@ public class ConsoleInterface extends AbstractInterface{
 
 	}
 
-
 	/**
 	 * Definition du nom du joueur
 	 */
@@ -52,10 +48,9 @@ public class ConsoleInterface extends AbstractInterface{
 		controller.setPlayerName(p);
 		this.playerName = Core.score.getPlayerName();
 
-		System.out.println(Core.lang.get("hello") + " " + this.playerName );
-		getScores();		
+		System.out.println(Core.lang.get("hello") + " " + this.playerName);
+		getScores();
 	}
-
 
 	/**
 	 * Initialisation de l'interface
@@ -74,62 +69,59 @@ public class ConsoleInterface extends AbstractInterface{
 	@Override
 	protected void setGameMode() {
 
-		String title ;
+		String title;
 		List<String[]> options;
 		gameType = "nbr";
 
 		title = Core.lang.get("selectGameMode.Title");
 		options = menuList("selectGameMode.Options");
 
-		String[] returnOption = {Core.lang.get("return.key"), Core.lang.get("return.desc")  };
+		String[] returnOption = { Core.lang.get("return.key"), Core.lang.get("return.desc") };
 		options.add(returnOption);
 
 		ConsoleMenu gameModeMenu = new ConsoleMenu(title, options);
 		gameMode = gameModeMenu.showMenu();
 
-		if(gameMode.equals(Core.lang.get("return.key"))) { 
+		if (gameMode.equals(Core.lang.get("return.key"))) {
 			principalMenu();
-		}else {
+		} else {
 			setGameType();
 		}
 
 	}
 
 	protected void setGameType() {
-		if(Core.config.containsKey(gameType+".moreLess") ) {
-			moreLess = Core.config.getBoolean(gameType+".moreLess") ;
-		}else {
-			String[][] o = { {"true", Core.lang.get("combType.moreLessTrue")  } ,
-					{"false", Core.lang.get("combType.moreLessFalse")  },
-					{Core.lang.get("return.key"), Core.lang.get("return.desc")  } };
-			ConsoleMenu moreLessMenu = new ConsoleMenu(Core.lang.get("selectCombType"), new ArrayList<>(Arrays.asList(o)));
+		if (Core.config.containsKey(gameType + ".moreLess")) {
+			moreLess = Core.config.getBoolean(gameType + ".moreLess");
+		} else {
+			String[][] o = { { "true", Core.lang.get("combType.moreLessTrue") },
+					{ "false", Core.lang.get("combType.moreLessFalse") },
+					{ Core.lang.get("return.key"), Core.lang.get("return.desc") } };
+			ConsoleMenu moreLessMenu = new ConsoleMenu(Core.lang.get("selectCombType"),
+					new ArrayList<>(Arrays.asList(o)));
 
 			String r = moreLessMenu.showMenu();
-			
-			if(r.equals(Core.lang.get("return.key"))) { 
+
+			if (r.equals(Core.lang.get("return.key"))) {
 				setGameMode();
-			}else {
-				moreLess = (r.equals("true")? true : false ) ;
+			} else {
+				moreLess = (r.equals("true") ? true : false);
 				setUniqueValue();
 			}
-		
-
 
 		}
 	}
 
-
 	protected void setUniqueValue() {
-		if(Core.config.containsKey(gameType+".uniqueValue")) {
-			moreLess = Core.config.getBoolean(gameType+".uniqueValue") ;
-		}else if(!moreLess){
+		if (Core.config.containsKey(gameType + ".uniqueValue")) {
+			moreLess = Core.config.getBoolean(gameType + ".uniqueValue");
+		} else if (!moreLess) {
 			uniqueValue = true;
-		}else {
-			uniqueValue = yesNo(Core.lang.get("setUniqueValue") );
+		} else {
+			uniqueValue = yesNo(Core.lang.get("setUniqueValue"));
 		}
 
- 
-			controller.setGameMode(gameMode, gameType, moreLess, uniqueValue);
+		controller.setGameMode(gameMode, gameType, moreLess, uniqueValue);
 	}
 
 	/**
@@ -146,16 +138,16 @@ public class ConsoleInterface extends AbstractInterface{
 	@Override
 	protected void newRound() {
 		System.out.println();
-		System.out.println(">  ROUND " + currentRound + "  <") ;
+		System.out.println(">  ROUND " + currentRound + "  <");
 
-		currentRound++;	
+		currentRound++;
 		this.controller.newGame();
 	}
 
 	/**
 	 * Menu principal
 	 */
-	protected void principalMenu() {	
+	protected void principalMenu() {
 		String t = Core.lang.get("menu.Title");
 		List<String[]> o = menuList("menu.Options");
 
@@ -165,47 +157,46 @@ public class ConsoleInterface extends AbstractInterface{
 
 		clearScreen();
 
-
-		switch(choice) {
+		switch (choice) {
 		case "rules":
 			rulesView();
 			break;
-		case "scores" :
+		case "scores":
 			scoresView();
-			break;			
-		case "aboutUs" :
+			break;
+		case "aboutUs":
 			aboutUsView();
 			break;
-		case "exit" :		
+		case "exit":
 			System.exit(0);
 			break;
 		case "game":
-		default :
+		default:
 			initGame();
 
 		}
 	}
 
-
 	protected void getScores() {
 		System.out.println(Core.lang.get("getScores"));
 
-		System.out.println( printScores( Core.score.getScores() ) );
+		System.out.println(printScores(Core.score.getScores()));
 
 		pressEnterToContinue();
 	}
 
-
-	private String printScores(int[] o ) {
+	private String printScores(int[] o) {
 		int w = o[0];
 		int l = o[1];
 		double p = 0.;
-		try{
-			p =   (w / ((double)w + (double)l)) * 100;
-		}catch(Exception e) {}
+		try {
+			p = (w / ((double) w + (double) l)) * 100;
+		} catch (Exception e) {
+		}
 
-		p = Math.round(p * Math.pow(10,2)) / Math.pow(10,2);
-		return "  " + w + " " +  Core.lang.get("victory") + " / " +  l + " " + Core.lang.get("defeat") +  " ( " + p + "% )";
+		p = Math.round(p * Math.pow(10, 2)) / Math.pow(10, 2);
+		return "  " + w + " " + Core.lang.get("victory") + " / " + l + " " + Core.lang.get("defeat") + " ( " + p
+				+ "% )";
 	}
 
 	/**
@@ -216,18 +207,17 @@ public class ConsoleInterface extends AbstractInterface{
 
 	}
 
-
 	/**
 	 * Vue des scores
 	 */
 	@Override
 	protected void scoresView() {
 
-		for(Entry<String, int[]> list : Core.score.getScoresList().entrySet()) {
+		for (Entry<String, int[]> list : Core.score.getScoresList().entrySet()) {
 			String playerName = list.getKey();
 			int[] value = list.getValue();
-			System.out.println( playerName + " : " +  printScores(value) );
-		}   
+			System.out.println(playerName + " : " + printScores(value));
+		}
 		pressEnterToContinue();
 		principalMenu();
 	}
@@ -254,28 +244,29 @@ public class ConsoleInterface extends AbstractInterface{
 
 	}
 
-	private void pressEnterToContinue() { 
+	private void pressEnterToContinue() {
 		System.out.println();
 		System.out.println();
 		System.out.println(Core.lang.get("pressEnterToContinue"));
 
-		try{
+		try {
 			System.in.read();
-		}catch(Exception e) {} 
-		clearScreen();	
+		} catch (Exception e) {
+		}
+		clearScreen();
 	}
 
-	private boolean yesNo(String msg) { 
+	private boolean yesNo(String msg) {
 		boolean value;
-		while(true) {
+		while (true) {
 
 			System.out.println(msg + " " + Core.lang.get("yesno"));
 			char choice = scanner.next().toLowerCase().charAt(0);
 
-			if(choice == 'y' || choice == 'o' ) {
+			if (choice == 'y' || choice == 'o') {
 				value = true;
 				break;
-			} else if(choice == 'n' ) {
+			} else if (choice == 'n') {
 				value = false;
 				break;
 			} else {
@@ -286,12 +277,12 @@ public class ConsoleInterface extends AbstractInterface{
 		clearScreen();
 		return value;
 
-	}	
+	}
 
 	private void printMultiline(String k) {
 		int i = 0;
 
-		while(Core.lang.keyExist(k + "." + i) ) {
+		while (Core.lang.keyExist(k + "." + i)) {
 			System.out.println(Core.lang.get(k + "." + i));
 			i++;
 		}
@@ -302,58 +293,60 @@ public class ConsoleInterface extends AbstractInterface{
 		boolean newRound = yesNo(msg);
 		if (newRound) {
 			newRound();
-		}else {
+		} else {
 			principalMenu();
 		}
 	}
 
-
-	private void clearScreen() {  
+	private void clearScreen() {
 		try {
 			String os = System.getProperty("os.name");
 			if (os.contains("Windows"))
 				new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
 			else
 				Runtime.getRuntime().exec("clear");
-		}catch(Exception e) {
+		} catch (Exception e) {
 		}
 	}
-
 
 	/** Pattern Observer */
 
 	/**
 	 * Gestion des sorties
-	 * @param s 
+	 * 
+	 * @param s
 	 * @param o
-	 * 		Message à afficher
-	 */	
+	 *            Message à afficher
+	 */
+	@Override
 	public void updateOutputCompar(List<Object> compar) {
 
-		if(moreLess) {
-			for(Object str : compar)
+		if (moreLess) {
+			for (Object str : compar)
 				System.out.print(str + " ");
 			System.out.print(System.getProperty("line.separator"));
-		}else {
+		} else {
 			int v = 0;
 			int o = 0;
-			for(Object obj : compar) {
-				if(obj == comparValues.get(1))
+			for (Object obj : compar) {
+				if (obj == comparValues.get(1))
 					v++;
-				else if(obj == comparValues.get(2))
+				else if (obj == comparValues.get(2))
 					o++;
 			}
 
-			System.out.println( o + " present(s) et " + v + " bien placé(s)" );		
+			System.out.println(o + " present(s) et " + v + " bien placé(s)");
 		}
 	}
 
+	@Override
 	public void updateOutputPropos(List<Object> o) {
-		for(Object str : o)
+		for (Object str : o)
 			System.out.print(str + " ");
 		System.out.print(System.getProperty("line.separator"));
 	}
 
+	@Override
 	public void updateRound(int o) {
 		currentRound = o;
 
@@ -361,30 +354,30 @@ public class ConsoleInterface extends AbstractInterface{
 
 	}
 
-
-
-
-	public void updateInitGame(String s, List<Object> l, List<Object> r,  boolean u, String gt) {
+	@Override
+	public void updateInitGame(String s, List<Object> l, List<Object> r, boolean u, boolean ml) {
 		this.acceptedValues = l;
 		this.uniqueValue = u;
 		this.comparValues = r;
-		this.gameType = gt;
+		this.moreLess = ml;
 		System.out.println();
 		System.out.println(Core.lang.get("acceptedValues") + acceptedValues.toString());
 		System.out.println(Core.lang.get("combLenght"));
-		System.out.println(Core.lang.get("uniqueValue" + (uniqueValue?"Yes":"No")));
+		System.out.println(Core.lang.get("uniqueValue" + (uniqueValue ? "Yes" : "No")));
 		System.out.println();
 	}
 
 	/**
 	 * Gestion des inputs
+	 * 
 	 * @param o
-	 * 		Message à afficher
+	 *            Message à afficher
 	 */
+	@Override
 	public void updateInput(String phase) {
 		String msg = "";
-		switch(phase) {
-		case "propos" :
+		switch (phase) {
+		case "propos":
 			msg = Core.lang.get("input.proposCombination");
 			break;
 		case "compar":
@@ -392,15 +385,14 @@ public class ConsoleInterface extends AbstractInterface{
 			break;
 		}
 
-
 		String str = "";
 		boolean r = false;
 		System.out.println(msg);
-		while(!r) {
+		while (!r) {
 			str = scanner.nextLine();
-			if(str.length() > 0) {
+			if (str.length() > 0) {
 				r = controller.setInput(phase, str);
-				if(!r)
+				if (!r)
 					System.out.println(Core.lang.get("input.error"));
 			}
 		}
@@ -408,25 +400,25 @@ public class ConsoleInterface extends AbstractInterface{
 
 	/**
 	 * Fin de jeu
+	 * 
 	 * @param t
-	 * 		Message à afficher
+	 *            Message à afficher
 	 * @param w
-	 * 		Presence d'un gagnant
+	 *            Presence d'un gagnant
 	 */
 
-	public void updateEndGame(String t, boolean w) {	
+	@Override
+	public void updateEndGame(String t, boolean w) {
 		System.out.println(Core.lang.get(t));
 		System.out.println(Core.lang.get("getScores"));
-		System.out.println( printScores( Core.score.getScores() ) );
+		System.out.println(printScores(Core.score.getScores()));
 
-		if(w) {
+		if (w) {
 			newRoundQuestion(Core.lang.get(gameMode + ".newRound"));
 		} else {
 			newRoundQuestion(Core.lang.get(gameMode + ".exaequo"));
 		}
 
 	}
-
-
 
 }

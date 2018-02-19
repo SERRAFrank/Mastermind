@@ -1,5 +1,15 @@
-18-02-2018 23:13:03 INFO  Config:72 - Loading config file : resources/config.properties
-18-02-2018 23:13:03 INFO  Config:62 - Loading language file : resources/language//fr-FR.lang
-18-02-2018 23:13:03 INFO  View:28 - View mode : graphic
-18-02-2018 23:13:17 INFO  GameModeDialog:103 - Game mode : challenger
-18-02-2018 23:13:17 DEBUG DebugMode:64 - hiddenCombination : [java.awt.Color[r=255,g=255,b=0], java.awt.Color[r=0,g=0,b=0], java.awt.Color[r=255,g=255,b=255], java.awt.Color[r=0,g=255,b=0], java.awt.Color[r=0,g=255,b=255]]
+19-02-2018 20:48:29 INFO  Config:63 - Loading config file : resources/config.properties
+19-02-2018 20:48:29 INFO  Config:57 - Loading language file : resources/language//fr-FR.lang
+19-02-2018 20:48:29 INFO  View:29 - View mode : graphic
+19-02-2018 20:48:39 INFO  Config:78 - Saving config file : resources/config.properties
+19-02-2018 20:48:39 INFO  Config:78 - Saving config file : resources/config.properties
+19-02-2018 20:48:39 INFO  Config:78 - Saving config file : resources/config.properties
+19-02-2018 20:48:39 INFO  Config:78 - Saving config file : resources/config.properties
+19-02-2018 20:48:40 INFO  Config:78 - Saving config file : resources/config.properties
+19-02-2018 20:48:40 INFO  Config:78 - Saving config file : resources/config.properties
+19-02-2018 20:48:44 INFO  GameModeDialog:98 - Game mode : challenger
+19-02-2018 20:48:51 INFO  GameModeDialog:98 - Game mode : challenger
+19-02-2018 20:49:01 INFO  Config:78 - Saving config file : resources/config.properties
+19-02-2018 20:49:01 INFO  Config:78 - Saving config file : resources/config.properties
+19-02-2018 20:49:01 INFO  Config:78 - Saving config file : resources/config.properties
+19-02-2018 20:49:01 INFO  Config:78 - Saving config file : resources/config.properties

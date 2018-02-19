@@ -3,33 +3,25 @@
  */
 package org.mastermind.model.player;
 
-import java.awt.Color;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.mastermind.core.Core;
 
-public abstract class  AbstractPlayer {
+public abstract class AbstractPlayer {
 	/** Combinaison à trouver */
-	protected List<Object> hiddenCombination =  new ArrayList<Object>();
+	protected List<Object> hiddenCombination = new ArrayList<Object>();
 
 	/** Combinaison proposée à comparer */
-	protected List<Object> proposCombination =  new ArrayList<Object>();
+	protected List<Object> proposCombination = new ArrayList<Object>();
 
-	/** Reponse de la comparaison de la proposition de chaine et  de la cachée */
-	protected List<Object> comparCombination =  new ArrayList<Object>();
+	/** Reponse de la comparaison de la proposition de chaine et de la cachée */
+	protected List<Object> comparCombination = new ArrayList<Object>();
 
 	/** Liste des symboles acceptés */
 	protected List<Object> acceptedInputList = new ArrayList<Object>();
 
 	/** Liste des caracteres acceptés */
-	protected List<Object> acceptedComparChars  = new ArrayList<Object>();
+	protected List<Object> acceptedComparChars = new ArrayList<Object>();
 
 	/** Identifiant du joueur */
 	protected String ID;
@@ -39,13 +31,13 @@ public abstract class  AbstractPlayer {
 
 	/** Longueur de la combinaison */
 	protected int combinationLenght = Core.config.getInt("game.lenght");
-	
-	protected int wInt = 0;
 
+	protected int wInt = 0;
 
 	protected boolean uniqueValue;
 
 	protected boolean moreLess;
+
 	/**
 	 * Generation de la clef secrete
 	 */
@@ -57,18 +49,17 @@ public abstract class  AbstractPlayer {
 	public abstract void proposCombination();
 
 	/**
-	 * Comparaison de la proposition et de la clef secrete 
+	 * Comparaison de la proposition et de la clef secrete
 	 */
 	public abstract void comparToHiddenCombination();
-
 
 	/**
 	 * Comparaison de la reponse joueur et de la proposition de clef
 	 */
 	public abstract void comparToProposCombination();
 
-
-	public AbstractPlayer(List<Object> acceptedInputList, List<Object> acceptedComparChars, boolean moreLess, boolean uniqueValue)  {
+	public AbstractPlayer(List<Object> acceptedInputList, List<Object> acceptedComparChars, boolean moreLess,
+			boolean uniqueValue) {
 		/** Instanciation du Core pour le logger */
 		Core.getInstance(this);
 
@@ -76,7 +67,7 @@ public abstract class  AbstractPlayer {
 		this.acceptedComparChars = acceptedComparChars;
 		this.uniqueValue = uniqueValue;
 		this.moreLess = moreLess;
-		
+
 	}
 
 	/**
@@ -89,6 +80,7 @@ public abstract class  AbstractPlayer {
 
 	/**
 	 * Teste si la combinaison est résolue
+	 * 
 	 * @return boolean
 	 */
 	public boolean solvedCombination() {
@@ -99,14 +91,14 @@ public abstract class  AbstractPlayer {
 
 	/**
 	 * Retourne si le caractere o est utilisable dans un input
+	 * 
 	 * @param o
-	 * 		Caractère (Integer ou String)
-	 * @return
-	 * 		true si utilisable, sinon false
+	 *            Caractère (Integer ou String)
+	 * @return true si utilisable, sinon false
 	 */
 
 	public boolean acceptedInputChar(Object o) {
-		if(acceptedInputList.contains(o) || acceptedComparChars.contains(o))
+		if (acceptedInputList.contains(o) || acceptedComparChars.contains(o))
 			return true;
 		else
 			return false;
@@ -121,13 +113,11 @@ public abstract class  AbstractPlayer {
 		return pauseToInput;
 	}
 
-
-
 	/**
 	 * Definit la proposition de clef.
 	 *
-	 * @param p 
-	 * 		Nouvelle proposition
+	 * @param p
+	 *            Nouvelle proposition
 	 */
 	public void setProposition(List<Object> p) {
 		this.proposCombination = p;
@@ -136,18 +126,17 @@ public abstract class  AbstractPlayer {
 	/**
 	 * Retourne la proposition de clef.
 	 *
-	 * @return 
-	 * 		La proposition
+	 * @return La proposition
 	 */
-	public List<Object> getProposition(){
+	public List<Object> getProposition() {
 		return this.proposCombination;
 	}
 
 	/**
 	 * Definit la comparaison de clefs.
 	 *
-	 * @param c 
-	 * 		La nouvelle comparaison
+	 * @param c
+	 *            La nouvelle comparaison
 	 */
 	public void setComparaison(List<Object> c) {
 		this.comparCombination = c;
@@ -156,10 +145,9 @@ public abstract class  AbstractPlayer {
 	/**
 	 * Retourne la comparaison de clefs.
 	 *
-	 * @return
-	 * 		La comparaison
+	 * @return La comparaison
 	 */
-	public List<Object> getComparaison(){
+	public List<Object> getComparaison() {
 		return this.comparCombination;
 	}
 

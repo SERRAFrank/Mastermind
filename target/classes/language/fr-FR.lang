@@ -53,7 +53,7 @@ defeat = Defaites
 gameType = Type de jeu
 gameMode = Mode de jeu
 
-selectGameType.Title = Selectionnez le type de jeu
+setGameType = Selectionnez le type de jeu
 selectGameMode.Title = Selectionnez le mode de jeu
 selectGameMode.Options.0.key = challenger
 selectGameMode.Options.0.desc = Mode challenger où vous devez trouver la combinaison secrète de l'ordinateur
@@ -65,15 +65,12 @@ selectGameMode.Options.2.desc = Mode duel où l'ordinateur et vous jouez tour à
 return.key = return
 return.desc = Retour
 
-
-
-
 gameMode.challenger : MODE CHALLENGER - Trouvez la combinaison !
 gameMode.defender : MODE DEFENSEUR - L'ordinateur cherche la combinaison
 gameMode.dual : MODE DUAL - Chacun cherche la combinaison de l'autre à tour de rôle
 
-gameType.color = Couleur
-gameType.nbr = Nombres
+gameType.MoreOrLess = Plus ou moins
+gameType.MasterMind = MasterMind
 
 rules.0 = Trouvez la combinaison des {{config.combinationLenght}} chiffres ou couleurs . 
 rules.1 = \= signifie que c'est le bon chiffre
@@ -125,9 +122,9 @@ aboutUs.1 = Par SERRA Frank
 aboutUs.2 = Pour OpenClassrooms
 
 
-gamePan = Jeu
-langPan = Langue
-
+systemPan = Système
+generalPan = General
+gamePan = Types de jeux
 
 setViewMode = Mode de vue
 setNightMode = Mode nuit
@@ -157,3 +154,7 @@ combType.moreLessTrue = Plus et moins
 combType.moreLessFalse = MasterMind
 
 combLenght = La chaine fait {{config.combinationLenght}} caractères
+
+
+MasterMind.configValues = Cliquez sur une valeur pour la modifier
+MoreOrLess.configValues = Valeurs non modifiables

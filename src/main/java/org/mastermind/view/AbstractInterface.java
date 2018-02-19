@@ -1,4 +1,4 @@
-package  org.mastermind.view;
+package org.mastermind.view;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 	/** Controlleur */
 	protected Controller controller;
 
-	/** Saisies de l'ordinateur*/
+	/** Saisies de l'ordinateur */
 	protected Object output;
 
 	/** Mode de jeu */
@@ -21,16 +21,15 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 	protected String gameType;
 	protected boolean uniqueValue;
 	protected boolean moreLess;
-	
-	
+
 	/** Tour en cours */
 	protected int turn = 1;
-	
+
 	/** Nombre de tours max */
 	protected int maxTurn = Core.config.getInt("game.turns");
 
 	/** Partie en cours */
-	protected int currentRound = 1;	
+	protected int currentRound = 1;
 
 	/** Nom du Joueur */
 	protected String playerName = "";
@@ -38,17 +37,16 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 	protected List<Object> acceptedValues;
 	protected List<Object> comparValues;
 
-
 	/**
 	 * Constructeur
+	 * 
 	 * @param c
-	 * 		Instance du controlleur
+	 *            Instance du controlleur
 	 */
 	public AbstractInterface(Controller c) {
 		/** Instanciation du Core pour le logger */
 		Core.getInstance(this);
-		
-		
+
 		controller = c;
 		// Initialisation de la vue
 		initView();
@@ -82,22 +80,22 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 	 * Initialisation du jeu avant démarrage
 	 */
 	protected void initGame() {
-		//Remise à 0 des paramettres du model
+		// Remise à 0 des paramettres du model
 		this.controller.resetModel();
 		turn = 1;
 		currentRound = 1;
 
-		if(playerName.equals(""))
+		if (playerName.equals(""))
 			setPlayer();
 		// Définition du mode de jeu
-		if(playerName.length()>0) {
+		if (playerName.length() > 0) {
 			setGameMode();
-			if(controller.getGameMode() != null) {
+			if (controller.getGameMode() != null) {
 				startNewGame();
 			}
 		}
 	}
-	
+
 	/**
 	 * Demarrage d'une nouvelle partie
 	 */
@@ -107,6 +105,7 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 		// Nouveau round
 		newRound();
 	}
+
 	/**
 	 * Definition du mode de jeu
 	 */
@@ -142,12 +141,11 @@ public abstract class AbstractInterface extends JFrame implements Observer {
 	 */
 	protected abstract void aboutUsView();
 
-	protected List<String[]> menuList(String options){
+	protected List<String[]> menuList(String options) {
 		List<String[]> menuList = new ArrayList<String[]>();
 
-
-		for(int i = 0;  Core.lang.keyExist(options + "." + i); i++ ) {
-			String[] value = {"", ""};
+		for (int i = 0; Core.lang.keyExist(options + "." + i); i++) {
+			String[] value = { "", "" };
 			value[0] = Core.lang.get(options + "." + i + ".key", true);
 			value[1] = Core.lang.get(options + "." + i + ".desc", true);
 			menuList.add(value);
