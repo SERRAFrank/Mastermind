@@ -35,63 +35,45 @@ public class App {
 		/** Instanciation du Core pour le logger */
 		Core.getInstance("App");
 
-
-		
-		//Initialisation des options
-		String viewOption = null;
-		int minOption = 0;
-		int maxOption = 0;
-		char lenghtOption = 0;
-		
-		boolean forceDebugOption = false;
-		boolean saveOption = false;
-		
 		CommandLine line = null;
 		try {
 			line = parser.parse(options, args);
 
 			// Vue : graphic / console
-			viewOption = line.getOptionValue("view", Core.config.get("view"));
-			if (!viewOption.equals("graphic") && !viewOption.equals("console")) {
-				try {
+			try {
+				String viewOption = line.getOptionValue("view", Core.config.get("view"));
+				if (!viewOption.equals("graphic") && !viewOption.equals("console"))
 					throw new Exception("View not found. Supported modes are console & graphic");
-				} catch (Exception e) {
-					Core.error(e);
-				}
+				else
+					Core.config.set("view", viewOption);
+			} catch (Exception e) {
+				Core.error(e);
 			}
-			/*
-			 * // Borne min de la combinaison minOption = line.getOptionValue("min",
-			 * Core.config.get("nbr.acceptedInputMin")).charAt(0) ; if
-			 * (!Character.isDigit(minOption)){ try { throw new
-			 * Exception("Min is a digit between 0 and 9"); } catch (Exception e) {
-			 * Core.error(e); } }
-			 * 
-			 * // Borne max de la combinaison maxOption = line.getOptionValue("max",
-			 * Core.config.get("nbr.acceptedInputMax")).charAt(0); if
-			 * (!Character.isDigit(maxOption)){ try {
-			 * 
-			 * throw new Exception("Max is a digit between 0 and 9"); } catch (Exception e)
-			 * { Core.error(e); } }
-			 */
+
+
+			//Longueur de chaine
+			try {
+				String l = line.getOptionValue("lenght", Core.config.get("game.lenght")) ;
+				int lenghtOption = Integer.parseInt(l);
+				
+				if(lenghtOption < 0 || lenghtOption > 9)
+					throw new Exception("Lenght is a digit between 0 and 9");
+				else
+					Core.config.set("game.lenght", lenghtOption);
+			} 
+			catch (Exception e) {
+				Core.error(e); 
+			} 
+
+
+			// debug mode		
+			Core.config.set("DEBUG", (Core.DEBUG() || line.hasOption("debug")) );
 			
-			// Longueur de la combinaison
-
-			lenghtOption = line.getOptionValue("min", Core.config.get("game.lenght")).charAt(0) ;
-			if(!Character.isDigit(lenghtOption)){ 
-				try { 
-					new Exception("Lenght is a digit between 0 and 9");
-				} 
-				catch (Exception e) {
-					Core.error(e); 
-				} 
-			}
-
-			// debug mode
-			forceDebugOption = line.hasOption("debug");
 			// Sauvegarde des arguments
-			saveOption = line.hasOption("save");
+			if(line.hasOption("save"))
+				Core.config.updateConfigFile();
 
-			// Si mode aide
+			// Si mode aide demandé
 			boolean helpMode = firstLine.hasOption("help");
 			if (helpMode) {
 				final HelpFormatter formatter = new HelpFormatter();
@@ -102,15 +84,6 @@ public class App {
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		}
-
-		// écrasement des données par des arguments
-		Core.config.set("view", viewOption);
-		Core.config.set("game.lenght", lenghtOption);
-		Core.config.set("DEBUG", (Core.DEBUG() || forceDebugOption) );
-
-		// Sauvegarde des données
-		if (saveOption)
-			Core.config.updateConfigFile();
 
 		// Creation du model
 		model = new Model();
@@ -159,7 +132,7 @@ public class App {
 				.argName("save")
 				.required(false)
 				.build();
-		
+
 		final Option forceDebugOption = Option.builder("d")
 				.longOpt("debug")
 				.desc("Force debug mode")
