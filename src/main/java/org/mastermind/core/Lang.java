@@ -1,21 +1,30 @@
 package org.mastermind.core;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import org.apache.commons.configuration2.FileBasedConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.BasicConfigurationBuilder;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.interpol.ConfigurationInterpolator;
+import org.apache.commons.configuration2.interpol.Lookup;
 import org.apache.log4j.Logger;
 
+/**
+ * Classe de management de la configuration de l'appli La classe utilise le
+ * pattern Singleton Charge un fichier lang.properties par defaut
+ */
 public class Lang {
+
 	/** Instance du logger */
-	private static Logger logger = Logger.getLogger(Config.class);
+	private static Logger logger = Logger.getLogger(Lang.class);
 
 	/** Instance du fichier de configuration */
 	protected Config config = Config.getInstance();
@@ -26,19 +35,16 @@ public class Lang {
 	/** Le fichier langue */
 	private String languageFile = config.get("dir.language") + "/" + defaultLanguage + ".lang";
 
-	private Properties props = new Properties();
-
-	/** Liste des clefs du fichier Lang */
-	private Set<String> keysList;
-
 	/** Instance unique non préinitialisée */
 	private static Lang INSTANCE = null;
+
+	private FileBasedConfigurationBuilder<FileBasedConfiguration> builder;
+
+	private FileBasedConfiguration lang;
 
 	/** Constructeur privé */
 	private Lang() {
 		loadConfigFile();
-		updateKeysList();
-
 	}
 
 	/** Point d'accès pour l'instance unique du singleton */
@@ -54,95 +60,46 @@ public class Lang {
 	 */
 	private void loadConfigFile() {
 
-		logger.info("Loading language file : " + this.languageFile);
-		FileInputStream reader = null;
+		Parameters langParam = new Parameters();
+		
+		//Ajout du prefix "config" pour l'interpolation de variables
+		Map<String, Lookup> lookups = new HashMap<String, Lookup>(
+				ConfigurationInterpolator.getDefaultPrefixLookups());
+		lookups.put("config", new ConfigLookup());
+
+		//création du builder de Common Configuration
+		builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class)
+				.configure(	langParam.properties()
+						.setFileName(this.languageFile)
+						.setEncoding("UTF-8")
+						.setPrefixLookups(lookups)
+						);
 		try {
-			// chargement du fichier
-			reader = new FileInputStream(this.languageFile);
-
-			// prise en charge de l'accentuation
-			props.load(new InputStreamReader(reader, Charset.forName("UTF-8")));
-
-			this.props.load(reader);
-		} catch (FileNotFoundException e) {
-			// fichier inexistant
+			lang = builder.getConfiguration();
+			logger.info("Loading lang file : " + this.languageFile);
+		} catch (ConfigurationException e) {
 			DebugMode.error(e);
-		} catch (IOException e) {
-			// erreur de chargement
-			DebugMode.error(e);
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (final IOException e) {
-					// erreur de fermeture
-					DebugMode.error(e);
-				}
-			}
 		}
 
 	}
 
 	/**
-	 * Retourne la langue.
-	 *
-	 * @return la langue
+	 * Mise à jour du fichier de configuration
+	 * 
+	 * @throws ConfigurationException
 	 */
-	public String getLang() {
-		return this.defaultLanguage;
 
-	}
+	public void updateConfigFile() {
+		OutputStream output = null;
+		logger.info("Saving config file : " + this.languageFile);
 
-	/**
-	 * Recherche la valeur d'une clef de langue
-	 *
-	 * @param key
-	 *            La clef
-	 * @param returnNull
-	 *            Retourne null si la clef n'existe pas, sinon il retourne la clef
-	 * @return La valeur de la clef
-	 */
-	private String getProperty(String key, boolean returnNull) {
-		String value;
-
-		if (returnNull)
-			value = this.props.getProperty(key);
-		else
-			value = this.props.getProperty(key, key);
-
-		// Regex pour les variables
-		String regex = "\\{\\{([a-zA-Z]+\\.[a-zA-Z]+)\\}\\}";
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher;
-		String[] substring;
-		String replace;
-
-		/**
-		 * Remplacement des variables du fichier par des variables lang ou config sous
-		 * la forme {{lang.xxx}}
-		 */
-		while (true) {
-			matcher = pattern.matcher(value);
-			if (matcher.find()) {
-				substring = matcher.group(1).split("\\.");
-
-				if (substring[0].equals("config"))
-					// Remplace par une valeur de config
-					replace = config.get(substring[1]);
-				else if (substring[0].equals("lang"))
-					// Remplace par une valeur de lang
-					replace = get(substring[1]);
-				else
-					replace = "{" + matcher.group(1) + "}";
-
-				value = value.replace("{{" + matcher.group(1) + "}}", replace);
-			} else {
-				break;
-			}
+		try {
+			builder.save();
+		} catch (final ConfigurationException e) {
+			// erreur à l'ouverture
+			DebugMode.error(e);
 
 		}
-
-		return value;
 	}
 
 	/**
@@ -150,82 +107,138 @@ public class Lang {
 	 *
 	 * @param key
 	 *            La clef recherchée
-	 * @param returnNull
-	 *            Retourne null si la clef n'existe pas, sinon il retourne la clef
-	 * 
 	 * @return value La valeur de la clef
-	 */
-	public String get(String key, boolean returnNull) {
-		return getProperty(key, returnNull);
-
-	}
-
-	/**
-	 * Retourne la valeur correspondant à une clef
-	 *
-	 * @param key
-	 *            La clef recherchée
-	 * 
-	 * @return value La valeur de la clef
+	 * @throws Exception
+	 *             Exception si la clef n'existe pas
 	 */
 	public String get(String key) {
-		return getProperty(key, false);
-	}
+		if(this.lang.containsKey(key))
+			return this.lang.getString(key);
+		else
+			return key;
 
+	}
+	
 	/**
-	 * Retourne la valeur correspondant à une clef sous forme de Character
+	 * Retourne la valeur correspondant à une clef sous forme d'Integer
 	 *
 	 * @param key
 	 *            La clef recherchée
-	 * 
-	 * @return value La valeur de la clef
-	 */
-	public char getChar(String key) {
-		return getProperty(key, false).charAt(0);
-	}
-
-	/**
-	 * Retourne la valeur correspondant à une clef sous dorme de Integer
-	 *
-	 * @param key
-	 *            La clef recherchée
-	 * 
 	 * @return value La valeur de la clef
 	 */
 	public int getInt(String key) {
-		return Integer.parseInt(getProperty(key, false));
+		return lang.getInt(key);
 	}
 
 	/**
-	 * Retourne une liste de toutes les clefs.
+	 * Retourne la valeur correspondant à une clef sous forme du Boolean
+	 *
+	 * @param key
+	 *            La clef recherchée
+	 * @return value La valeur de la clef
+	 */
+	public boolean getBoolean(String key) {
+		return lang.getBoolean(key);
+	}
+
+	/**
+	 * Retourne la valeur correspondant à une clef sous forme d'un tableau
+	 *
+	 * @param key
+	 *            La clef recherchée
+	 * @return value La valeur de la clef
+	 * @throws Exception
+	 *             Exception si la clef n'existe pas
+	 */
+	public String[] getArray(String key) {
+		return lang.getStringArray(key);
+
+	}
+
+	/**
+	 * Retourne la valeur correspondant à une clef sous forme d'une list
+	 *
+	 * @param key
+	 *            La clef recherchée
+	 * @return value La valeur de la clef
+	 * @throws Exception
+	 *             Exception si la clef n'existe pas
+	 */
+	public List<Object> getList(String key) {
+		return lang.getList(key);
+
+	}
+
+	/**
+	 * Indique si la clef existe.
+	 *
+	 * @param key
+	 *            La clef a tester
+	 * @return true si vrai
+	 */
+	public boolean keyExist(String key) {
+		return lang.containsKey(key);
+	}
+
+	/**
+	 * Définit la valeur d'une clef
+	 *
+	 * @param key
+	 *            Le nom de la clef
+	 * @param value
+	 *            La valeur de la clef
+	 */
+	public void set(String key, Object value) {
+		this.lang.setProperty(key, value);
+	}
+
+	/**
+	 * Retourne toutes les clefs.
 	 *
 	 * @return Set Liste des clefs
 	 */
-	public Set<String> getKeysList() {
-		return keysList;
+	public Iterator<String> getAllKeys() {
+		return this.lang.getKeys();
 	}
 
 	/**
-	 * Met à jour la liste des clefs.
-	 */
-	public void updateKeysList() {
-		keysList = ((Map) this.props).keySet();
-	}
-
-	/**
-	 * Verifie si une clef existe
+	 * Supprime une clef et sa valeur
 	 * 
-	 * @param k
-	 *            La clef
-	 * @return true si elle existe, sinon false
+	 * @param key
+	 *            Le nom de la clef
 	 */
-	public boolean keyExist(String k) {
-		boolean result = false;
-		for (String key : keysList) {
-			if (key.contains(k))
-				result = true;
-		}
-		return result;
+	public void remove(String key) {
+		this.lang.clearProperty(key);
 	}
 
+	public char getChar(String key) {
+		return this.lang.getString(key).charAt(0);
+	}
+
+	public String get(String key, boolean b) {
+		if(lang.containsKey(key))
+			return this.lang.getString(key);
+		else
+			return null;
+	}
+}
+
+
+
+
+
+/*
+ * Class LookUp
+ */
+
+class ConfigLookup implements Lookup
+{
+	/** Instance du fichier de configuration */
+	protected Config config = Config.getInstance();
+	@Override
+	public Object lookup(String varName)
+	{
+		String r = config.get(varName);
+		return r;
+	}
 }

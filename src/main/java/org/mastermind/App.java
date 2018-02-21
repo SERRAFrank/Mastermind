@@ -36,13 +36,16 @@ public class App {
 		Core.getInstance("App");
 
 
+		
+		//Initialisation des options
 		String viewOption = null;
 		int minOption = 0;
 		int maxOption = 0;
-		int lenghtOption = 0;
-		boolean debugOption = Core.config.getBoolean("DEBUG");
+		char lenghtOption = 0;
+		
+		boolean forceDebugOption = false;
 		boolean saveOption = false;
-
+		
 		CommandLine line = null;
 		try {
 			line = parser.parse(options, args);
@@ -70,116 +73,130 @@ public class App {
 			 * throw new Exception("Max is a digit between 0 and 9"); } catch (Exception e)
 			 * { Core.error(e); } }
 			 */
+			
 			// Longueur de la combinaison
-			try {
-			lenghtOption = Integer.valueOf(line.getOptionValue("lenght", Core.config.get("game.lenght")));
-			} catch (Exception e) {
-				new Exception("Lenght is a digit between 0 and 9");
-				Core.error(e);
+
+			lenghtOption = line.getOptionValue("min", Core.config.get("game.lenght")).charAt(0) ;
+			if(!Character.isDigit(lenghtOption)){ 
+				try { 
+					new Exception("Lenght is a digit between 0 and 9");
+				} 
+				catch (Exception e) {
+					Core.error(e); 
+				} 
 			}
 
-		// debug mode
-		debugOption = line.hasOption("debug");
+			// debug mode
+			forceDebugOption = line.hasOption("debug");
+			// Sauvegarde des arguments
+			saveOption = line.hasOption("save");
 
-		// Sauvegarde des arguments
-		saveOption = line.hasOption("save");
+			// Si mode aide
+			boolean helpMode = firstLine.hasOption("help");
+			if (helpMode) {
+				final HelpFormatter formatter = new HelpFormatter();
+				formatter.printHelp("MasterMind", options, true);
+				System.exit(0);
+			}
 
-		// Si mode aide
-		boolean helpMode = firstLine.hasOption("help");
-		if (helpMode) {
-			final HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("MasterMind", options, true);
-			System.exit(0);
+		} catch (ParseException e1) {
+			e1.printStackTrace();
 		}
 
-	} catch (ParseException e1) {
-		e1.printStackTrace();
+		// écrasement des données par des arguments
+		Core.config.set("view", viewOption);
+		Core.config.set("game.lenght", lenghtOption);
+		Core.config.set("DEBUG", (Core.DEBUG() || forceDebugOption) );
+
+		// Sauvegarde des données
+		if (saveOption)
+			Core.config.updateConfigFile();
+
+		// Creation du model
+		model = new Model();
+
+		// Creation du controller
+		Controller controller = new Controller(model);
+
+		// Creation de la vue
+		View view = new View(controller);
+
+		// Ajout des observers
+		model.addObserver(view.getObserver());
+
+		// Demarrage de la vue
+		view.start();
 	}
 
-	// écrasement des données pas des arguments
-	Core.config.set("view", viewOption);
-	// Core.config.set("combinationNumbersMin", String.valueOf(minOption) );
-	// Core.config.set("combinationNumbersMax", String.valueOf(maxOption)) ;
-	Core.config.set("game.lenght", lenghtOption);
-	Core.config.set("DEBUG", debugOption);
-
-	// Sauvegarde des données
-	if (saveOption)
-		Core.config.updateConfigFile();
-
-	// Creation du model
-	model = new Model();
-
-	// Creation du controller
-	Controller controller = new Controller(model);
-
-	// Creation de la vue
-	View view = new View(controller);
-
-	// Ajout des observers
-	model.addObserver(view.getObserver());
-
-
-	// Demarrage de la vue
-	view.start();
-
-
-
-}
-
-/**
- * Options CLI
- * 
- * @param firstOptions
- * @return
- */
-private static Options configParameters(final Options firstOptions) {
-
-	final Option viewOption = Option.builder("v").longOpt("view") //
-			.desc("View mode : graphic or console").hasArg(true).argName("view").required(false).build();
-	/*
-	 * final Option minOption = Option.builder("min") .desc("Minimal number")
-	 * .hasArg(true) .argName("min") .required(false) .build();
+	/**
+	 * Options CLI
 	 * 
-	 * final Option maxOption = Option.builder("max") .desc("Maximal number")
-	 * .hasArg(true) .argName("max") .required(false) .build();
+	 * @param firstOptions
+	 * @return
 	 */
-	final Option lenghtOption = Option.builder("l").longOpt("lenght").desc("Combination lenght").hasArg(true)
-			.argName("lenght").required(false).build();
+	private static Options configParameters(final Options firstOptions) {
 
-	final Option saveOption = Option.builder("s").longOpt("save").desc("Save arguments").hasArg(false)
-			.argName("save").required(false).build();
+		final Option viewOption = Option.builder("v").
+				longOpt("view")
+				.desc("View mode : graphic or console")
+				.hasArg(true)
+				.argName("view")
+				.required(false)
+				.build();
 
-	final Options options = new Options();
+		final Option lenghtOption = Option.builder("l")
+				.longOpt("lenght")
+				.desc("Combination lenght between 0 and 9")
+				.hasArg(true)
+				.argName("lenght")
+				.required(false)
+				.build();
 
-	// First Options
-	for (final Option fo : firstOptions.getOptions()) {
-		options.addOption(fo);
+		final Option saveOption = Option.builder("s")
+				.longOpt("save")
+				.desc("Save arguments")
+				.hasArg(false)
+				.argName("save")
+				.required(false)
+				.build();
+		
+		final Option forceDebugOption = Option.builder("d")
+				.longOpt("debug")
+				.desc("Force debug mode")
+				.hasArg(false)
+				.argName("save")
+				.required(false)
+				.build();
+
+		final Options options = new Options();
+
+		// First Options
+		for (final Option fo : firstOptions.getOptions()) {
+			options.addOption(fo);
+		}
+
+		options.addOption(viewOption);
+		options.addOption(lenghtOption);
+		options.addOption(saveOption);
+		options.addOption(forceDebugOption);
+
+		return options;
 	}
 
-	options.addOption(viewOption);
-	// options.addOption(minOption);
-	// options.addOption(maxOption);
-	options.addOption(lenghtOption);
-	options.addOption(saveOption);
+	/**
+	 * Premier parametre d'Aide
+	 * 
+	 * @return
+	 */
+	private static Options configFirstParameters() {
 
-	return options;
-}
+		final Option helpOption = Option.builder("h").longOpt("help").desc("Help").build();
 
-/**
- * Premier parametre d'Aide
- * 
- * @return
- */
-private static Options configFirstParameters() {
+		final Options firstOptions = new Options();
 
-	final Option helpOption = Option.builder("h").longOpt("help").desc("Affiche le message d'aide").build();
+		firstOptions.addOption(helpOption);
 
-	final Options firstOptions = new Options();
-
-	firstOptions.addOption(helpOption);
-
-	return firstOptions;
-}
+		return firstOptions;
+	}
 
 }

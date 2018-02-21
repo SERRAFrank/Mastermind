@@ -119,7 +119,13 @@ public class Config {
 	 * @return value La valeur de la clef
 	 */
 	public boolean getBoolean(String key) {
-		return config.getBoolean(key);
+		if(this.config.containsKey(key)) {
+			return config.getBoolean(key);
+		}else {
+			//Core.debug("Key "+ key + " not found");
+			return false;
+		}
+			
 	}
 
 	/**

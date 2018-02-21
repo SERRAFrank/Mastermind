@@ -25,15 +25,15 @@ public class GraphicInterface extends AbstractInterface {
 
 	private JMenuBar menuBar = null;
 
-	private JMenu fileMenu = null;
-	private JMenuItem newGameItem = null;
-	private JMenuItem scoreItem = null;
-	private JMenuItem rulesItem = null;
-	private JMenuItem configItem = null;
-	private JMenuItem exitItem = null;
+	private JMenu menuFile = null;
+	private JMenuItem menuNewGameItem = null;
+	private JMenuItem menuScoreItem = null;
+	private JMenuItem menuRulesItem = null;
+	private JMenuItem menuConfigItem = null;
+	private JMenuItem menuExitItem = null;
 
-	private JMenu aboutUsMenu = null;
-	private JMenuItem aboutUsItem = null;
+	private JMenu menuAboutUsMenu = null;
+	private JMenuItem menuAboutUsItem = null;
 
 	private JPanel container;
 
@@ -51,10 +51,11 @@ public class GraphicInterface extends AbstractInterface {
 
 	@Override
 	protected void initView() {
-		this.size = new Dimension(600, 600);
+		this.size = new Dimension(650, 600);
 
 		this.setTitle(Core.lang.get("appTitle"));
 		this.setSize(this.size);
+		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.container = new JPanel();
@@ -74,75 +75,75 @@ public class GraphicInterface extends AbstractInterface {
 	private void initMenu() {
 		this.menuBar = new JMenuBar();
 
-		this.fileMenu = new JMenu(Core.lang.get("fileMenu"));
-		this.fileMenu.setMnemonic(Core.lang.getChar("fileMenuMnemonic"));
+		this.menuFile = new JMenu(Core.lang.get("graphic.menuFile"));
+		this.menuFile.setMnemonic(Core.lang.getChar("graphic.menuFileMnemonic"));
 
-		this.newGameItem = new JMenuItem(Core.lang.get("newGameItem"));
-		this.newGameItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
-		this.newGameItem.addActionListener(new ActionListener() {
+		this.menuNewGameItem = new JMenuItem(Core.lang.get("graphic.menuNewGameItem"));
+		this.menuNewGameItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
+		this.menuNewGameItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				initGame();
 			}
 		});
 
-		this.scoreItem = new JMenuItem(Core.lang.get("scoreItem"));
-		this.scoreItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-		this.scoreItem.addActionListener(new ActionListener() {
+		this.menuScoreItem = new JMenuItem(Core.lang.get("graphic.menuScoreItem"));
+		this.menuScoreItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+		this.menuScoreItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				scoresView();
 			}
 		});
 
-		this.rulesItem = new JMenuItem(Core.lang.get("rulesItem"));
-		this.rulesItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
-		this.rulesItem.addActionListener(new ActionListener() {
+		this.menuRulesItem = new JMenuItem(Core.lang.get("graphic.menuRulesItem"));
+		this.menuRulesItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
+		this.menuRulesItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				rulesView();
 			}
 		});
 
-		this.configItem = new JMenuItem(Core.lang.get("configItem"));
-		this.configItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK));
-		this.configItem.addActionListener(new ActionListener() {
+		this.menuConfigItem = new JMenuItem(Core.lang.get("graphic.menuConfigItem"));
+		this.menuConfigItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK));
+		this.menuConfigItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				configView();
 			}
 		});
 
-		this.exitItem = new JMenuItem(Core.lang.get("exitItem"));
-		this.exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
-		this.exitItem.addActionListener(new ActionListener() {
+		this.menuExitItem = new JMenuItem(Core.lang.get("graphic.menuExitItem"));
+		this.menuExitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
+		this.menuExitItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
 
-		this.aboutUsMenu = new JMenu(Core.lang.get("aboutUsMenu"));
-		this.aboutUsMenu.setMnemonic(Core.lang.getChar("aboutUsMenuMnemonic"));
-		this.aboutUsItem = new JMenuItem(Core.lang.get("aboutUsItem"));
-		this.aboutUsItem.addActionListener(new ActionListener() {
+		this.menuAboutUsMenu = new JMenu(Core.lang.get("graphic.menuAboutUsMenu"));
+		this.menuAboutUsMenu.setMnemonic(Core.lang.getChar("graphic.menuAboutUsMenuMnemonic"));
+		this.menuAboutUsItem = new JMenuItem(Core.lang.get("graphic.menuAboutUsItem"));
+		this.menuAboutUsItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				aboutUsView();
 			}
 		});
 
-		this.fileMenu.add(this.newGameItem);
-		this.fileMenu.add(this.scoreItem);
-		this.fileMenu.add(this.rulesItem);
-		this.fileMenu.addSeparator();
-		this.fileMenu.add(this.configItem);
-		this.fileMenu.addSeparator();
-		this.fileMenu.add(this.exitItem);
-		this.aboutUsMenu.add(this.aboutUsItem);
+		this.menuFile.add(this.menuNewGameItem);
+		this.menuFile.add(this.menuScoreItem);
+		this.menuFile.add(this.menuRulesItem);
+		this.menuFile.addSeparator();
+		this.menuFile.add(this.menuConfigItem);
+		this.menuFile.addSeparator();
+		this.menuFile.add(this.menuExitItem);
+		this.menuAboutUsMenu.add(this.menuAboutUsItem);
 
-		this.menuBar.add(this.fileMenu);
-		this.menuBar.add(this.aboutUsMenu);
+		this.menuBar.add(this.menuFile);
+		this.menuBar.add(this.menuAboutUsMenu);
 
 		this.setJMenuBar(menuBar);
 
@@ -163,7 +164,7 @@ public class GraphicInterface extends AbstractInterface {
 
 	@Override
 	protected void setGameMode() {
-		GameModeDialog dial = new GameModeDialog(null, "Coucou les ZérOs", true, controller);
+		NewGameSettingDialog dial = new NewGameSettingDialog(null, Core.lang.get("hello") + " " + this.playerName, true, controller);
 	}
 
 	@Override
@@ -181,13 +182,10 @@ public class GraphicInterface extends AbstractInterface {
 
 	@Override
 	protected void setPlayer() {
-		String nom = JOptionPane.showInputDialog(null, Core.lang.get("setPlayerName"), "",
-				JOptionPane.QUESTION_MESSAGE);
+		String nom = (String) JOptionPane.showInputDialog(null, Core.lang.get("setPlayerName"), "", JOptionPane.QUESTION_MESSAGE, GameGFX.QUESTION.getIcon(), null, "");
 		if (nom != null) {
 			this.controller.setPlayerName(nom);
 			this.playerName = Core.score.getPlayerName();
-			JOptionPane.showMessageDialog(null, Core.lang.get("hello") + " " + this.playerName, Core.lang.get("hello"),
-					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -222,12 +220,10 @@ public class GraphicInterface extends AbstractInterface {
 		ImageIcon logo = new ImageIcon(Core.config.get("dir.img") + "logo.png");
 
 		String aboutUsText = "";
-		for (int i = 0; Core.lang.keyExist("aboutUs" + "." + i); i++) {
-			aboutUsText += Core.lang.get("aboutUs" + "." + i, true) + "\n";
-		}
+		for (String s : Core.lang.getArray("text.aboutUs"))
+			aboutUsText += s + "\n";
 
-		JOptionPane.showMessageDialog(null, aboutUsText, Core.lang.get("aboutUsItem"), JOptionPane.INFORMATION_MESSAGE,
-				logo);
+		JOptionPane.showMessageDialog(null, aboutUsText, Core.lang.get("graphic.menuAboutUsItem"), JOptionPane.INFORMATION_MESSAGE,logo);
 
 	}
 
@@ -267,17 +263,17 @@ public class GraphicInterface extends AbstractInterface {
 
 		p = Math.round(p * Math.pow(10, 2)) / Math.pow(10, 2);
 
-		str += "  " + win + " " + Core.lang.get("victory") + " / " + loose + " " + Core.lang.get("defeat") + " ( " + p
+		str += "  " + win + " " + Core.lang.get("text.victory") + " / " + loose + " " + Core.lang.get("text.defeat") + " ( " + p
 				+ "% )" + "\n\n";
 
 		if (winner) {
-			str += Core.lang.get(controller.getGameMode() + ".newRound") + "\n";
+			str += Core.lang.get("newRound." + controller.getGameMode() ) + "\n";
 		} else {
-			str += Core.lang.get(controller.getGameMode() + ".exaequo") + "\n";
+			str += Core.lang.get("exaequo") + "\n";
 		}
 
 		int option = JOptionPane.showConfirmDialog(null, str, "", JOptionPane.YES_NO_OPTION,
-				JOptionPane.QUESTION_MESSAGE);
+				JOptionPane.QUESTION_MESSAGE, GameGFX.QUESTION.getIcon());
 
 		if (option == JOptionPane.OK_OPTION) {
 			startNewGame();

@@ -46,10 +46,16 @@ public class Model implements Observable {
 	/** Input passé au Model */
 	private Object input = null;
 
+	/** Valeur unique */
 	private boolean uniqueValue;
+	
+	/**Systeme de plus ou moins */
 	private boolean moreLess;
 
+	/** liste des caractères acceptés de combinaison */
 	private List<Object> acceptedInputList = new ArrayList<Object>();
+	
+	/** liste des caractères acceptés de comparaison */
 	private List<Object> acceptedComparChars = new ArrayList<Object>();
 
 	/**
@@ -82,17 +88,19 @@ public class Model implements Observable {
 		this.gameMode = gm;
 		this.gameType = gt;
 
+		// Ecrasement des valeurs passées si des valeurs pas defaut sont présents dan la configuration 
+		if (Core.config.containsKey(gameType + ".moreLess")) {
+			moreLess = Core.config.getBoolean(gameType + ".moreLess");
+		} else {
+			moreLess = ml;
+		}
+		
 		if (Core.config.containsKey(gameType + ".uniqueValue")) {
 			uniqueValue = Core.config.getBoolean(gameType + ".uniqueValue");
 		} else {
 			uniqueValue = b;
 		}
 
-		if (Core.config.containsKey(gameType + ".moreLess")) {
-			moreLess = Core.config.getBoolean(gameType + ".moreLess");
-		} else {
-			moreLess = ml;
-		}
 
 		this.currentRound = 1;
 		Core.logger.info("Game mode : " + gameMode);
@@ -104,7 +112,10 @@ public class Model implements Observable {
 		acceptedComparChars.clear();
 
 		String[] acceptedInput = Core.config.getArray(gameType + ".acceptedInputValues");
-		for(int i= 0; i < Core.config.getInt("game.lenght"); i++ ) {
+		
+		
+		// limitation des valeurs acceptées en entrée à la longueur de chaine +1
+		for(int i= 0; i <= Core.config.getInt("game.lenght"); i++ ) {
 			String c = acceptedInput[i];
 			if (Core.config.get(gameType + ".acceptedInputType").equals("Color")) {
 				try {
@@ -113,46 +124,35 @@ public class Model implements Observable {
 						this.acceptedInputList.add(color);
 
 				} catch (Exception e) {
+					Core.error(e);
 				}
 
 			} else {
 				this.acceptedInputList.add(c.trim());
 			}
 		}
-
-		String[] acceptedChar = Core.config.getArray(gameType + ".acceptedComparChars");
-
-		if (Core.config.get(gameType + ".acceptedComparType").equals("Icon")) {
-			String imgDir = Core.config.get("imgDir") + "/";
-			ImageIcon icon = new ImageIcon(imgDir + acceptedChar[0]);
-
-			this.acceptedComparChars.add(new ImageIcon(imgDir + acceptedChar[0]));
-			this.acceptedComparChars.add(new ImageIcon(imgDir + acceptedChar[1]));
-			this.acceptedComparChars.add(new ImageIcon(imgDir + acceptedChar[2]));
-
-		} else {
-			this.acceptedComparChars = new ArrayList<Object>(Arrays.asList(acceptedChar));
-
-		}
-
+		
+		this.acceptedComparChars = Core.config.getList( ((moreLess)?"moreLess":"mastermind") + ".acceptedComparChars");
+		
 		// Choix du mode de jeu et initialisation des joueurs
+		
+		//TODO : Game Mode parametrée par fichier de config
+		
 		switch (gameMode) {
 		case "challenger":
 			this.player1 = new AIPlayer(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
-			this.player2 = new HumanPlayer(acceptedInputList, acceptedComparChars, false, false);
-
+			this.player2 = new HumanPlayer(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
 			break;
 		case "defender":
-			this.player1 = new HumanPlayer(acceptedInputList, acceptedComparChars, false, false);
+			this.player1 = new HumanPlayer(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
 			this.player2 = new AIPlayer(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
-
 			break;
 		case "dual":
 			if (this.currentRound % 2 == 1) {
 				this.player1 = new AIPlayer(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
-				this.player2 = new HumanPlayer(acceptedInputList, acceptedComparChars, false, false);
+				this.player2 = new HumanPlayer(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
 			} else {
-				this.player1 = new HumanPlayer(acceptedInputList, acceptedComparChars, false, false);
+				this.player1 = new HumanPlayer(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
 				this.player2 = new AIPlayer(acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
 			}
 			break;
@@ -166,9 +166,9 @@ public class Model implements Observable {
 		}
 
 		if (this.player1.pauseToInput()) {
-			notifyInitGame("compar", acceptedComparChars, acceptedComparChars, false, moreLess);
+			notifyInitGame("compar", acceptedComparChars, acceptedComparChars, moreLess, false);
 		} else if (this.player2.pauseToInput()) {
-			notifyInitGame("propos", acceptedInputList, acceptedComparChars, uniqueValue, moreLess);
+			notifyInitGame("propos", acceptedInputList, acceptedComparChars, moreLess, uniqueValue);
 		}
 
 	}
@@ -375,10 +375,10 @@ public class Model implements Observable {
 	}
 
 	@Override
-	public void notifyInitGame(String s, List<Object> l, List<Object> r, boolean u, boolean ml) {
+	public void notifyInitGame(String s, List<Object> l, List<Object> r, boolean ml, boolean u ) {
 
 		for (Observer obs : listObserver)
-			obs.updateInitGame(s, l, r, u, ml);
+			obs.updateInitGame(s, l, r,  ml, u);
 
 	}
 

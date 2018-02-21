@@ -73,16 +73,16 @@ public class AIPlayer extends AbstractPlayer {
 		for (int i = 0; i < this.combinationLenght; i++) {
 
 			List<Object> temp = new ArrayList<Object>(possibilities.get(i));
-
+			// Si une valeur validée n'existe pas encore
 			if (validateCombination.get(i) == null) {
-
+				// Tire un objet aléatoire
 				do {
 					randomIndex = (int) (Math.random() * temp.size());
 				} while ((validateCombination.contains(temp.get(randomIndex))
 						|| proposCombination.contains(temp.get(randomIndex))) && this.uniqueValue);
 
 				this.proposCombination.add(temp.get(randomIndex));
-
+				// si c'est valeur unique, l'objet est retiré des possibilités
 				if (this.uniqueValue) {
 					for (List<Object> p : possibilities) {
 						p.remove(temp.get(randomIndex));
@@ -108,6 +108,7 @@ public class AIPlayer extends AbstractPlayer {
 		for (int i = 0; i < combinationLenght; i++) {
 			Object hiddenCombinationValue = this.hiddenCombination.get(i);
 			Object propositionValue = this.proposCombination.get(i);
+			/** Mode plus ou moins */
 			if (this.moreLess) {
 				if (acceptedInputList.indexOf(hiddenCombinationValue) > acceptedInputList.indexOf(propositionValue)) {
 					this.comparCombination.add(acceptedComparChars.get(2));
@@ -118,6 +119,8 @@ public class AIPlayer extends AbstractPlayer {
 					this.comparCombination.add(acceptedComparChars.get(1));
 					this.wInt++;
 				}
+
+				/** Mode mastermin */
 			} else {
 				if (hiddenCombinationValue == propositionValue) {
 					this.comparCombination.add(acceptedComparChars.get(1));
@@ -152,7 +155,7 @@ public class AIPlayer extends AbstractPlayer {
 
 			List<Object> newPossibility = new ArrayList<Object>();
 			List<Object> possibilities = this.possibleCombination.get(i);
-
+			/** Mode plus ou moins */
 			if (this.moreLess) {
 				min = acceptedInputList.indexOf(possibilities.get(0));
 				max = acceptedInputList.indexOf(possibilities.get(possibilities.size() - 1));
@@ -170,31 +173,33 @@ public class AIPlayer extends AbstractPlayer {
 
 				newPossibility.add(props);
 				this.wInt++;
+				
+				/** Mode MasterMind */
 			} else {
 
 				if (reponse == acceptedComparChars.get(0)) {
 					if (this.moreLess)
 						max = (acceptedInputList.indexOf(props) > 0) ? acceptedInputList.indexOf(props) - 1 : 0;
 
-					if (uniqueValue) {
-						for (List<Object> p : possibleCombination)
-							p.remove(props);
-						excludePossibilities.add(props);
-					}
+						if (uniqueValue) {
+							for (List<Object> p : possibleCombination)
+								p.remove(props);
+							excludePossibilities.add(props);
+						}
 
-					for (int j = min; j <= max; j++) {
-						Object f = acceptedInputList.get(j);
-						if (!excludePossibilities.contains(f))
-							newPossibility.add(f);
-					}
+						for (int j = min; j <= max; j++) {
+							Object f = acceptedInputList.get(j);
+							if (!excludePossibilities.contains(f))
+								newPossibility.add(f);
+						}
 
-					if (newPossibility.size() == 1)
-						validateCombination.set(i, newPossibility.get(0));
+						if (newPossibility.size() == 1)
+							validateCombination.set(i, newPossibility.get(0));
 
 				} else if (reponse == acceptedComparChars.get(2)) {
 					if (this.moreLess)
 						min = (acceptedInputList.indexOf(props) < acceptedInputList.size() - 1)
-								? acceptedInputList.indexOf(props) + 1
+						? acceptedInputList.indexOf(props) + 1
 								: acceptedInputList.size() - 1;
 
 					for (int j = min; j <= max; j++) {
@@ -217,9 +222,6 @@ public class AIPlayer extends AbstractPlayer {
 			this.possibleCombination.set(i, newPossibility);
 
 		}
-		for (List l : possibleCombination)
-			System.out.println(l);
-
 	}
 
 	/**

@@ -5,6 +5,8 @@ import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import org.mastermind.core.Core;
 
@@ -22,9 +24,13 @@ public class HelloWorldPanel extends AbstractPanel {
 
 	@Override
 	public void initPanel() {
-		ImageIcon imgFile = new ImageIcon(Core.config.get("dir.img") + "hello.jpg");
 
-		this.content.add(new JLabel(imgFile), BorderLayout.CENTER);
+
+		ImageIcon imgFile = new ImageIcon(Core.config.get("dir.img") + "hello.jpg");
+		JLabel label = new JLabel(imgFile);
+	    label.setHorizontalAlignment(SwingConstants.CENTER);
+
+	    this.content.add(label, BorderLayout.CENTER);
 
 		this.panel.add(content, BorderLayout.CENTER);
 

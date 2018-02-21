@@ -47,7 +47,7 @@ public abstract class AbstractPanel implements Observer {
 	protected void setTitle(String msg) {
 		JLabel titre = new JLabel(msg);
 		titre.setHorizontalAlignment(SwingConstants.CENTER);
-		titre.setFont(GameFont.COMICS30.getFont());
+		titre.setFont(GameGFX.COMICS30.getFont());
 		this.panel.add(titre, BorderLayout.NORTH);
 
 	}

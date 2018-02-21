@@ -2,7 +2,10 @@ package org.mastermind.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.mastermind.core.Core;
 import org.mastermind.model.Model;
 import org.mastermind.observer.Observer;
@@ -20,6 +23,8 @@ public class Controller {
 
 	/** Mode de jeu */
 	private String gameMode;
+
+	private boolean uniqueValue;
 
 	/**
 	 * Controlleur
@@ -61,6 +66,7 @@ public class Controller {
 	 */
 	public void setGameMode(String gm, String gt, boolean moreLess, boolean b) {
 		this.gameMode = gm;
+		this.uniqueValue = b;
 		this.model.setGameMode(gameMode, gt, moreLess, b);
 	}
 
@@ -97,20 +103,21 @@ public class Controller {
 	 */
 	public boolean setInput(String phase, List<Object> input) {
 		int acceptedChar = 0;
+
 		int combinationLenght = Core.config.getInt("game.lenght");
 		// verification si les caractères sont acceptés
-		for (Object o : input) {
-			if (this.model.acceptedChar(o))
+		for(Object o : input) {
+			if(this.model.acceptedChar(o))
 				acceptedChar++;
 		}
-
-		if (input.size() == combinationLenght && acceptedChar == combinationLenght) {
+		
+		if(input.size() == combinationLenght && acceptedChar == combinationLenght ) {
 			this.model.setInput(phase, input);
 			return true;
-		} else {
+		}else {
 			return false;
 		}
-	}
+	}	
 
 	/**
 	 * Definit le nom du joueur et le met en form pour les scores

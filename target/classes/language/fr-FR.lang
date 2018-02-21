@@ -2,159 +2,168 @@ appTitle = Mastermind
 
 hello = Bonjour
 
-helloWorld.0  = __________________________________________________________________
-helloWorld.1  =|  __    __        _                                 _____        |
-helloWorld.2  =| / / /\\ \\ \\  ___ | |  ___   ___   _ __ ___    ___  /__   \\  ___  |
-helloWorld.3  =| \\ \\/  \\/ / / _ \\| | / __| / _ \\ | '_ ` _ \\  / _ \\   / /\\/ / _ \\ |
-helloWorld.4  =|  \\  /\\  / |  __/| || (__ | (_) || | | | | ||  __/  / /   | (_) ||
-helloWorld.5  =|   \\/  \\/   \\___||_| \\___| \\___/ |_| |_| |_| \\___|  \\/     \\___/ |
-helloWorld.6  =|                                                                 |
-helloWorld.7  =|                      _                        _             _   |
-helloWorld.8  =|   /\\/\\    __ _  ___ | |_   ___  _ __   /\\/\\  (_) _ __    __| |  |
-helloWorld.9  =|  /    \\  / _` |/ __|| __| / _ \\| '__| /    \\ | || '_ \\  / _` |  |
-helloWorld.10 =| / /\\/\\ \\| (_| |\\__ \\| |_ |  __/| |   / /\\/\\ \\| || | | || (_| |  |
-helloWorld.11 =| \\/    \\/ \\__,_||___/ \\__| \\___||_|   \\/    \\/|_||_| |_| \\__,_|  |
-helloWorld.12 =|_________________________________________________________________|
+console.helloWorld = __________________________________________________________________
+console.helloWorld =|  __    __        _                                 _____        |
+console.helloWorld =| / / /\ \ \  ___ | |  ___   ___   _ __ ___    ___  /__   \  ___  |
+console.helloWorld =| \ \/  \/ / / _ \| | / __| / _ \ | '_ ` _ \  / _ \   / /\/ / _ \ |
+console.helloWorld =|  \  /\  / |  __/| || (__ | (_) || | | | | ||  __/  / /   | (_) ||
+console.helloWorld =|   \/  \/   \___||_| \___| \___/ |_| |_| |_| \___|  \/     \___/ |
+console.helloWorld =|                                                                 |
+console.helloWorld =|                      _                        _             _   |
+console.helloWorld =|   /\/\    __ _  ___ | |_   ___  _ __   /\/\  (_) _ __    __| |  |
+console.helloWorld =|  /    \  / _` |/ __|| __| / _ \| '__| /    \ | || '_ \  / _` |  |
+console.helloWorld =| / /\/\ \| (_| |\__ \| |_ |  __/| |   / /\/\ \| || | | || (_| |  |
+console.helloWorld =| \/    \/ \__,_||___/ \__| \___||_|   \/    \/|_||_| |_| \__,_|  |
+console.helloWorld =|_________________________________________________________________|
 
 
-helloWorld.img = 
-
-menu.Title = Menu
-menu.Options.0.key = game
-menu.Options.0.desc = {{lang.newGameItem}}
-menu.Options.1.key = rules
-menu.Options.1.desc =  {{lang.rulesItem}}
-menu.Options.2.key = scores
-menu.Options.2.desc =  {{lang.scoreItem}}
-menu.Options.3.key = aboutUs
-menu.Options.3.desc =  {{lang.aboutUsItem}}
-menu.Options.4.key = exit
-menu.Options.4.desc =  {{lang.exitItem}}
+console.principalMenuOptionsTitle = Menu
+console.principalMenuOptions = game | ${graphic.menuNewGameItem}
+console.principalMenuOptions = rules | ${graphic.menuRulesItem}
+console.principalMenuOptions = scores | ${graphic.menuScoreItem}
+console.principalMenuOptions = aboutUs | ${graphic.menuAboutUsItem}
+console.principalMenuOptions = exit | ${graphic.menuExitItem}
 
 
+graphic.menuFile = Fichier
+graphic.menuFileMnemonic = f
+graphic.menuNewGameItem = Nouveau jeu
+graphic.menuRulesItem = Règles
+graphic.menuScoreItem = Scores
+graphic.menuConfigItem = Configurer 
+graphic.menuExitItem = Quitter
+graphic.menuAboutUsMenu = ?
+graphic.menuAboutUsMenuMnemonic = o
+graphic.menuAboutUsItem = A propos ...
 
-fileMenu = Fichier
-fileMenuMnemonic = f
-newGameItem = Nouveau jeu
-rulesItem = Règles
-scoreItem = Scores
-configItem = Configurer 
-exitItem = Quitter
-aboutUsMenu = ?
-aboutUsMenuMnemonic = o
-aboutUsItem = A propos ...
 
 setPlayerName = Entrez votre nom :
-getScores = Votre score est de : 
-victory = Victoires
-defeat = Defaites
+
+getScores = Votre score est de :
 
 
-gameType = Type de jeu
-gameMode = Mode de jeu
+selectGameTypeTitle = Selectionnez le type de jeu
 
-setGameType = Selectionnez le type de jeu
-selectGameMode.Title = Selectionnez le mode de jeu
-selectGameMode.Options.0.key = challenger
-selectGameMode.Options.0.desc = Mode challenger où vous devez trouver la combinaison secrète de l'ordinateur
-selectGameMode.Options.1.key = defender
-selectGameMode.Options.1.desc = Mode défenseur où c'est à l'ordinateur de trouver votre combinaison secrète
-selectGameMode.Options.2.key = dual
-selectGameMode.Options.2.desc = Mode duel où l'ordinateur et vous jouez tour à tour, le premier à trouver la combinaison secrète de l'autre a gagné
+selectGameModeTitle = Selectionnez le mode de jeu
+selectGameMode.challenger = Mode challenger où vous devez trouver la combinaison secrète de l'ordinateur
+selectGameMode.defender = Mode défenseur où c'est à l'ordinateur de trouver votre combinaison secrète
+selectGameMode.dual = Mode duel où l'ordinateur et vous jouez tour à tour, le premier à trouver la combinaison secrète de l'autre a gagné
 
-return.key = return
-return.desc = Retour
 
-gameMode.challenger : MODE CHALLENGER - Trouvez la combinaison !
-gameMode.defender : MODE DEFENSEUR - L'ordinateur cherche la combinaison
-gameMode.dual : MODE DUAL - Chacun cherche la combinaison de l'autre à tour de rôle
-
-gameType.MoreOrLess = Plus ou moins
-gameType.MasterMind = MasterMind
-
-rules.0 = Trouvez la combinaison des {{config.combinationLenght}} chiffres ou couleurs . 
-rules.1 = \= signifie que c'est le bon chiffre
-rules.2 = - signifie que c'est moins
-rules.3 = et +, que c'est plus ...
-rules.4 = Lorsque vous saisissez une réponse, séparez les caractères par des espaces.
-rules.5 = Par exemple : 1 2 3 4
-rules.6 = 
-rules.7 = Attention, vous avez droit à {{config.gameTurns}} essais.
-
-pressEnterToContinue = Appuyez sur [Entrer] pour continuer ...
-select = Selectionnez une valeur :
-yesno = [O]ui/[N]on
-
-submit = Soumettre
+optionMenu.return = Retour
 
 
 input.proposCombination = Veuillez saisir votre proposition
 input.setComparaison = Veuillez saisir votre réponse
+input.error = La saisie n'est pas correcte. Veillez rentrer une chaine valide.
 
 output.proposCombination = Voici la proposition
 output.setComparaison = Voici la réponse
 
 
-input.error = La saisie n'est pas correcte. Veillez rentrer une chaine valide, avec des espaces entre chaque caractère.
-
-
 AI.win = J'ai gagné. Le silicone bat le neurone !
 human.win = Bravo, l'humain bat encore la machine ... pour le moment
-
 AI.lost = Mince, je n'ai pas trouvé !
 human.lost = Vous n'avez pas réussi à trouver mon code ! 
 
-challenger.newRound = Voulez-vous recommencer une partie en mode Challenger ?
-defender.newRound = Voulez-vous recommencer une partie en mode Defenseur ?
-dual.newRound = Voulez-vous recommencer une partie en mode Duel ?
+exaequo =  Aller, nouvelle manche et on échange les places ! Ca vous va ?
 
-dual.exaequo =  Aller, nouvelle manche et on échange les places ! Ca vous va ?
+newRound.challenger = Voulez-vous recommencer une partie en mode Challenger ?
+newRound.defender = Voulez-vous recommencer une partie en mode Defenseur ?
+newRound.dual = Voulez-vous recommencer une partie en mode Duel ?
 
-
-nbrRound = Manche 
-nbrTurn = Tour 
-
-notUnderstand = Je n'ai pas compris.
+text.aboutUs = MasterMind
+text.aboutUs = Par SERRA Frank
+text.aboutUs = Pour OpenClassrooms
 
 
-aboutUs.0 = MasterMind
-aboutUs.1 = Par SERRA Frank
-aboutUs.2 = Pour OpenClassrooms
+newGameSetting.setUniqueValue = Voulez-vous interdire les doublons ?
+newGameSetting.gameSetting = Options de jeu
+newGameSetting.acceptedValues = Valeurs acceptées : 
+newGameSetting.uniqueValue.Yes = Les valeurs sont uniques
+newGameSetting.uniqueValue.No = Les doublons sont autorisés
+
+newGameSetting.moreLess.True =  Plus et moins
+newGameSetting.moreLess.False =  MasterMind
 
 
-systemPan = Système
-generalPan = General
-gamePan = Types de jeux
-
-setViewMode = Mode de vue
-setNightMode = Mode nuit
+moreLessMenuTitle = Selectionnez votre type de jeu
+moreLessMenuOptions = true | ${newGameSetting.moreLess.True}
+moreLessMenuOptions = false | ${newGameSetting.moreLess.False}
 
 
-setNbrTurns = Nombre maximum de tours par manches
+config.systemPanTitle = Système
+config.generalPanTitle = General
+config.gamePanTitle = Parametres des jeux
 
-setLang = Langue par defaut
-setCombinationRange = Bornes des combinaisons
-setCombinationLenght = Longueur de la combinaison
+config.gameTypePan.numbers = Nombres en folie
+config.gameTypePan.colors = Explosion de Couleurs
 
-setCombMin = Minimum : 
-setCombMax = Maximum : 
+config.setViewMode = Mode de vue
+config.setNbrTurnsTitle = Nombre maximum de tours par manches
+config.setLangTitle = Langue par defaut
+config.setCombinationLenghtTitle = Longueur de la combinaison
+config.debugModeTitle = Debug Mode
+config.setCombMin = Minimum : 
+config.setCombMax = Maximum : 
+config.setLenght = Longueur : 
+config.setDebugMode = Activer le mode DEBUG
+config.setValues = Cliquez sur une valeur pour la modifier
+config.setAcceptedValue = Choisissez une valeur
+config.setAcceptedValueExiste = Cette valeur existe déjà
+config.setAcceptedValueNotValid = Cette valeur n'est pas valide
 
-setLenght = Longueur : 
-
-debugMode = Debug Mode
-setDebugMode = Activer le mode DEBUG
-
-acceptedValues = Valeurs acceptées : 
-setUniqueValue = Voulez-vous interdire les doublons dans la combinaison ?
-uniqueValueYes = Les valeurs sont uniques
-uniqueValueNo = Les doublons sont autorisés
-
-selectCombType = Selectionnez votre type de jeu
-combType.moreLessTrue = Plus et moins
-combType.moreLessFalse = MasterMind
-
-combLenght = La chaine fait {{config.combinationLenght}} caractères
+text.gameMode = Mode de jeu
+text.gameMode.challenger : MODE CHALLENGER - Trouvez la combinaison !
+text.gameMode.defender : MODE DEFENSEUR - L'ordinateur cherche la combinaison
+text.gameMode.dual : MODE DUAL - Chacun cherche la combinaison de l'autre à tour de rôle
 
 
-MasterMind.configValues = Cliquez sur une valeur pour la modifier
-MoreOrLess.configValues = Valeurs non modifiables
+text.gameType = Type de jeu
+text.gameType.numbers = Nombres en folie : jouez avec les chiffres
+text.gameType.colors = Explosion de Couleurs : manipulez des couleurs
+
+text.gameReturnMasterMind = {0} present(s) et {1} bien placé(s)
+
+text.rules = MasterMind est un jeu de réflexion.
+text.rules = Trouvez la bonne combinaison et battez l'ordinateur.
+text.text.rules = 
+text.rules = Vous disposez de deux modes de jeu:
+text.rules = - Plus ou Moins, où il faut découvrir la combinaison à ${config:game.lenght} chiffres de l'adversaire. 
+text.rules = Pour ce faire, l'attaquant fait une proposition. 
+text.rules = Le défenseur indique pour chaque chiffre de la combinaison proposée si le chiffre 
+text.rules = de sa combinaison est plus grand (+), plus petit (-) ou si c'est le bon chiffre (=).
+text.rules = 
+text.rules = - MasterMind, où il faut trouver la combinaison à ${config:game.lenght} chiffres ou couleurs de l'adversaire (le défenseur).
+text.rules = Pour ce faire, l'attaquant fait une proposition. Le défenseur indique pour chaque proposition le nombre de chiffre/couleur
+text.rules =  de la proposition qui apparaissent à la bonne place et à la mauvaise place dans la combinaison secrète.
+text.rules = 
+text.rules = Attention, vous avez droit à ${config:game.turns} essais.
+
+
+text.pressEnterToContinue = Appuyez sur [Entrer] pour continuer ...
+text.select = Selectionnez une valeur :
+text.yesNo = [O]ui/[N]on
+
+text.submit = Soumettre
+
+text.nbrRound = Manche 
+text.nbrTurn = Tour 
+text.notUnderstand = Je n'ai pas compris.
+
+text.error = Erreur
+text.combinasionLenght = La chaine fait ${config:game.lenght} caractères
+
+text.victory = Victoires
+text.defeat = Defaites
+
+text.ok = OK
+text.cancel = Annuler
+
+text.compar.moreLess.0 = C'est moins
+text.compar.moreLess.1 = C'est bon
+text.compar.moreLess.2 = C'est plus
+
+text.compar.mastermind.0 = Valeur absente 
+text.compar.mastermind.1 = Valeur présente mais mal placée
+text.compar.mastermind.2 = Valeur bien placée

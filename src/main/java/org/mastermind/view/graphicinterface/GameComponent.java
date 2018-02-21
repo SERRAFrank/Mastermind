@@ -29,6 +29,8 @@ public class GameComponent {
 	private Set<Object> usedValue = new HashSet<Object>();
 	private boolean uniqueValue = true;
 
+	private boolean doublons = false;
+
 	public GameComponent(int l) {
 		this.lenght = l;
 
@@ -37,10 +39,6 @@ public class GameComponent {
 			widgetList.add(w);
 		}
 
-	}
-
-	public String getValue(int i) {
-		return widgetList.get(i).getText();
 	}
 
 	public JPanel toPanel() {
@@ -53,31 +51,27 @@ public class GameComponent {
 	}
 
 	private void addSelector() {
-		for (final Widget widget : widgetList) {
+		for (Widget w : widgetList) {
 
-			widget.addMouseListener(new MouseListener() {
+			w.addMouseListener(new MouseListener() {
 				@Override
-				public void mousePressed(MouseEvent me) {
-				}
-
-				@Override
-				public void mouseReleased(MouseEvent me) {
-				}
+				public void mousePressed(MouseEvent me) {}
 
 				@Override
-				public void mouseEntered(MouseEvent me) {
-				}
+				public void mouseReleased(MouseEvent me) {}
 
 				@Override
-				public void mouseExited(MouseEvent me) {
-				}
+				public void mouseEntered(MouseEvent me) {}
+
+				@Override
+				public void mouseExited(MouseEvent me) {}
 
 				@Override
 				public void mouseClicked(MouseEvent me) {
+					Widget widget = (Widget) me.getSource();
 					if (widget.isEnabled()) {
 						int index;
 						Object oldValue = widget.getValue();
-						boolean oldValueErased = widget.isErased();
 						Object newValue = null;
 						if (possibleValue.contains(oldValue)) {
 							index = possibleValue.indexOf(oldValue);
@@ -88,31 +82,50 @@ public class GameComponent {
 						if (me.getButton() == MouseEvent.BUTTON2) {
 							widget.erase();
 						} else {
-							do {
-								if (me.getButton() == MouseEvent.BUTTON1) {
-									index = (index < (possibleValue.size() - 1)) ? index + 1 : 0;
-								} else {
-									index = (index > 0) ? index - 1 : possibleValue.size() - 1;
-								}
-								newValue = possibleValue.get(index);
-
-							} while ((uniqueValue && usedValue.contains(newValue) && possibleValue.size() > 1));
-
-							widget.setValue(newValue);
+							if (me.getButton() == MouseEvent.BUTTON1) {
+								index = (index < (possibleValue.size() - 1)) ? index + 1 : 0;
+							} else {
+								index = (index > 0) ? index - 1 : possibleValue.size() - 1;
+							}
+							widget.setValue(possibleValue.get(index));
 						}
-
-						if (uniqueValue) {
-							if (!oldValueErased)
-								usedValue.remove(oldValue);
-							if (!widget.isErased())
-								usedValue.add(newValue);
-						}
-
+						findDoublons();
 					}
 				}
+
+
 			});
 		}
 	}
+
+	private void findDoublons() {
+		doublons = false;
+		Border redline = BorderFactory.createLineBorder(Color.red, 2);
+		Border blackline = BorderFactory.createLineBorder(Color.black, 2);
+		Border compound = BorderFactory.createCompoundBorder(
+				BorderFactory.createRaisedBevelBorder() , BorderFactory.createLoweredBevelBorder());
+		Border border = BorderFactory.createCompoundBorder( redline, blackline);
+
+		if (uniqueValue) {
+			for (Widget widget : widgetList) {
+				boolean d = false;
+				for (Widget w : widgetList) {
+					if(( w != widget) && (w.getValue() == widget.getValue() && !widget.isErased() && !w.isErased()) ) {
+						w.setBorder(border);
+						doublons = true;
+						d = true;
+					}
+				}
+
+				if(d)
+					widget.setBorder(border);
+				else
+					widget.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+			}
+		}
+	}
+
+
 
 	public void setBackground(int i, Color color) {
 		widgetList.get(i).setBackground(color);
@@ -127,10 +140,20 @@ public class GameComponent {
 
 	}
 
-	public void setPossibleValue(List<Object> v, boolean u) {
-		possibleValue = v;
-		uniqueValue = u;
-		addSelector();
+	public String getValue(int i) {
+		return widgetList.get(i).getText();
+	}
+
+	public List<Object> getValues() {
+	
+		List<Object> value = new ArrayList<Object>();
+		for (Widget widget : widgetList) 
+			value.add(widget.getValue());
+	
+		if( (uniqueValue && !doublons) || !uniqueValue) 
+			return value;
+		else
+			return null;
 	}
 
 	public void setValues(List<Object> list) {
@@ -148,6 +171,12 @@ public class GameComponent {
 		this.returnValue = r;
 	}
 
+	public void setPossibleValue(List<Object> v, boolean u) {
+		possibleValue = v;
+		uniqueValue = u;
+		addSelector();
+	}
+
 	public void setEnabled(boolean b) {
 		for (Widget w : widgetList)
 			w.setEnabled(b);
@@ -157,27 +186,26 @@ public class GameComponent {
 		this.border = b;
 	}
 
-	public JLabel get(int i) {
-		return widgetList.get(i);
-
+	public void setDimension(Dimension dimension) {
+		for (Widget w : widgetList)
+			w.setPreferredSize(dimension);
+		
 	}
-
-	public List<Object> toList() {
-		List<Object> value = new ArrayList<Object>();
-		for (Widget widget : widgetList) {
-			value.add(widget.getValue());
-		}
-		return value;
+	
+	public void setFont(Font font) {
+		for (Widget w : widgetList)
+			w.setFont(font);
+		
 	}
 }
 
 class Widget extends JLabel {
-	private Font font = GameFont.COMICS30.getFont();
+	private Font font = GameGFX.COMICS30.getFont();
 	private Dimension dim = new Dimension(50, 50);
 	private String eraseText = "X";
 	private Color eraseColor = new Color(254, 254, 254);
 	private JLabel label = new JLabel();
-	private Border border = BorderFactory.createLineBorder(Color.LIGHT_GRAY);
+	private Border border = BorderFactory.createLineBorder(Color.GRAY);
 	private String typeValue = "String";
 	private boolean erased = true;
 

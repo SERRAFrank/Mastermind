@@ -4,16 +4,20 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -41,9 +45,12 @@ public class GamePanel extends AbstractPanel {
 
 	protected Map<String, GameComponent> labelList = new HashMap<String, GameComponent>();
 
-	protected JButton submitButton = new JButton(Core.lang.get("submit"));
+	protected JButton submitButton = new JButton(Core.lang.get("text.submit"));
+
+	protected ImageIcon infoIcon = GameGFX.INFO.getIcon();
 
 	protected String proposText;
+
 	protected String comparText;
 
 	private String editable;
@@ -58,16 +65,39 @@ public class GamePanel extends AbstractPanel {
 
 	private String gameType;
 
-	private String returnText = "";
-
 	private List<Object> comparValues;
 
 	private boolean moreLess;
 
+	private JPanel info = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+	private JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+
+	/**
+	 * Instantiates a new game panel.
+	 *
+	 * @param dim the dim
+	 * @param ctrl the ctrl
+	 */
 	public GamePanel(Dimension dim, Controller ctrl) {
 		super(dim);
 
 		this.controller = ctrl;
+
+
+
+		JButton infoButton = new JButton("?");
+		infoButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JOptionPane.showMessageDialog(null, info, "" , JOptionPane.INFORMATION_MESSAGE, infoIcon);
+			}
+		});
+		//	infoButton.setPreferredSize(new Dimension(30,30));
+		//	infoButton.setHorizontalAlignment(JButton.RIGHT);
+		infoPanel.setBackground(Color.WHITE);
+		infoPanel.add(infoButton);
 
 		submitButton.addActionListener(new ActionListener() {
 			@Override
@@ -82,14 +112,38 @@ public class GamePanel extends AbstractPanel {
 
 	@Override
 	public void initPanel() {
-
 		content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+	}
+
+
+	protected void infoPanel() {
+		info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
+		JLabel acceptedValuesLabel = new JLabel(Core.lang.get("newGameSetting.acceptedValues"));
+		acceptedValuesLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		info.add( new JLabel(Core.lang.get("newGameSetting.acceptedValues") ) );
+
+		GameComponent acceptedValuesPanel = new GameComponent(acceptedValues.size());
+		acceptedValuesPanel.setValues(acceptedValues);
+		acceptedValuesPanel.setEnabled(false);
+		acceptedValuesPanel.setDimension(new Dimension(30,30));
+		acceptedValuesPanel.setFont(GameGFX.COMICS20.getFont());
+		info.add(acceptedValuesPanel.toPanel());
+		if(editable.equals("compar")) {
+			for(int i = 0; i < 3 ; i++) {
+				info.add(new JLabel( acceptedValues.get(i) + " : " + Core.lang.get("text.compar." + ((moreLess)?"moreLess":"mastermind") + "." + i) ) );
+			}
+		}
+		info.add( new JLabel(Core.lang.get("text.combinasionLenght") ) );
+		info.add( new JLabel(Core.lang.get("newGameSetting.uniqueValue." + (uniqueValue ? "Yes" : "No"))) ) ;
+
+
+
 
 	}
 
 	protected void drawPanel() {
-		content.removeAll();
 
+		content.removeAll();
 		JPanel list = new JPanel();
 		list.setLayout(new GridLayout(maxTurn, 1));
 
@@ -99,24 +153,19 @@ public class GamePanel extends AbstractPanel {
 			history.setBackground((i == currentRound) ? Color.WHITE : Color.LIGHT_GRAY);
 
 			TitledBorder titled = BorderFactory
-					.createTitledBorder(Core.lang.get("nbrRound") + " " + i + " / " + this.maxTurn);
+					.createTitledBorder(Core.lang.get("text.nbrRound") + " " + i + " / " + this.maxTurn);
 			titled.setTitleJustification(TitledBorder.CENTER);
 			titled.setTitlePosition(TitledBorder.DEFAULT_POSITION);
 			history.setBorder(titled);
 
-			/*if (i != currentRound) {
-				for (int j = 0; j < combinationLenght; j++) {
-					Color color = (labelList.get(i + ".compar").getValue(j).equals("=")) ? Color.BLUE : Color.RED;
-					labelList.get(i + ".propos").setColor(j, color);
-					labelList.get(i + ".compar").setColor(j, color);
-				}
-			} else */
-			if (returnedField.size() == combinationLenght) {
+			if (i == currentRound && returnedField.size() == combinationLenght) {
 				labelList.get(i + "." + editable).setValues(returnedField);
 			}
 
+
 			JPanel propos = labelList.get(i + ".propos").toPanel();
 			JPanel compar = labelList.get(i + ".compar").toPanel();
+
 
 			if (i == currentRound) {
 				JLabel proposTextLabel = new JLabel(proposText);
@@ -129,73 +178,83 @@ public class GamePanel extends AbstractPanel {
 			}
 			history.add(propos);
 
-			if (editable.equals("compar") || i != currentRound) {
-				if (i == currentRound) {
-					history.add(new JLabel(comparText));
-					compar.setBackground(Color.WHITE);
-				} else {
-					compar.setBackground(Color.LIGHT_GRAY);
-				}
+			if((i == currentRound)) 
+				compar.setBackground(Color.WHITE);
+			else
+				compar.setBackground(Color.LIGHT_GRAY);
 
-				if (moreLess) {
-					history.add(compar);
-				}else {
-					history.add(new JLabel(returnText));
-					if(Core.DEBUG()) {
-						history.add(new JLabel("DEBUG MODE ON"));
+
+			if (editable.equals("compar")) {
+				if(i == currentRound) {
+					JLabel comparTextLabel = new JLabel(comparText);
+					comparTextLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+					history.add(comparTextLabel);
+				}
+				history.add(compar);
+			}else {
+				if(i != currentRound) {
+					if (moreLess) {
 						history.add(compar);
+					}else {
+						history.add(new JLabel(getReturnText(labelList.get(i + ".compar").getValues())));
 					}
+				
 				}
 			}
+
+
+
 			list.add(history);
 
 		}
 
 		JScrollPane scrollPane = new JScrollPane(list);
-		scrollPane.setPreferredSize(new Dimension(575, 500));
+		scrollPane.setPreferredSize(new Dimension(575, 400));
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		content.add(scrollPane);
+
+		panel.add(infoPanel, BorderLayout.NORTH);
 		panel.add(content, BorderLayout.CENTER);
 		panel.add(submitButton, BorderLayout.SOUTH);
 
 		content.revalidate();
-
 	}
 
 	protected void submit() {
 		String id = currentRound + "." + editable;
 
-		returnedField = labelList.get(id).toList();
+		returnedField = labelList.get(id).getValues();
 
-		if (controller.setInput(editable, returnedField)) {
+		boolean testUniqueValue = true;
+
+		if(editable.equals("propos") && uniqueValue) {
+			//création d'un set pour avoir des valeurs uniques 
+			Set<Object> uniqueInput = new HashSet<Object>(returnedField);
+			testUniqueValue = ( uniqueInput.size() == returnedField.size());
+		}
+
+		if (controller.setInput(editable, returnedField) && testUniqueValue) {
 			labelList.get(id).setEnabled(false);
 		} else {
-			JOptionPane.showMessageDialog(null, Core.lang.get("input.error"), "Erreur", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, Core.lang.get("input.error"), "Erreur", JOptionPane.ERROR_MESSAGE, GameGFX.ERROR.getIcon());
 		}
 	}
 
 	@Override
 	public void updateInput(String p) {
-		for (int i = 0; i < (combinationLenght); i++) {
-			// labelList.get(currentRound + "." +
-			// p).get(i).setToolTipText(Core.lang.get("toolTipText" + this.editable));
-		}
-
-		drawPanel();
 
 	}
 
 	@Override
-	public void updateInitGame(String s, List<Object> l, List<Object> r, boolean u, boolean ml) {
+	public void updateInitGame(String s, List<Object> l, List<Object> r,  boolean ml, boolean u) {
 		this.editable = s;
 		this.acceptedValues = l;
 		this.comparValues = r;
 		this.uniqueValue = u;
 		this.moreLess = ml;
-		addLabelLine();
-
+		infoPanel();
 	}
 
 	private void addLabelLine() {
@@ -210,7 +269,7 @@ public class GamePanel extends AbstractPanel {
 			propPanel.setEnabled(true);
 			comparPanel.setEnabled(false);
 
-		} else if (editable.equals("compar")) {
+		} else  {
 			proposText = Core.lang.get("output.proposCombination");
 			comparText = Core.lang.get("input.setComparaison");
 			comparPanel.setPossibleValue(acceptedValues, uniqueValue);
@@ -224,30 +283,31 @@ public class GamePanel extends AbstractPanel {
 		drawPanel();
 	}
 
-	@Override
-	public void updateOutputCompar(List<Object> compar) {
-		/*
-		 * for(int i = 0; i < combinationLenght; i++) {
-		 * 
-		 * Color color = Color.RED; String value = ((List<?>) o).get(i).toString();
-		 * if(value.equals("=")) color = Color.BLUE;
-		 * 
-		 * labelList.get(currentRound + ".compar").setColor(i, color);
-		 * labelList.get(currentRound + ".compar").setText(i, value);
-		 * 
-		 * }
-		 */
-
+	private String getReturnText(List<Object> compar) {
+		String returnText = "";
 		int v = 0;
 		int o = 0;
 		for (Object obj : compar) {
-			if (obj.equals("o"))
+			if (obj.equals(comparValues.get(1)))
 				o++;
-			if (obj.equals("v"))
+			else if (obj.equals(comparValues.get(2)))
 				v++;
 		}
 
-		returnText = o + " present(s) et " + v + " bien placé(s)";
+		returnText = Core.lang.get("text.gameReturnMasterMind");
+		returnText = returnText.replaceAll("\\{0\\}", String.valueOf(v));
+		returnText = returnText.replaceAll("\\{1\\}", String.valueOf(o));
+
+
+		if(Core.DEBUG() && moreLess) {
+			Core.debug(compar);
+		}
+
+		return returnText;
+	}
+
+	@Override
+	public void updateOutputCompar(List<Object> compar) {
 
 		labelList.get(currentRound + ".compar").setValues(compar);
 
@@ -255,11 +315,6 @@ public class GamePanel extends AbstractPanel {
 
 	@Override
 	public void updateOutputPropos(List<Object> o) {
-		/*
-		 * for(int i = 0; i < combinationLenght; i++) { String value = ((List<?>)
-		 * o).get(i).toString(); labelList.get(currentRound + ".propos").setText(i,
-		 * value); }
-		 */
 		labelList.get(currentRound + ".propos").setValues(o);
 	}
 
@@ -272,7 +327,6 @@ public class GamePanel extends AbstractPanel {
 
 	@Override
 	public void updateEndGame(String t, boolean winner) {
-
 	}
 
 }

@@ -32,13 +32,13 @@ public class ScoresPanel extends AbstractPanel {
 	@Override
 	public void initPanel() {
 
-		setTitle(Core.lang.get("scoreItem"));
+		setTitle(Core.lang.get("graphic.menuScoreItem"));
 
 		content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
 		JTextArea scoreJTextArea = new JTextArea();
 		scoreJTextArea.setBackground(Color.white);
-		scoreJTextArea.setFont(GameFont.ARIAL.getFont());
+		scoreJTextArea.setFont(GameGFX.ARIAL.getFont());
 
 		String scoreText = "";
 
@@ -50,8 +50,10 @@ public class ScoresPanel extends AbstractPanel {
 
 		scoreJTextArea.setText(scoreText);
 		scoreJTextArea.setEditable(false);
+		
 
 		JScrollPane scrollScore = new JScrollPane(scoreJTextArea);
+		scrollScore.setPreferredSize(new Dimension(500, 500));
 		scrollScore.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollScore.setBorder(null);
 
@@ -69,7 +71,7 @@ public class ScoresPanel extends AbstractPanel {
 		}
 
 		p = Math.round(p * Math.pow(10, 2)) / Math.pow(10, 2);
-		return "  " + w + " " + Core.lang.get("victory") + " / " + l + " " + Core.lang.get("defeat") + " ( " + p
+		return "  " + w + " " + Core.lang.get("text.victory") + " / " + l + " " + Core.lang.get("text.defeat") + " ( " + p
 				+ "% )";
 	}
 

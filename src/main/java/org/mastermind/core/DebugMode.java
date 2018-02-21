@@ -47,7 +47,12 @@ public class DebugMode {
 	public static void setDebugMode(boolean d) {
 		debugMode = d;
 	}
-
+	
+	public static boolean getDebugMode() {
+		return debugMode;
+	}
+	
+	
 	/**
 	 * Affichage des messages de debug
 	 * 

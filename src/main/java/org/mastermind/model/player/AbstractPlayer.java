@@ -34,8 +34,10 @@ public abstract class AbstractPlayer {
 
 	protected int wInt = 0;
 
+	/**Valeur unique */
 	protected boolean uniqueValue;
 
+	/** mode plus ou moins */
 	protected boolean moreLess;
 
 	/**

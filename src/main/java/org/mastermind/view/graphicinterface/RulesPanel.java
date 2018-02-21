@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 
 import org.mastermind.core.Core;
 
@@ -23,21 +25,27 @@ public class RulesPanel extends AbstractPanel {
 	@Override
 	public void initPanel() {
 
-		setTitle(Core.lang.get("rulesItem"));
+		setTitle(Core.lang.get("graphic.menuRulesItem"));
 
 		JTextArea rules = new JTextArea();
 		rules.setBackground(Color.white);
 
 		String rulesText = "";
-		for (int i = 0; Core.lang.keyExist("rules" + "." + i); i++) {
-			rulesText += Core.lang.get("rules" + "." + i, true) + "\n";
-		}
+		for (String s : Core.lang.getArray("text.rules") )
+			rulesText += s + "\n";
 
 		rules.setText(rulesText);
-		rules.setFont(GameFont.ARIAL.getFont());
 		rules.setEditable(false);
+		
+		rules.setLineWrap(true); 
+		rules.setWrapStyleWord(true); 
 
-		this.content.add(rules);
+		JScrollPane scrollrules = new JScrollPane(rules);
+		scrollrules.setPreferredSize(new Dimension(500, 500));
+		scrollrules.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollrules.setBorder(null);
+
+		this.content.add(scrollrules);
 
 		this.panel.add(content, BorderLayout.CENTER);
 

@@ -21,7 +21,7 @@ public class Core {
 
 	/** Constructeur privé */
 	private Core() {
-		DebugMode.setDebugMode(config.getBoolean("DEBUG"));
+		DebugMode.setDebugMode(DEBUG());
 	}
 
 	/** Point d'accès pour l'instance unique du singleton */
@@ -34,15 +34,18 @@ public class Core {
 	}
 	
 
-	/**
-	 * Affichage des messages de debug
-	 * 
-	 * @param debugMsg
-	 *            Message a passer
-	 */
 	public static boolean DEBUG() {
 		return config.getBoolean("DEBUG");
 	}
+	
+
+	public static void DEBUG(boolean d) {
+		config.set("DEBUG", d);
+		DebugMode.setDebugMode(config.getBoolean("DEBUG"));
+
+	}
+	
+	
 	
 
 	/**

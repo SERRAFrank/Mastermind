@@ -1,15 +1,9 @@
-19-02-2018 20:48:29 INFO  Config:63 - Loading config file : resources/config.properties
-19-02-2018 20:48:29 INFO  Config:57 - Loading language file : resources/language//fr-FR.lang
-19-02-2018 20:48:29 INFO  View:29 - View mode : graphic
-19-02-2018 20:48:39 INFO  Config:78 - Saving config file : resources/config.properties
-19-02-2018 20:48:39 INFO  Config:78 - Saving config file : resources/config.properties
-19-02-2018 20:48:39 INFO  Config:78 - Saving config file : resources/config.properties
-19-02-2018 20:48:39 INFO  Config:78 - Saving config file : resources/config.properties
-19-02-2018 20:48:40 INFO  Config:78 - Saving config file : resources/config.properties
-19-02-2018 20:48:40 INFO  Config:78 - Saving config file : resources/config.properties
-19-02-2018 20:48:44 INFO  GameModeDialog:98 - Game mode : challenger
-19-02-2018 20:48:51 INFO  GameModeDialog:98 - Game mode : challenger
-19-02-2018 20:49:01 INFO  Config:78 - Saving config file : resources/config.properties
-19-02-2018 20:49:01 INFO  Config:78 - Saving config file : resources/config.properties
-19-02-2018 20:49:01 INFO  Config:78 - Saving config file : resources/config.properties
-19-02-2018 20:49:01 INFO  Config:78 - Saving config file : resources/config.properties
+21-02-2018 20:51:53 INFO  Config:63 - Loading config file : resources/config.properties
+21-02-2018 20:51:53 INFO  Lang:79 - Loading lang file : resources/language//fr-FR.lang
+21-02-2018 20:51:54 INFO  View:29 - View mode : graphic
+21-02-2018 20:51:59 INFO  NewGameSettingDialog:106 - Game mode : defender
+21-02-2018 20:51:59 DEBUG DebugMode:66 - 0 present(s) et 0 bien placé(s)
+21-02-2018 20:52:13 INFO  NewGameSettingDialog:106 - Game mode : challenger
+21-02-2018 20:52:13 DEBUG DebugMode:66 - hiddenCombination : [0, 4, 1, 0]
+21-02-2018 20:52:26 INFO  NewGameSettingDialog:106 - Game mode : challenger
+21-02-2018 20:52:26 DEBUG DebugMode:66 - hiddenCombination : [java.awt.Color[r=255,g=0,b=0], java.awt.Color[r=0,g=0,b=0], java.awt.Color[r=0,g=0,b=255], java.awt.Color[r=0,g=255,b=0]]

@@ -1,8 +1,13 @@
 package org.mastermind.view.consoleinterface;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.mastermind.core.Core;
 
 public class ConsoleMenu {
@@ -10,7 +15,7 @@ public class ConsoleMenu {
 	private String title = "";
 
 	/** Liste des propositions */
-	private List<String[]> options;
+	private Map<String, String> options = new LinkedHashMap<String, String>();
 
 	/**
 	 * Constructeur par defaut
@@ -26,7 +31,10 @@ public class ConsoleMenu {
 	 * @param k
 	 *            Clef des parametres de menu dans le fichier Lang
 	 */
-	public ConsoleMenu(String t, List<String[]> o) {
+	public ConsoleMenu(String t, Map<String, String> o) {
+		/** Instanciation du Core pour le logger */
+		Core.getInstance(this);
+
 		this.title = Core.lang.get(t);
 		this.options = o;
 	}
@@ -47,9 +55,21 @@ public class ConsoleMenu {
 	 * @param options
 	 *            the options
 	 */
-	public void setOptions(List<String[]> o) {
+	public void setOptions(Map<String, String> o) {
 		this.options = o;
 	}
+
+
+	public void addOption(String k, String v) {
+		this.options.put(k, v);
+	}
+
+	public void addOption(String kv) { 	
+		DefaultListDelimiterHandler handler = new DefaultListDelimiterHandler('|');
+		List<String> kvlist = (List<String>) handler.split(kv, true);
+
+		addOption(kvlist.get(0), kvlist.get(1));
+	}	
 
 	/**
 	 * Vide le titre et les options de menu.
@@ -70,25 +90,31 @@ public class ConsoleMenu {
 
 		// verrou tant que le choix ne correspond pas à une proposition valide
 		boolean lock = true;
+		List<String> keyList = new ArrayList<String>();
 
 		do {
 
 			// Affichage d'un titre
-			if (!title.equals("")) {
+			if (title != null && !title.equals("")) {
 				System.out.println();
 				showTitle(title);
 
 			}
 
+			int index = 1;
 			// Creation des options du menu
-			for (int i = 0; i < options.size(); i++) {
-				System.out.println((i + 1) + ". " + options.get(i)[1]);
+			for (Map.Entry<String, String> entry : options.entrySet()) {
+				keyList.add( entry.getKey() );
+				System.out.println(index + ". " + entry.getValue());
+				index++;
 			}
+
 
 			// Choix de la proposition
 			keyboard = new Scanner(System.in);
-			System.out.print(Core.lang.get("select"));
+			System.out.print(Core.lang.get("text.select"));
 			choice = keyboard.nextInt();
+
 
 			if (choice > options.size() || choice < 1) {
 				System.out.println("Je n'ai pas compris votre choix");
@@ -99,7 +125,7 @@ public class ConsoleMenu {
 
 		} while (lock);
 
-		String key = options.get(choice - 1)[0];
+		String key = keyList.get(choice - 1);
 
 		flush();
 
@@ -142,6 +168,19 @@ public class ConsoleMenu {
 			strReturn += str;
 
 		return strReturn;
+
+	}
+
+
+
+	public static <T, E> String getKeysByValue(Map<T, E> map, E value) {
+		String key = null;
+		for (Entry<T, E> entry : map.entrySet()) {
+			if (value.equals(entry.getValue())) {
+				key = (String) entry.getKey();
+			}
+		}
+		return key;
 
 	}
 
