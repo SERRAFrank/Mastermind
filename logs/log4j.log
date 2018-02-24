@@ -1,3 +1,11 @@
-21-02-2018 21:23:36 INFO  Config:63 - Loading config file : resources/config.properties
-21-02-2018 21:23:36 INFO  Lang:79 - Loading lang file : resources/language//fr-FR.lang
-21-02-2018 21:23:36 INFO  View:29 - View mode : graphic
+24-02-2018 19:20:44 INFO  Config:58 - Loading config file : resources/config.properties
+24-02-2018 19:20:44 INFO  Lang:76 - Loading lang file : resources/language//fr-FR.lang
+24-02-2018 19:20:44 INFO  View:29 - View mode : graphic
+24-02-2018 19:20:49 INFO  Config:72 - Saving config file : resources/config.properties
+24-02-2018 19:20:49 INFO  Config:72 - Saving config file : resources/config.properties
+24-02-2018 19:20:50 INFO  Config:72 - Saving config file : resources/config.properties
+24-02-2018 19:20:50 INFO  Config:72 - Saving config file : resources/config.properties
+24-02-2018 19:20:51 INFO  Config:72 - Saving config file : resources/config.properties
+24-02-2018 19:20:52 INFO  Config:72 - Saving config file : resources/config.properties
+24-02-2018 19:20:52 INFO  Config:72 - Saving config file : resources/config.properties
+24-02-2018 19:20:53 INFO  Config:72 - Saving config file : resources/config.properties

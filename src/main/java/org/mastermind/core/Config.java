@@ -1,7 +1,5 @@
 package org.mastermind.core;
 
-import java.io.File;
-import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -52,9 +50,6 @@ public class Config {
 	private void loadConfigFile() {
 
 		Parameters params = new Parameters();
-		// Read data from this file
-		File propertiesFile = new File(this.configFile);
-
 		builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class)
 				.configure(params.properties().setFileName(this.configFile)
 						.setListDelimiterHandler(new DefaultListDelimiterHandler(',')));
@@ -74,7 +69,6 @@ public class Config {
 	 */
 
 	public void updateConfigFile() {
-		OutputStream output = null;
 		logger.info("Saving config file : " + configFile);
 
 		try {

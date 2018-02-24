@@ -1,7 +1,10 @@
 package org.mastermind.model.player;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.mastermind.core.Core;
 
 public class AIPlayer extends AbstractPlayer {
@@ -12,6 +15,8 @@ public class AIPlayer extends AbstractPlayer {
 	private List<List<Object>> possibleCombination = new ArrayList<List<Object>>();
 
 	private List<Object> validateCombination = new ArrayList<Object>();
+
+	private Set<Object> excludePossibilities = new HashSet<Object>();
 
 	public AIPlayer(List<Object> acceptedInputList, List<Object> acceptedComparChars, boolean moreLess,
 			boolean uniqueValue) {
@@ -60,43 +65,52 @@ public class AIPlayer extends AbstractPlayer {
 	 */
 	@Override
 	public void proposCombination() {
-		this.proposCombination.clear();
 
+		boolean validate = true;
 		List<List<Object>> possibilities = new ArrayList<List<Object>>();
 
-		for (List<Object> p : possibleCombination) {
-			List<Object> t = new ArrayList<Object>(p);
-			possibilities.add(t);
-		}
+		do {
+			validate = true;
+			this.proposCombination.clear();
+			possibilities.clear();
 
-		int randomIndex;
-		for (int i = 0; i < this.combinationLenght; i++) {
-
-			List<Object> temp = new ArrayList<Object>(possibilities.get(i));
-			// Si une valeur validée n'existe pas encore
-			if (validateCombination.get(i) == null) {
-				// Tire un objet aléatoire
-				do {
-					randomIndex = (int) (Math.random() * temp.size());
-				} while ((validateCombination.contains(temp.get(randomIndex))
-						|| proposCombination.contains(temp.get(randomIndex))) && this.uniqueValue);
-
-				this.proposCombination.add(temp.get(randomIndex));
-				// si c'est valeur unique, l'objet est retiré des possibilités
-				if (this.uniqueValue) {
-					for (List<Object> p : possibilities) {
-						p.remove(temp.get(randomIndex));
-					}
-				}
-			} else {
-				this.proposCombination.add(validateCombination.get(i));
-				if (this.uniqueValue) {
-					for (List<Object> t : possibilities)
-						t.remove(validateCombination.get(i));
-				}
+			for (List<Object> p : possibleCombination) {
+				List<Object> t = new ArrayList<Object>(p);
+				possibilities.add(t);
 			}
 
-		}
+			int randomIndex;
+			for (List<Object> temp : possibilities) {
+				if(validate) {
+					if(temp.size() > 1) {
+						// Si une valeur validée n'existe pas encore
+						// Tire un objet aléatoire
+						do {
+							randomIndex = (int) (Math.random() * temp.size());
+						} while ((validateCombination.contains(temp.get(randomIndex))
+								|| proposCombination.contains(temp.get(randomIndex))) && this.uniqueValue);
+
+						Object value = temp.get(randomIndex);
+						this.proposCombination.add(value);
+
+						// si c'est valeur unique, l'objet est retiré des possibilités
+						if (this.uniqueValue) {
+							for (List<Object> p : possibilities) {
+								p.remove(value);
+								if(p.size() == 0)
+									validate = false;
+							}
+						}
+					} else if(temp.size() == 1) {
+						this.proposCombination.add(temp.get(0)); 
+					} else {
+						this.proposCombination.add(-1);
+					}
+				}
+			}
+		}while(!validate);
+
+
 	}
 
 	/**
@@ -140,13 +154,11 @@ public class AIPlayer extends AbstractPlayer {
 	 */
 	@Override
 	public void comparToProposCombination() {
-		List<Object> excludePossibilities = new ArrayList<Object>();
+
+
 
 		int min = 0;
 		int max = acceptedInputList.size() - 1;
-
-		int combinationMin = 0;
-		int combinationMax = acceptedInputList.size() - 1;
 
 		for (int i = 0; i < this.combinationLenght; i++) {
 
@@ -154,15 +166,14 @@ public class AIPlayer extends AbstractPlayer {
 			String reponse = this.comparCombination.get(i).toString();
 
 			List<Object> newPossibility = new ArrayList<Object>();
-			List<Object> possibilities = this.possibleCombination.get(i);
+
 			/** Mode plus ou moins */
 			if (this.moreLess) {
-				min = acceptedInputList.indexOf(possibilities.get(0));
-				max = acceptedInputList.indexOf(possibilities.get(possibilities.size() - 1));
+				min = acceptedInputList.indexOf(this.possibleCombination.get(i).get(0));
+				max = acceptedInputList.indexOf(this.possibleCombination.get(i).get(this.possibleCombination.get(i).size() - 1));
 			}
 
 			if (reponse == acceptedComparChars.get(1)) {
-
 				validateCombination.set(i, props);
 
 				if (uniqueValue) {
@@ -171,58 +182,62 @@ public class AIPlayer extends AbstractPlayer {
 					excludePossibilities.add(props);
 				}
 
+
 				newPossibility.add(props);
 				this.wInt++;
-				
+
 				/** Mode MasterMind */
 			} else {
+				Object excludeObj = null;
 
 				if (reponse == acceptedComparChars.get(0)) {
-					if (this.moreLess)
+					if (this.moreLess) {
 						max = (acceptedInputList.indexOf(props) > 0) ? acceptedInputList.indexOf(props) - 1 : 0;
-
-						if (uniqueValue) {
-							for (List<Object> p : possibleCombination)
-								p.remove(props);
-							excludePossibilities.add(props);
-						}
-
-						for (int j = min; j <= max; j++) {
-							Object f = acceptedInputList.get(j);
-							if (!excludePossibilities.contains(f))
-								newPossibility.add(f);
-						}
-
-						if (newPossibility.size() == 1)
-							validateCombination.set(i, newPossibility.get(0));
-
-				} else if (reponse == acceptedComparChars.get(2)) {
-					if (this.moreLess)
-						min = (acceptedInputList.indexOf(props) < acceptedInputList.size() - 1)
-						? acceptedInputList.indexOf(props) + 1
-								: acceptedInputList.size() - 1;
-
-					for (int j = min; j <= max; j++) {
-						Object f = acceptedInputList.get(j);
-						if (!excludePossibilities.contains(f)) {
-							newPossibility.add(f);
-						}
-
+					}else {
+						excludePossibilities.add(props);
 					}
 
-					if (uniqueValue)
-						newPossibility.remove(props);
-
-					if (newPossibility.size() == 1)
-						validateCombination.set(i, newPossibility.get(0));
-
+				} else if (reponse == acceptedComparChars.get(2)) {
+					if (this.moreLess) {
+						min = (acceptedInputList.indexOf(props) < acceptedInputList.size() - 1) ? acceptedInputList.indexOf(props) + 1 : acceptedInputList.size() - 1;
+					}else {
+						excludeObj = props;
+					}
 				}
+
+				if (this.moreLess) {
+					for (int j = min; j <= max; j++) {
+						Object f = acceptedInputList.get(j);
+						newPossibility.add(f);
+					}
+				}else {
+					newPossibility = new ArrayList<Object>(this.possibleCombination.get(i));
+				}
+				
+				if(uniqueValue)
+					newPossibility.remove(excludeObj);
 			}
 
 			this.possibleCombination.set(i, newPossibility);
 
 		}
+
+
+		if (this.uniqueValue) {
+			for (List<Object> plist : possibleCombination) {
+				if(plist.size() == 1)
+					excludePossibilities.add(plist.get(0));
+			}
+
+			for (List<Object> plist : possibleCombination) {
+				if(plist.size() > 1)
+					plist.removeAll(excludePossibilities);
+			}
+		}
+
+
 	}
+
 
 	/**
 	 * Definit si le joueur est victorieux ou non, et ajouter les points en fonction

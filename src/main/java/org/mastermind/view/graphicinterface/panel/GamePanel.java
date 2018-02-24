@@ -1,4 +1,4 @@
-package org.mastermind.view.graphicinterface;
+package org.mastermind.view.graphicinterface.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,6 +28,8 @@ import javax.swing.border.TitledBorder;
 
 import org.mastermind.controller.Controller;
 import org.mastermind.core.Core;
+import org.mastermind.view.graphicinterface.GameComponent;
+import org.mastermind.view.graphicinterface.GameGFX;
 
 public class GamePanel extends AbstractPanel {
 
@@ -63,8 +65,6 @@ public class GamePanel extends AbstractPanel {
 
 	private boolean uniqueValue;
 
-	private String gameType;
-
 	private List<Object> comparValues;
 
 	private boolean moreLess;
@@ -72,6 +72,8 @@ public class GamePanel extends AbstractPanel {
 	private JPanel info = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 	private JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+	private boolean stopGame = false;
 
 
 	/**
@@ -87,7 +89,7 @@ public class GamePanel extends AbstractPanel {
 
 
 
-		JButton infoButton = new JButton("?");
+		JButton infoButton = new JButton(new ImageIcon(Core.config.get("dir.img") + "game.info.png"));
 		infoButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -198,7 +200,7 @@ public class GamePanel extends AbstractPanel {
 					}else {
 						history.add(new JLabel(getReturnText(labelList.get(i + ".compar").getValues())));
 					}
-				
+
 				}
 			}
 
@@ -235,12 +237,17 @@ public class GamePanel extends AbstractPanel {
 			testUniqueValue = ( uniqueInput.size() == returnedField.size());
 		}
 
-		if (controller.setInput(editable, returnedField) && testUniqueValue) {
+		boolean r = false;
+		if(testUniqueValue) 
+			r = controller.setInput(editable, returnedField);
+
+		if(r) {
 			labelList.get(id).setEnabled(false);
 		} else {
 			JOptionPane.showMessageDialog(null, Core.lang.get("input.error"), "Erreur", JOptionPane.ERROR_MESSAGE, GameGFX.ERROR.getIcon());
 		}
 	}
+
 
 	@Override
 	public void updateInput(String p) {
@@ -308,14 +315,21 @@ public class GamePanel extends AbstractPanel {
 
 	@Override
 	public void updateOutputCompar(List<Object> compar) {
-
-		labelList.get(currentRound + ".compar").setValues(compar);
+		if(!stopGame)
+			labelList.get(currentRound + ".compar").setValues(compar);
 
 	}
 
 	@Override
 	public void updateOutputPropos(List<Object> o) {
-		labelList.get(currentRound + ".propos").setValues(o);
+		if(!stopGame) {
+			if(o.contains(-1)) {
+				JOptionPane.showMessageDialog(null, Core.lang.get("impossible.error"), "Erreur", JOptionPane.ERROR_MESSAGE, GameGFX.ERROR.getIcon());
+				stopGame = true;
+			}else {
+				labelList.get(currentRound + ".propos").setValues(o);
+			}
+		}
 	}
 
 	@Override

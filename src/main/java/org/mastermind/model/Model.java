@@ -2,11 +2,8 @@ package org.mastermind.model;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import javax.swing.ImageIcon;
 
 import org.mastermind.core.Core;
 import org.mastermind.model.player.AIPlayer;
@@ -317,6 +314,7 @@ public class Model implements Observable {
 	 * @param i
 	 *            Inputs du joueur
 	 */
+	@SuppressWarnings("unchecked")
 	public void setInput(String phase, Object i) {
 		this.input = i;
 

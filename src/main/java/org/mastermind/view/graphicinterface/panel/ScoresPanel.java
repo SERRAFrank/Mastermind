@@ -1,4 +1,4 @@
-package org.mastermind.view.graphicinterface;
+package org.mastermind.view.graphicinterface.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,6 +12,7 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
 import org.mastermind.core.Core;
+import org.mastermind.view.graphicinterface.GameGFX;
 
 public class ScoresPanel extends AbstractPanel {
 

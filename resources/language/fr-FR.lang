@@ -36,6 +36,7 @@ graphic.menuAboutUsMenu = ?
 graphic.menuAboutUsMenuMnemonic = o
 graphic.menuAboutUsItem = A propos ...
 
+graphic.help = AIDE
 
 setPlayerName = Entrez votre nom :
 
@@ -56,6 +57,8 @@ optionMenu.return = Retour
 input.proposCombination = Veuillez saisir votre proposition
 input.setComparaison = Veuillez saisir votre réponse
 input.error = La saisie n'est pas correcte. Veillez rentrer une chaine valide.
+
+impossible.error = La saisie ne permet pas de trouver la chaine. Etes-vous sûr d'avoir donné de bonnes réponses ?
 
 output.proposCombination = Voici la proposition
 output.setComparaison = Voici la réponse

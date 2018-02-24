@@ -25,20 +25,13 @@ import org.mastermind.core.Core;
 
 public class NewGameSettingDialog extends JDialog {
 
-	private JComboBox gameTypeCombo = new JComboBox();
-	private JComboBox gameModeCombo = new JComboBox();
-
-	private JLabel gameTypeLabel = new JLabel(Core.lang.get("selectGameTypeTitle"));
-	private JLabel gameModeLabel = new JLabel(Core.lang.get("selectGameModeTitle"));
-	private JLabel gameSettingLabel = new JLabel(Core.lang.get("gameSettingLabel"));
-
+	private JComboBox<String> gameTypeCombo = new JComboBox<String>();
+	private JComboBox<String> gameModeCombo = new JComboBox<String>();
 
 	private JCheckBox gameSettingCheckBoxUniqueValue = new JCheckBox(Core.lang.get("newGameSetting.setUniqueValue"));
 	private JRadioButton  gameSettingCheckBoxMoreOrLessTrue = new JRadioButton (Core.lang.get("newGameSetting.moreLess.True"));
 	private JRadioButton  gameSettingCheckBoxMoreOrLessFalse = new JRadioButton (Core.lang.get("newGameSetting.moreLess.False"));
 	private ButtonGroup gameSettingCheckBoxMoreOrLessButtonGroup = new ButtonGroup();
-
-	private boolean sendData;
 
 	private String[] gameTypeValue = Core.config.getArray("game.type");
 	private String[] gameModeValue = Core.config.getArray("game.mode");
@@ -90,6 +83,7 @@ public class NewGameSettingDialog extends JDialog {
 
 		gameTypeCombo.addActionListener(
 				new ActionListener(){
+					@Override
 					public void actionPerformed(ActionEvent e){
 						updateComponents();
 					}
@@ -111,6 +105,7 @@ public class NewGameSettingDialog extends JDialog {
 
 		gameModeCombo.addActionListener(
 				new ActionListener(){
+					@Override
 					public void actionPerformed(ActionEvent e){
 						updateComponents();
 					}

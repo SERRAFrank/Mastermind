@@ -1,4 +1,4 @@
-package org.mastermind.view.graphicinterface;
+package org.mastermind.view.graphicinterface.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -38,6 +38,7 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.commons.io.FilenameUtils;
 import org.mastermind.core.Core;
+import org.mastermind.view.graphicinterface.GameGFX;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -142,8 +143,6 @@ public class ConfigPanel extends AbstractPanel {
 				int nbrTurns = ((JSlider) e.getSource()).getValue();
 				Core.config.set("game.turns", nbrTurns);
 				Core.config.updateConfigFile();
-
-				String value = Core.lang.get("text.nbrTurn") + nbrTurns;
 			}
 		});
 

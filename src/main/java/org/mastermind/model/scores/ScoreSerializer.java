@@ -36,13 +36,14 @@ public class ScoreSerializer implements Serializable {
 	/**
 	 * Chargement du fichier de score
 	 */
+	@SuppressWarnings("unchecked")
 	public void load() {
 
 		// si le fichier score existe
 		if (scoreFile.exists() && !scoreFile.isDirectory()) {
 			try {
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(this.scoreFile));
-				this.scoreList = (HashMap) ois.readObject();
+				this.scoreList = (HashMap<String, int[]>) ois.readObject();
 				ois.close();
 			} catch (Exception e) {
 				Core.error(e);

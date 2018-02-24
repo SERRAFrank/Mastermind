@@ -23,13 +23,9 @@ public class GameComponent {
 	private List<Widget> widgetList = new ArrayList<Widget>();
 	private int lenght = 0;
 
-	private String border = "";
-	private String returnValue;
 	private List<Object> possibleValue = new ArrayList<Object>();
 	private Set<Object> usedValue = new HashSet<Object>();
 	private boolean uniqueValue = true;
-
-	private boolean doublons = false;
 
 	public GameComponent(int l) {
 		this.lenght = l;
@@ -72,7 +68,6 @@ public class GameComponent {
 					if (widget.isEnabled()) {
 						int index;
 						Object oldValue = widget.getValue();
-						Object newValue = null;
 						if (possibleValue.contains(oldValue)) {
 							index = possibleValue.indexOf(oldValue);
 						} else {
@@ -99,11 +94,8 @@ public class GameComponent {
 	}
 
 	private void findDoublons() {
-		doublons = false;
 		Border redline = BorderFactory.createLineBorder(Color.red, 2);
 		Border blackline = BorderFactory.createLineBorder(Color.black, 2);
-		Border compound = BorderFactory.createCompoundBorder(
-				BorderFactory.createRaisedBevelBorder() , BorderFactory.createLoweredBevelBorder());
 		Border border = BorderFactory.createCompoundBorder( redline, blackline);
 
 		if (uniqueValue) {
@@ -112,7 +104,6 @@ public class GameComponent {
 				for (Widget w : widgetList) {
 					if(( w != widget) && (w.getValue() == widget.getValue() && !widget.isErased() && !w.isErased()) ) {
 						w.setBorder(border);
-						doublons = true;
 						d = true;
 					}
 				}
@@ -145,15 +136,13 @@ public class GameComponent {
 	}
 
 	public List<Object> getValues() {
-	
+
 		List<Object> value = new ArrayList<Object>();
 		for (Widget widget : widgetList) 
 			value.add(widget.getValue());
-	
-		if( (uniqueValue && !doublons) || !uniqueValue) 
-			return value;
-		else
-			return null;
+
+		return value;
+
 	}
 
 	public void setValues(List<Object> list) {
@@ -168,7 +157,6 @@ public class GameComponent {
 	}
 
 	public void setReturnValue(String r) {
-		this.returnValue = r;
 	}
 
 	public void setPossibleValue(List<Object> v, boolean u) {
@@ -183,19 +171,18 @@ public class GameComponent {
 	}
 
 	public void setBorder(String b) {
-		this.border = b;
 	}
 
 	public void setDimension(Dimension dimension) {
 		for (Widget w : widgetList)
 			w.setPreferredSize(dimension);
-		
+
 	}
-	
+
 	public void setFont(Font font) {
 		for (Widget w : widgetList)
 			w.setFont(font);
-		
+
 	}
 }
 
@@ -204,7 +191,6 @@ class Widget extends JLabel {
 	private Dimension dim = new Dimension(50, 50);
 	private String eraseText = "X";
 	private Color eraseColor = new Color(254, 254, 254);
-	private JLabel label = new JLabel();
 	private Border border = BorderFactory.createLineBorder(Color.GRAY);
 	private String typeValue = "String";
 	private boolean erased = true;

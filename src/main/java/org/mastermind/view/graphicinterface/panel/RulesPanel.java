@@ -1,4 +1,4 @@
-package org.mastermind.view.graphicinterface;
+package org.mastermind.view.graphicinterface.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

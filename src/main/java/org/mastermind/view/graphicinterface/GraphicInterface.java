@@ -20,6 +20,12 @@ import javax.swing.KeyStroke;
 import org.mastermind.controller.Controller;
 import org.mastermind.core.Core;
 import org.mastermind.view.AbstractInterface;
+import org.mastermind.view.graphicinterface.panel.AbstractPanel;
+import org.mastermind.view.graphicinterface.panel.ConfigPanel;
+import org.mastermind.view.graphicinterface.panel.GamePanel;
+import org.mastermind.view.graphicinterface.panel.HelloWorldPanel;
+import org.mastermind.view.graphicinterface.panel.RulesPanel;
+import org.mastermind.view.graphicinterface.panel.ScoresPanel;
 
 public class GraphicInterface extends AbstractInterface {
 

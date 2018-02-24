@@ -2,16 +2,12 @@ package org.mastermind.view.consoleinterface;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 
-import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
-import org.apache.commons.configuration2.convert.ListDelimiterHandler;
 import org.mastermind.controller.Controller;
 import org.mastermind.core.Core;
 import org.mastermind.view.AbstractInterface;
@@ -76,8 +72,6 @@ public class ConsoleInterface extends AbstractInterface {
 	@Override
 	protected void setGameMode() {
 
-		String title;
-		Map<String, String> options;
 		gameType = "numbers";
 		ConsoleMenu gameModeMenu = new ConsoleMenu();
 
@@ -107,7 +101,7 @@ public class ConsoleInterface extends AbstractInterface {
 			moreLessMenu.setTitle(Core.lang.get("moreLessMenuTitle"));
 			for(Object optionLine : Core.lang.getList("moreLessMenuOptions")) 
 				moreLessMenu.addOption(optionLine.toString());
-			
+
 			moreLessMenu.addOption("return", Core.lang.get("optionMenu.return"));
 
 			reponse = moreLessMenu.showMenu();
@@ -347,9 +341,14 @@ public class ConsoleInterface extends AbstractInterface {
 
 	@Override
 	public void updateOutputPropos(List<Object> o) {
-		for (Object str : o)
-			System.out.print(str + " ");
-		System.out.print(System.getProperty("line.separator"));
+		if(o.contains(-1)) {
+			System.out.println(Core.lang.get("impossible.error"));			
+		}else {
+			for (Object str : o)
+				System.out.print(str.toString() + " ");
+			System.out.print(System.getProperty("line.separator"));
+		}
+
 	}
 
 	@Override
@@ -400,17 +399,17 @@ public class ConsoleInterface extends AbstractInterface {
 			if (str.length() > 0) {
 				List<String> returnedField = new ArrayList<String>(Arrays.asList(str.trim().split(" ")));
 				boolean testUniqueValue = true;
-				
+
 				if(editable.equals("propos") && uniqueValue) {
-				//création d'un set pour avoir des valeurs uniques 
+					//création d'un set pour avoir des valeurs uniques 
 					Set<Object> uniqueInput = new HashSet<Object>(returnedField);
 					testUniqueValue = ( uniqueInput.size() == returnedField.size());
 				}			
-				
-				
+
+
 				if(testUniqueValue) 
 					r = controller.setInput(phase, str);
-				
+
 				if (!r)
 					System.out.println(Core.lang.get("input.error"));
 			}

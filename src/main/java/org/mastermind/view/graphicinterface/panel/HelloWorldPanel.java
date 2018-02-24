@@ -1,11 +1,10 @@
-package org.mastermind.view.graphicinterface;
+package org.mastermind.view.graphicinterface.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import org.mastermind.core.Core;

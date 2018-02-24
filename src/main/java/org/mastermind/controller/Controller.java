@@ -2,10 +2,7 @@ package org.mastermind.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import org.mastermind.core.Core;
 import org.mastermind.model.Model;
 import org.mastermind.observer.Observer;
@@ -23,8 +20,6 @@ public class Controller {
 
 	/** Mode de jeu */
 	private String gameMode;
-
-	private boolean uniqueValue;
 
 	/**
 	 * Controlleur
@@ -66,7 +61,6 @@ public class Controller {
 	 */
 	public void setGameMode(String gm, String gt, boolean moreLess, boolean b) {
 		this.gameMode = gm;
-		this.uniqueValue = b;
 		this.model.setGameMode(gameMode, gt, moreLess, b);
 	}
 
@@ -130,25 +124,6 @@ public class Controller {
 		p = p.trim().toUpperCase();
 		// passage au model
 		this.model.setPlayerName(p);
-	}
-
-	/**
-	 * Test si le texte passé est un entier
-	 * 
-	 * @param s
-	 *            Le string à tester
-	 * @return true si c'est un entier
-	 */
-	private boolean isInteger(String s) {
-		boolean isInteger = false;
-		try {
-			Integer.parseInt(s);
-			// s est un entier
-			isInteger = true;
-		} catch (NumberFormatException e) {
-			// sinon, levée d'éxception non gérée
-		}
-		return isInteger;
 	}
 
 	/**

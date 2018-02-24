@@ -1,6 +1,5 @@
 package org.mastermind.core;
 
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -8,10 +7,8 @@ import java.util.Map;
 
 import org.apache.commons.configuration2.FileBasedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
-import org.apache.commons.configuration2.builder.BasicConfigurationBuilder;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
-import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.interpol.ConfigurationInterpolator;
 import org.apache.commons.configuration2.interpol.Lookup;
@@ -90,7 +87,6 @@ public class Lang {
 	 */
 
 	public void updateConfigFile() {
-		OutputStream output = null;
 		logger.info("Saving config file : " + this.languageFile);
 
 		try {
