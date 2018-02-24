@@ -33,7 +33,7 @@ usage: MasterMind [-h] [-l <lenght>] [-s] [-v <view>]
 L'application est configurable via le fichier resources/config.properties , et par le menu Configuration en mode graphique.
 
 
-## Autheur
+## Auteur
 
 * **Frank Serra** - *OpenClassRoom* - (https://github.com/SERRAFrank/)
 
